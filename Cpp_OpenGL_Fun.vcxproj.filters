@@ -106,7 +106,7 @@
     <ClInclude Include="src\ShaderProgram.h">
       <Filter>system\graphics\shader</Filter>
     </ClInclude>
-    <ClInclude Include="include\openglfun\render\Vertex.h">
+    <ClInclude Include="src\Vertex.h">
       <Filter>system\graphics\model</Filter>
     </ClInclude>
     <ClInclude Include="src\WindowSystem.h">
