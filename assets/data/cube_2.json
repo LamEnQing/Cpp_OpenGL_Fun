@@ -1,0 +1,16 @@
+{
+	"name": "Hello World",
+	"type": "experiment",
+	"components": [
+		{
+			"type": "Model",
+			"model": 0
+		},
+		{
+			"type": "Transform",
+			"position": [1.0, 0.0, 0.0],
+			"rotation": [45.0, 45.0, 5.0],
+			"scale": [0.4, 0.4, 0.4]
+		}
+	]
+}

@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="entity">
+      <UniqueIdentifier>{45156bae-e9f0-4086-a85c-8d301b771158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component">
+      <UniqueIdentifier>{b5688012-18e0-4d9b-94aa-1a832c3c6f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{978b9a46-d0fb-4a6d-ac95-93db6d4e90a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\graphics">
+      <UniqueIdentifier>{74867d2f-f1b0-405d-aaab-a8daf63782bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\graphics\model">
+      <UniqueIdentifier>{43bd17fb-daa1-4eb1-abf5-585ff43622df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\graphics\shader">
+      <UniqueIdentifier>{5719a682-42c5-455c-964b-9ccf1a25f088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{9e84f975-e915-4674-a3d2-10558e6cd8c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\components">
+      <UniqueIdentifier>{b479b50d-8ab7-4088-ba97-7a0ee8fee8ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="factory">
+      <UniqueIdentifier>{4207f079-648b-4cb1-b777-60f6a657efb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="serializer">
+      <UniqueIdentifier>{0672bc3c-d621-442e-a619-b6ee38099f89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="level_manager">
+      <UniqueIdentifier>{d32f1bbb-43fc-43ea-9fd7-ac08983e0d3b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>system\graphics\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderProgram.cpp">
+      <Filter>system\graphics\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>system\graphics\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shapes.cpp">
+      <Filter>system\graphics\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vertex.cpp">
+      <Filter>system\graphics\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputSystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WindowSystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphicSystem.cpp">
+      <Filter>system\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ComponentManager.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityFactory.cpp">
+      <Filter>factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Serializer.cpp">
+      <Filter>serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelManager.cpp">
+      <Filter>level_manager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Entity.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Component.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ComponentManager.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputSystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderProgram.h">
+      <Filter>system\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\openglfun\render\Vertex.h">
+      <Filter>system\graphics\model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WindowSystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Texture.h">
+      <Filter>system\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicSystem.h">
+      <Filter>system\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Exceptions.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\Shader.h">
+      <Filter>system\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model.h">
+      <Filter>system\graphics\model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>component\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controllable.h">
+      <Filter>component\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Transform.h">
+      <Filter>component\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ComponentCreator.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityFactory.h">
+      <Filter>factory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serializer.h">
+      <Filter>serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LevelManager.h">
+      <Filter>level_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Color.h">
+      <Filter>component\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModelComponent.h">
+      <Filter>component\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Button.h">
+      <Filter>component\components</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
