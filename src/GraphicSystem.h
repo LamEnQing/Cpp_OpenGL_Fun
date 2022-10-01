@@ -18,8 +18,6 @@ namespace OpenGLFun {
 		ShaderProgram _mainShaderProgram;
 		ShaderProgram _2DShaderProgram;
 
-		OpenGLFun::Model _rainbowCubeModel;
-		OpenGLFun::Model _axisModel;
 		OpenGLFun::Model _2DShapeModel;
 	};
 	extern GraphicSystem* GRAPHICS_SYSTEM;

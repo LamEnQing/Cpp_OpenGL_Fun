@@ -58,79 +58,6 @@ namespace OpenGLFun {
 		Vertex vertex;
 		std::vector<unsigned int> indices;
 		std::vector<Vertex> vertices = {
-			// bottom face (-ve y), blue
-			vertex.Pos(-0.5f, -0.5f,  0.5f).Color(0.0f, 0.0f, 1.0f), // front left
-			vertex.Pos(-0.5f, -0.5f, -0.5f),  // back left
-			vertex.Pos(0.5f, -0.5f, -0.5f),  // back right
-			vertex.Pos(0.5f, -0.5f, -0.5f),  // back right
-			vertex.Pos(0.5f, -0.5f,  0.5f),  // front right
-			vertex.Pos(-0.5f, -0.5f,  0.5f),  // front left
-
-			// top face (-ve y), cyan
-			vertex.Pos(-0.5f, 0.5f, -0.5f).Color(0.0f, 1.0f, 1.0f),  // top left
-			vertex.Pos(-0.5f, 0.5f,  0.5f),  // bottom left
-			vertex.Pos(0.5f, 0.5f, -0.5f),  // top right
-			vertex.Pos(0.5f, 0.5f, -0.5f),  // top right
-			vertex.Pos(-0.5f, 0.5f,  0.5f),  // bottom left
-			vertex.Pos(0.5f, 0.5f,  0.5f),  // bottom right
-
-			// front face (+ve z), green
-			vertex.Pos(-0.5f,  0.5f, 0.5f).Color(0.0f, 1.0f, 0.0f),  // top left
-			vertex.Pos(-0.5f, -0.5f, 0.5f),  // bottom left
-			vertex.Pos(0.5f,  0.5f, 0.5f),  // top right
-			vertex.Pos(0.5f,  0.5f, 0.5f),  // top right
-			vertex.Pos(-0.5f, -0.5f, 0.5f),  // bottom left
-			vertex.Pos(0.5f, -0.5f, 0.5f),  // bottom right
-
-			// back face (-ve z), yellow
-			vertex.Pos(0.5f,  0.5f, -0.5f).Color(1.0f, 1.0f, 0.0f),  // top left
-			vertex.Pos(0.5f, -0.5f, -0.5f),  // bottom left
-			vertex.Pos(-0.5f,  0.5f, -0.5f),  // top right
-			vertex.Pos(-0.5f,  0.5f, -0.5f),  // top right
-			vertex.Pos(0.5f, -0.5f, -0.5f),  // bottom left
-			vertex.Pos(-0.5f, -0.5f, -0.5f),  // bottom right
-
-			// left face (-ve x), purple
-			vertex.Pos(-0.5f,  0.5f, -0.5f).Color(1.0f, 0.0f, 1.0f),  // top left
-			vertex.Pos(-0.5f, -0.5f, -0.5f),  // bottom left
-			vertex.Pos(-0.5f,  0.5f,  0.5f),  // top right
-			vertex.Pos(-0.5f,  0.5f,  0.5f),  // top right
-			vertex.Pos(-0.5f, -0.5f, -0.5f),  // bottom left
-			vertex.Pos(-0.5f, -0.5f,  0.5f),  // bottom right
-
-			// right face (+ve x), red
-			vertex.Pos(0.5f,  0.5f,  0.5f).Color(1.0f, 0.0f, 0.0f),  // top left
-			vertex.Pos(0.5f, -0.5f,  0.5f),  // bottom left
-			vertex.Pos(0.5f,  0.5f, -0.5f),  // top right
-			vertex.Pos(0.5f,  0.5f, -0.5f),  // top right
-			vertex.Pos(0.5f, -0.5f,  0.5f),  // bottom left
-			vertex.Pos(0.5f, -0.5f, -0.5f)   // bottom right
-		};
-		// left face (-ve x), purple
-		//quad.init(vertex.Pos(-0.5f, 0.5f, -0.5f).Color(1.0f, 0.0f, 1.0f), vertex.Pos(-0.5f, -0.5f, -0.5f).Color(1.0f, 0.0f, 1.0f), vertex.Pos(-0.5f, -0.5f, 0.5f).Color(1.0f, 0.0f, 1.0f), vertex.Pos(-0.5f, 0.5f, 0.5f).Color(1.0f, 0.0f, 1.0f));
-		//vertices.insert(vertices.end(), quad.Vertices().begin(), quad.Vertices().end());
-		//// right face (+ve x), red. Top-left, anti-clockwise
-		//quad.init(vertex.Pos(0.5f, 0.5f, 0.5f).Color(1.0f, 0.0f, 0.0f), vertex.Pos(0.5f, -0.5f, 0.5f).Color(1.0f, 0.0f, 0.0f), vertex.Pos(0.5f, -0.5f, -0.5f).Color(1.0f, 0.0f, 0.0f), vertex.Pos(0.5f, 0.5f, -0.5f).Color(1.0f, 0.0f, 0.0f));
-		//vertices.insert(vertices.end(), quad.Vertices().begin(), quad.Vertices().end());
-		_rainbowCubeModel.Init(vertices);
-
-		vertices.clear();
-		vertices.insert(vertices.end(), {
-			// x-axis, red
-			vertex.Pos(0.0f, 0.0f, 0.0f).Color(1.0f, 0.0f, 0.0f),
-			vertex.Pos(1.0f, 0.0f, 0.0f),
-
-			// z-axis, blue
-			vertex.Pos(0.0f, 0.0f, 0.0f).Color(0.0f, 0.0f, 1.0f),
-			vertex.Pos(0.0f, 0.0f, 1.0f),
-
-			// y-axis, green
-			vertex.Pos(0.0f, 0.0f, 0.0f).Color(0.0f, 1.0f, 0.0f),
-			vertex.Pos(0.0f, 1.0f, 0.0f)
-			});
-		_axisModel.Init(vertices).SetDrawMode(GL_LINES).SetCull(false);
-
-		vertices = {
 			vertex.Pos(-0.5f, 0.5f, 0.0f).Color(1.0f, 1.0f, 1.0f).UV(0.0f, 0.0f), // top left
 			vertex.Pos(-0.5f, -0.5f, 0.0f).UV(0.0f, 1.0f), // bottom left
 			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
@@ -148,8 +75,6 @@ namespace OpenGLFun {
 	}
 
 	GraphicSystem::~GraphicSystem() {
-		_2DShapeModel.Destroy();
-		_axisModel.Destroy();
 		_mainShaderProgram.Destroy();
 	}
 
@@ -192,18 +117,12 @@ namespace OpenGLFun {
 
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
-
-			/*if (modelComp->mModelType == ModelComponent::Type::Axis) {
-				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
-				_axisModel.Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
-			}
-			else*/ {
-				if (modelComp->mModelFilepath.empty()) continue;
-				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
-				model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
-				RESOURCE_MANAGER->GetModel(modelComp->mModelFilepath)
-					->SetCull(modelComp->mShouldCull).Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
-			}
+			
+			if (modelComp->mModelFilepath.empty()) continue;
+			model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
+			model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
+			RESOURCE_MANAGER->GetModel(modelComp->mModelFilepath)
+				->SetCull(modelComp->mShouldCull).Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
 
 			/*if (modelComp->mModelType == ModelComponent::Type::Cube) {
 				// SRT
