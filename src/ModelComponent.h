@@ -5,15 +5,16 @@ namespace OpenGLFun {
 	class ModelComponent : public IComponent {
 	public:
 		enum class Type {
-			Cube, Axis, TwoD, Maximum
+			Cube, Axis, TwoD, ThreeD, Maximum
 		};
 
 		Type mModelType;
+		std::string mModelFilepath;
 		bool mEnableBlend;
+		bool mShouldCull;
 
-		ModelComponent() : IComponent(), mModelType{ Type::Cube }, mEnableBlend{ false } {
+		ModelComponent() : IComponent(), mModelType{ Type::Cube }, mModelFilepath(""), mEnableBlend{false}, mShouldCull{false}  {
 			mCompType = ComponentType::Model;
-			std::cout << "Model constructor\n";
 		}
 		ModelComponent(EntityId const& owner, Type modelType) : ModelComponent() {
 			mOwner = owner;
@@ -36,6 +37,18 @@ namespace OpenGLFun {
 				if (!jsonObj["enable_blend"].IsBool())
 					throw SimpleException("Component of type Model's 'enable_blend' must be a boolean");
 				mEnableBlend = jsonObj["enable_blend"].GetBool();
+			}
+
+			if (jsonObj.HasMember("should_cull")) {
+				if (!jsonObj["should_cull"].IsBool())
+					throw SimpleException("Component of type Model's 'should_cull' must be a boolean");
+				mShouldCull = jsonObj["should_cull"].GetBool();
+			}
+
+			if (jsonObj.HasMember("model_filename")) {
+				if (!jsonObj["model_filename"].IsString())
+					throw SimpleException("Component of type Model's 'model_filename' must be a string");
+				mModelFilepath = jsonObj["model_filename"].GetString();
 			}
 		}
 	};

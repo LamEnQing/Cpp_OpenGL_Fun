@@ -10,7 +10,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "ShaderProgram.h"
-#include "Shapes.h"
+#include "Shape.h"
 
 #include "Player.h"
 

@@ -167,6 +167,7 @@
     <ClCompile Include="src\Serializer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\Shape.cpp" />
     <ClCompile Include="src\Vec2f.cpp" />
     <ClCompile Include="src\Vec3f.cpp" />
     <ClCompile Include="src\Vec4f.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="src\Serializer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\Shape.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\Vec2f.h" />

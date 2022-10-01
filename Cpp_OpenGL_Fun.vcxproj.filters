@@ -98,6 +98,9 @@
     <ClCompile Include="src\Vec4f.cpp">
       <Filter>math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Shape.cpp">
+      <Filter>system\graphics\model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entity.h">
@@ -191,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="src\Vec3f.h">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shape.h">
+      <Filter>system\graphics\model</Filter>
     </ClInclude>
     <ClInclude Include="src\Vec4f.h">
       <Filter>math</Filter>

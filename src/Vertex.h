@@ -14,5 +14,7 @@ namespace OpenGLFun {
 		Vertex& Color(float red, float green, float blue, float alpha=1.0f);
 
 		Vertex& UV(float u, float v);
+
+		void Deserialise(rapidjson::Value const& jsonObj, bool omitColor = false);
 	};
 }

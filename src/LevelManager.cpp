@@ -13,6 +13,7 @@
 #include "Transform.h"
 #include "Serializer.h"
 #include "Sprite.h"
+#include "ModelComponent.h"
 
 namespace OpenGLFun {
 	const std::string LEVEL_DIR = "assets\\data\\levels";
@@ -33,6 +34,8 @@ namespace OpenGLFun {
 	LevelManager::~LevelManager() {}
 
 	void LevelManager::Load() {
+		std::cout << "Level Manager Loading\n";
+		std::cout << "----------------------------------------------------------------------\n";
 		/*for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR + std::to_string(_currentLevel) + "\\entity")) {
 			std::cout << "Discovered:" << entry.path().string() << '\n';
 			try {
@@ -67,19 +70,25 @@ namespace OpenGLFun {
 		Transform* transform = new Transform(engine->mPlayerId, { -3, 0, 0 }, {}, {});
 		COMPONENT_MANAGER->AddComponent(transform);
 
+		std::cout << "\nLoading Resources\n";
+		std::cout << "--------------------------\n";
 		// Load textures
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
-			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
-				continue;
-
-			RESOURCE_MANAGER->LoadTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
+			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
+				RESOURCE_MANAGER->LoadTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
+			}
+			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model)) {
+				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
+				if (!modelComp->mModelFilepath.empty())
+					RESOURCE_MANAGER->LoadModel(modelComp->mModelFilepath);
+			}
 		}
-
-		RESOURCE_MANAGER->LoadTexture("assets/textures/no_texture.png");
+		RESOURCE_MANAGER->LoadTexture("no_texture.png");
 	}
 
 	void LevelManager::Unload() {
 		RESOURCE_MANAGER->UnloadTextures();
+		RESOURCE_MANAGER->UnloadModels();
 
 		COMPONENT_MANAGER->Clear();
 		ENTITY_MANAGER->Clear();

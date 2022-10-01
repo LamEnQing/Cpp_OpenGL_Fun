@@ -22,7 +22,7 @@
 		},
 		{
 			"type": "Sprite",
-			"texture": "assets/textures/gold_block.png"
+			"texture": "gold_block.png"
 		}
 	]
 }

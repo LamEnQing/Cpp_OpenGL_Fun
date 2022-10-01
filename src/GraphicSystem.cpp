@@ -56,9 +56,10 @@ namespace OpenGLFun {
 		}
 
 		Vertex vertex;
+		std::vector<unsigned int> indices;
 		std::vector<Vertex> vertices = {
 			// bottom face (-ve y), blue
-			vertex.Pos(-0.5f, -0.5f,  0.5f).Color(0.0f, 0.0f, 1.0f),  // front left
+			vertex.Pos(-0.5f, -0.5f,  0.5f).Color(0.0f, 0.0f, 1.0f), // front left
 			vertex.Pos(-0.5f, -0.5f, -0.5f),  // back left
 			vertex.Pos(0.5f, -0.5f, -0.5f),  // back right
 			vertex.Pos(0.5f, -0.5f, -0.5f),  // back right
@@ -134,11 +135,15 @@ namespace OpenGLFun {
 			vertex.Pos(-0.5f, -0.5f, 0.0f).UV(0.0f, 1.0f), // bottom left
 			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
 
-			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
+			//vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
 			vertex.Pos(0.5f, 0.5f, 0.0f).UV(1.0f, 0.0f), // top right
-			vertex.Pos(-0.5f, 0.5f, 0.0f).UV(0.0f, 0.0f), // top left
+			//vertex.Pos(-0.5f, 0.5f, 0.0f).UV(0.0f, 0.0f), // top left
 		};
-		_2DShapeModel.Init(vertices).SetCull(false).SetBlend(true);
+		indices = {
+			0, 1, 2,
+			2, 3, 0
+		};
+		_2DShapeModel.Init(vertices, indices).SetCull(false).SetBlend(true);
 		glEnable(GL_DEPTH_TEST);
 	}
 
@@ -181,19 +186,26 @@ namespace OpenGLFun {
 				continue;
 
 			model = glm::mat4(1.0f);
-			Texture* texture = RESOURCE_MANAGER->GetTexture("assets/textures/no_texture.png");
+			Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
 			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
 				texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
 
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
-			if (modelComp->mModelType == ModelComponent::Type::Axis) {
+			/*if (modelComp->mModelType == ModelComponent::Type::Axis) {
 				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
 				_axisModel.Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
 			}
+			else*/ {
+				if (modelComp->mModelFilepath.empty()) continue;
+				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
+				model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
+				RESOURCE_MANAGER->GetModel(modelComp->mModelFilepath)
+					->SetCull(modelComp->mShouldCull).Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
+			}
 
-			if (modelComp->mModelType == ModelComponent::Type::Cube) {
+			/*if (modelComp->mModelType == ModelComponent::Type::Cube) {
 				// SRT
 				// rotation is zyx. That is when we apply in math, it's reversed order
 				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
@@ -219,24 +231,24 @@ namespace OpenGLFun {
 				};
 				model = glm::transpose(mtxRotZ * mtxRotY * mtxRotX) * model;
 				std::cout << "I believe this is identity:" << glm::to_string(glm::mat4(1.0f)) << '\n';
-				std::cout << glm::to_string(glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f))) << '\n';*/
+				std::cout << glm::to_string(glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f))) << '\n';*
 				/*model = glm::rotate(model, glm::radians(entityTransform->mRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 				model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-				model = glm::rotate(model, glm::radians(entityTransform->mRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));*/
+				model = glm::rotate(model, glm::radians(entityTransform->mRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));*
 				_rainbowCubeModel.Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
-			}
+			}*/
 		}
 
 		if (INPUT_SYSTEM->mIsPaused) {
 			glm::vec3 sample_vec3;
 			_2DShaderProgram.use();
 
-			//glDisable(GL_DEPTH);
+			glDisable(GL_DEPTH_TEST);
 			for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
 				if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
 					continue;
 
-				Texture* texture = RESOURCE_MANAGER->GetTexture("assets/textures/no_texture.png");
+				Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
 				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
 					texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
 
@@ -288,13 +300,15 @@ namespace OpenGLFun {
 					}
 				}
 				_2DShapeModel
+					.SetCull(modelComp->mShouldCull)
 					.SetBlend(modelComp->mEnableBlend)
 					.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, color);
 			}
-			//glEnable(GL_DEPTH);
+			glEnable(GL_DEPTH_TEST);
 		}
 
 		glfwSwapBuffers(WINDOW_SYSTEM->mWindow);
+		glfwSwapInterval(0);
 	}
 
 	void GraphicSystem::CreateGLTexture(Texture* texture) {

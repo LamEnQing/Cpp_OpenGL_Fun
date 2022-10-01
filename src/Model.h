@@ -1,12 +1,16 @@
 #pragma once
 #include "pch.h"
 
+#include "Shape.h"
 #include "Vec2f.h"
 #include "Vertex.h"
 
 namespace OpenGLFun {
 	struct Model {
+		Model& Init(std::vector<Shape>& shapes);
+
 		Model& Init(std::vector<Vertex>& vertices);
+		Model& Init(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 		Model& Destroy();
 
 		Model& Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions = { 1.0f, 1.0f }, Vec2f uvOffsetPos = { 0.0f, 0.0f }, Vec4f tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -16,9 +20,11 @@ namespace OpenGLFun {
 		Model& SetCull(const bool& cull);
 		Model& SetBlend(const bool& blend);
 
+		void Deserialize(rapidjson::Value const& jsonObj);
+
 		private:
-			unsigned int _vbo{ 0 }, _vao{ 0 };
-			int _vertexCount{ 0 };
+			unsigned int _vbo{ 0 }, _vao{ 0 }, _ebo{ 0 };
+			int _vertexCount{ 0 }, _indexCount{ 0 };
 
 			int _drawMode{ GL_TRIANGLES };
 			bool _shouldCull{ true };

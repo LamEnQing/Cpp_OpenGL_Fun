@@ -4,7 +4,8 @@
 	"components": [
 		{
 			"type": "Model",
-			"model": 1
+			"model": 1,
+			"model_filename": "axis.json"
 		},
 		{
 			"type": "Transform",
