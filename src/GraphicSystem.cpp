@@ -13,7 +13,12 @@
 #include "Transform.h"
 
 namespace OpenGLFun {
+	GraphicSystem* GRAPHICS_SYSTEM = nullptr;;
+
 	GraphicSystem::GraphicSystem() : ISystem(), _mainShaderProgram() {
+		if (GRAPHICS_SYSTEM != nullptr)
+			throw SimpleException("Graphics system already created!");
+
 		Shader vertexShader{}, fragmentShader{};
 		if (!vertexShader.Compile(ShaderType::Vertex, "assets/shaders/basic.vert")) {
 			vertexShader.Destroy();
@@ -142,7 +147,7 @@ namespace OpenGLFun {
 		_mainShaderProgram.Destroy();
 	}
 
-	void GraphicSystem::Update(double const&) {
+	void GraphicSystem::Update(float const&) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

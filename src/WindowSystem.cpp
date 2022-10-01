@@ -33,7 +33,7 @@ namespace OpenGLFun {
 		glfwTerminate();
 	}
 
-	void WindowSystem::Update(double const&) {
+	void WindowSystem::Update(float const&) {
 		glfwPollEvents();
 	}
 

@@ -8,7 +8,7 @@ namespace OpenGLFun {
 	public:
 		GraphicSystem();
 		virtual ~GraphicSystem() override;
-		virtual void Update(double const&) override;
+		virtual void Update(float const&) override;
 	private:
 		ShaderProgram _mainShaderProgram;
 		ShaderProgram _2DShaderProgram;
@@ -17,4 +17,5 @@ namespace OpenGLFun {
 		OpenGLFun::Model _axisModel;
 		OpenGLFun::Model _2DShapeModel;
 	};
+	extern GraphicSystem* GRAPHICS_SYSTEM;
 }

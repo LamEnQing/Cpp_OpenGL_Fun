@@ -4,6 +4,6 @@ namespace OpenGLFun {
 	public:
 		ISystem() {}
 		virtual ~ISystem() {}
-		virtual void Update(double const&) = 0;
+		virtual void Update(float const&) = 0;
 	};
 }

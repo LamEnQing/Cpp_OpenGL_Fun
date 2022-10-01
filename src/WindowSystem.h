@@ -8,7 +8,7 @@ namespace OpenGLFun {
 		GLFWwindow* mWindow;
 		WindowSystem();
 		~WindowSystem();
-		virtual void Update(double const&) override;
+		virtual void Update(float const&) override;
 
 		int GetWindowWidth();
 		int GetWindowHeight();
