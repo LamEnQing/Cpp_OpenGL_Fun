@@ -1,0 +1,30 @@
+{
+	"name": "Hello World",
+	"type": "experiment",
+	"components": [
+		{
+			"type": "Button",
+			"hover_color": [1.0, 1.0, 1.0, 1.0],
+			"hover_uv_dimensions": [10, 10],
+			"hover_uv_pos": [0, 75]
+		},
+		{
+			"type": "Color",
+			"color": [1.0, 1.0, 1.0, 1.0]
+		},
+		{
+			"type": "Model",
+			"model": 2
+		},
+		{
+			"type": "Transform",
+			"scale": [100.0, 100.0, 0.0]
+		},
+		{
+			"type": "Sprite",
+			"texture": "assets/textures/widgets.png",
+			"uv_dimensions": [10, 10],
+			"uv_pos": [0, 65]
+		}
+	]
+}

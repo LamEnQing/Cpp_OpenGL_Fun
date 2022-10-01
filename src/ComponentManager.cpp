@@ -3,6 +3,7 @@
 #include "Button.h"
 #include "Color.h"
 #include "ModelComponent.h"
+#include "Sprite.h"
 #include "Transform.h"
 
 namespace OpenGLFun {
@@ -10,6 +11,7 @@ namespace OpenGLFun {
 		mComponentCreatorsMap.insert({ "Button", new ComponentCreator<Button>() });
 		mComponentCreatorsMap.insert({ "Color", new ComponentCreator<Color>() });
 		mComponentCreatorsMap.insert({ "Model", new ComponentCreator<ModelComponent>() });
+		mComponentCreatorsMap.insert({ "Sprite", new ComponentCreator<Sprite>() });
 		mComponentCreatorsMap.insert({ "Transform", new ComponentCreator<Transform>() });
 	}
 

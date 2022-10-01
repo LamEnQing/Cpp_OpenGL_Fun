@@ -10,6 +10,7 @@ namespace OpenGLFun {
 		Button,
 		Color,
 		Model,
+		Sprite,
 		Transform,
 	};
 

@@ -3,7 +3,7 @@
 
 namespace OpenGLFun {
 	struct ShaderProgram {
-		unsigned int programId;
+		unsigned int mProgramId;
 
 		bool CompileAndLink(Shader& vertexShader, Shader& fragmentShader);
 		void Destroy(void);

@@ -8,8 +8,7 @@ namespace OpenGLFun {
 	};
 
 	struct Shader {
-		unsigned int shaderId;
-		ShaderType type;
+		unsigned int mShaderId;
 
 		// Create a shader and read from a shader file
 		bool Compile(ShaderType type, std::string shaderFilepath);

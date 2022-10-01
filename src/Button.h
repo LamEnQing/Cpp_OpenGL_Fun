@@ -9,6 +9,7 @@ namespace OpenGLFun {
 		Vec4f mHoverRgba;
 		std::array<int, 2> mHoverUVPos;
 		std::array<int, 2> mHoverUVDimensions;
+
 		Button() : IComponent(), mHoverRgba{ 1.0f, 1.0f, 1.0f, 1.0f }, mHoverUVPos{ 0, 0 }, mHoverUVDimensions{ 0, 0 } { mCompType = ComponentType::Button; }
 
 		~Button() override {}
@@ -30,6 +31,32 @@ namespace OpenGLFun {
 					value = colorArr[i].GetFloat();
 
 				mHoverRgba[i] = value; // vec4 is double, even though in json, the values are integer
+			}
+
+			if (jsonObj.HasMember("hover_uv_pos")) {
+				if (!jsonObj["hover_uv_pos"].IsArray() || jsonObj["hover_uv_pos"].Size() < 2)
+					throw SimpleException("Component of type Button must have key 'hover_uv_pos' with an array of size 2");
+
+				const rapidjson::Value& posArr = jsonObj["hover_uv_pos"];
+				for (int i = 0; i < 2; i++) {
+					if (!posArr[i].IsInt())
+						throw JsonReadException("component of type Button", std::string("hover_uv_pos[") + std::to_string(i) + "]", "integer");
+
+					mHoverUVPos[i] = posArr[i].GetInt();
+				}
+			}
+
+			if (jsonObj.HasMember("hover_uv_dimensions")) {
+				if (!jsonObj["hover_uv_dimensions"].IsArray() || jsonObj["hover_uv_dimensions"].Size() < 2)
+					throw SimpleException("Component of type Button must have key 'hover_uv_dimensions' with an array of size 2");
+
+				const rapidjson::Value& dimArr = jsonObj["hover_uv_dimensions"];
+				for (int i = 0; i < 2; i++) {
+					if (!dimArr[i].IsInt())
+						throw JsonReadException("component of type Button", std::string("hover_uv_dimensions[") + std::to_string(i) + "]", "integer");
+
+					mHoverUVDimensions[i] = dimArr[i].GetInt();
+				}
 			}
 		}
 	};

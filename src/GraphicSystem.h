@@ -1,7 +1,9 @@
 #pragma once
+#include "pch.h"
 #include "Model.h"
 #include "ShaderProgram.h"
 #include "System.h"
+#include "Texture.h"
 
 namespace OpenGLFun {
 	class GraphicSystem : public ISystem {
@@ -9,6 +11,9 @@ namespace OpenGLFun {
 		GraphicSystem();
 		virtual ~GraphicSystem() override;
 		virtual void Update(float const&) override;
+
+		void CreateGLTexture(Texture* texture);
+		void DeleteGLTexture(unsigned int& texture);
 	private:
 		ShaderProgram _mainShaderProgram;
 		ShaderProgram _2DShaderProgram;

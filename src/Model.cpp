@@ -25,6 +25,8 @@ namespace OpenGLFun {
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vertex::mPos))); // assign to location = 1, or the color variable in the vertex shader, also set the offset, offset of Pos
 		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vertex::mPos) + sizeof(Vertex::mColor))); // assign to location = 2, or the texture variable in the vertex shader, also set the offset, offset of Pos + Color
+		glEnableVertexAttribArray(2);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO
 		glBindVertexArray(0); // unbind VAO

@@ -4,6 +4,8 @@
 #include "ComponentManager.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
+#include "ResourceManager.h"
+#include "Texture.h"
 #include "WindowSystem.h"
 
 #include "Button.h"
@@ -11,6 +13,7 @@
 #include "Color.h"
 #include "ModelComponent.h"
 #include "Transform.h"
+#include "Sprite.h"
 
 namespace OpenGLFun {
 	GraphicSystem* GRAPHICS_SYSTEM = nullptr;;
@@ -114,30 +117,28 @@ namespace OpenGLFun {
 		vertices.insert(vertices.end(), {
 			// x-axis, red
 			vertex.Pos(0.0f, 0.0f, 0.0f).Color(1.0f, 0.0f, 0.0f),
-			vertex.Pos(0.5f, 0.0f, 0.0f),
+			vertex.Pos(1.0f, 0.0f, 0.0f),
 
 			// z-axis, blue
 			vertex.Pos(0.0f, 0.0f, 0.0f).Color(0.0f, 0.0f, 1.0f),
-			vertex.Pos(0.0f, 0.0f, 0.5f),
+			vertex.Pos(0.0f, 0.0f, 1.0f),
 
 			// y-axis, green
 			vertex.Pos(0.0f, 0.0f, 0.0f).Color(0.0f, 1.0f, 0.0f),
-			vertex.Pos(0.0f, 0.5f, 0.0f)
+			vertex.Pos(0.0f, 1.0f, 0.0f)
 			});
-		_axisModel.Init(vertices).SetDrawMode(GL_LINE_STRIP).SetCull(false);
+		_axisModel.Init(vertices).SetDrawMode(GL_LINES).SetCull(false);
 
 		vertices = {
-			vertex.Pos(-0.5f, 0.5f, 0.0f).Color(1.0f, 1.0f, 1.0f), // top left
-			vertex.Pos(-0.5f, -0.5f, 0.0f), // bottom left
-			vertex.Pos(0.5f, -0.5f, 0.0f), // bottom right
+			vertex.Pos(-0.5f, 0.5f, 0.0f).Color(1.0f, 1.0f, 1.0f).UV(0.0f, 0.0f), // top left
+			vertex.Pos(-0.5f, -0.5f, 0.0f).UV(0.0f, 1.0f), // bottom left
+			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
 
-			vertex.Pos(0.5f, -0.5f, 0.0f), // bottom right
-			vertex.Pos(0.5f, 0.5f, 0.0f), // top right
-			vertex.Pos(-0.5f, 0.5f, 0.0f), // top left
+			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
+			vertex.Pos(0.5f, 0.5f, 0.0f).UV(1.0f, 0.0f), // top right
+			vertex.Pos(-0.5f, 0.5f, 0.0f).UV(0.0f, 0.0f), // top left
 		};
 		_2DShapeModel.Init(vertices).SetCull(false).SetBlend(true);
-
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // enable wireframe mode
 		glEnable(GL_DEPTH_TEST);
 	}
 
@@ -150,6 +151,15 @@ namespace OpenGLFun {
 	void GraphicSystem::Update(float const&) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		if (INPUT_SYSTEM->IsKeyTriggered(GLFW_KEY_F2)) {
+			if (engine->mInDebugMode) {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // enable wireframe mode
+			}
+			else {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // reset to default view
+			}
+		}
 
 		_mainShaderProgram.use();
 
@@ -171,6 +181,10 @@ namespace OpenGLFun {
 				continue;
 
 			model = glm::mat4(1.0f);
+			Texture* texture = RESOURCE_MANAGER->GetTexture("assets/textures/no_texture.png");
+			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
+				texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
+
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
@@ -222,6 +236,10 @@ namespace OpenGLFun {
 				if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
 					continue;
 
+				Texture* texture = RESOURCE_MANAGER->GetTexture("assets/textures/no_texture.png");
+				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
+					texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
+
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 				if (modelComp->mModelType != ModelComponent::Type::TwoD) continue;
 				Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
@@ -238,6 +256,13 @@ namespace OpenGLFun {
 				sample_vec3 *= 2.0f;
 				model = glm::scale(model, sample_vec3);
 
+				Vec2f uvDimensions = { 1.0f, 1.0f }, uvOffsetPos = { 0.0f, 0.0f };
+				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
+					Sprite* spriteComp = COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite);
+					if (spriteComp->mUVDimensions[0] != 0)
+						uvDimensions = { static_cast<float>(spriteComp->mUVDimensions[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVDimensions[1]) / texture->imgHeight };
+					uvOffsetPos = { static_cast<float>(spriteComp->mUVPosition[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVPosition[1]) / texture->imgHeight };
+				}
 				auto color = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
 
 				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Button)) {
@@ -255,6 +280,11 @@ namespace OpenGLFun {
 
 					if (mousePosX >= buttonPosX - buttonWidth && mousePosX < buttonPosX + buttonWidth
 						&& mousePosY > buttonPosY - buttonHeight && mousePosY <= buttonPosY + buttonHeight) {
+						Button* buttonComp = COMPONENT_MANAGER->GetComponent<Button>(entityId, ComponentType::Button);
+						color = buttonComp->mHoverRgba;
+						if (buttonComp->mHoverUVDimensions[0] != 0)
+							uvDimensions = { static_cast<float>(buttonComp->mHoverUVDimensions[0]) / texture->imgWidth, static_cast<float>(buttonComp->mHoverUVDimensions[1]) / texture->imgHeight };
+						uvOffsetPos = { static_cast<float>(buttonComp->mHoverUVPos[0]) / texture->imgWidth, static_cast<float>(buttonComp->mHoverUVPos[1]) / texture->imgHeight };
 					}
 				}
 				_2DShapeModel
@@ -265,5 +295,30 @@ namespace OpenGLFun {
 		}
 
 		glfwSwapBuffers(WINDOW_SYSTEM->mWindow);
+	}
+
+	void GraphicSystem::CreateGLTexture(Texture* texture) {
+		std::cout << "Creating texture:" << texture->imgWidth << ' ' << texture->imgHeight << '\n';
+		std::cout << "Img channels:" << texture->imgChannels << '\n';
+		unsigned int texId;
+
+		glGenTextures(1, &texId); // create an id for the texture
+		glBindTexture(GL_TEXTURE_2D, texId); // bind to transfer img data onto texture
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		GLint imgFormat = texture->imgChannels == 3 ? GL_RGB : GL_RGBA;
+		glTexImage2D(GL_TEXTURE_2D, 0, imgFormat, texture->imgWidth, texture->imgHeight, 0, imgFormat, GL_UNSIGNED_BYTE, texture->imgData);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		texture->mGLTextureId = texId;
+	}
+
+	void GraphicSystem::DeleteGLTexture(unsigned int& textureId) {
+		glDeleteTextures(1, &textureId);
 	}
 }

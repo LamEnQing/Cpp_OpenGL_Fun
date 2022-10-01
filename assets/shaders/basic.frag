@@ -1,9 +1,12 @@
 #version 330 core
 in vec4 myColor;
 in vec4 myTintColor;
+in vec2 myTexCoord;
 out vec4 FragColor;
+
+uniform sampler2D myTexture;
 
 void main()
 {
-	FragColor = vec4(myColor.x * myTintColor.x, myColor.y * myTintColor.y, myColor.z * myTintColor.z, myColor.w * myTintColor.w);
+	FragColor = myColor * myTintColor * texture(myTexture, myTexCoord);
 }

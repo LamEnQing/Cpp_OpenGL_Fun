@@ -15,30 +15,30 @@ namespace OpenGLFun {
 		GLenum shaderType = GL_VERTEX_SHADER;
 		if (type == ShaderType::Fragment)
 			shaderType = GL_FRAGMENT_SHADER;
-		shaderId = glCreateShader(shaderType);
+		mShaderId = glCreateShader(shaderType);
 
 		const GLchar* shaderSrcGL = shaderSrc.c_str();
-		glShaderSource(shaderId, 1, &shaderSrcGL, NULL);
+		glShaderSource(mShaderId, 1, &shaderSrcGL, NULL);
 
-		glCompileShader(shaderId);
+		glCompileShader(mShaderId);
 		int isCompiled;
-		glGetShaderiv(shaderId, GL_COMPILE_STATUS, &isCompiled);
+		glGetShaderiv(mShaderId, GL_COMPILE_STATUS, &isCompiled);
 
 		if (!isCompiled) {
 			// If compilation failed, find out why and log the error
 			GLint maxLength = 0;
-			glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
+			glGetShaderiv(mShaderId, GL_INFO_LOG_LENGTH, &maxLength);
 
 			// The maxLength includes the NULL character
 			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(shaderId, maxLength, &maxLength, &infoLog[0]);
+			glGetShaderInfoLog(mShaderId, maxLength, &maxLength, &infoLog[0]);
 
 			// We don't need the shader anymore if compilation failed
-			glDeleteShader(shaderId);
+			glDeleteShader(mShaderId);
 
 			std::cout<< "Shader Compilation failed: \n" << infoLog.data();
 
-			shaderId = UINT32_MAX;
+			mShaderId = UINT32_MAX;
 			return false;
 		}
 
@@ -46,9 +46,9 @@ namespace OpenGLFun {
 	}
 
 	void Shader::Destroy() {
-		if (shaderId != UINT32_MAX) {
-			glDeleteShader(shaderId);
-			shaderId = UINT32_MAX;
+		if (mShaderId != UINT32_MAX) {
+			glDeleteShader(mShaderId);
+			mShaderId = UINT32_MAX;
 		}
 	}
 }

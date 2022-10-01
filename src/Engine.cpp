@@ -5,6 +5,7 @@
 #include "GraphicSystem.h"
 #include "LevelManager.h"
 #include "InputSystem.h"
+#include "ResourceManager.h"
 #include "WindowSystem.h"
 
 #include "Camera.h"
@@ -12,14 +13,16 @@
 #include "Transform.h"
 
 namespace OpenGLFun {
-	ComponentManager* COMPONENT_MANAGER;
-	EntityManager* ENTITY_MANAGER;
+	ComponentManager* COMPONENT_MANAGER = nullptr;
+	EntityManager* ENTITY_MANAGER = nullptr;
+	ResourceManager* RESOURCE_MANAGER = nullptr;
 	std::unique_ptr<EntityFactory> ENTITY_FACTORY;
 	std::unique_ptr<LevelManager> LEVEL_MANAGER;
 
 	Engine::Engine(): mPlayerId(-1), _lastTime(0) {
 		COMPONENT_MANAGER = new ComponentManager();
 		ENTITY_MANAGER = new EntityManager();
+		RESOURCE_MANAGER = new ResourceManager();
 		ENTITY_FACTORY.reset(new EntityFactory());
 		LEVEL_MANAGER.reset(new LevelManager());
 
@@ -31,6 +34,7 @@ namespace OpenGLFun {
 	Engine::~Engine() {
 		std::cout << "Engine destructor";
 
+		delete RESOURCE_MANAGER;
 		delete COMPONENT_MANAGER;
 		delete ENTITY_MANAGER;
 	}

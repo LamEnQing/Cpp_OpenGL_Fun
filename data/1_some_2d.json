@@ -1,0 +1,28 @@
+{
+	"name": "Hello World",
+	"type": "experiment",
+	"components": [
+		{
+			"type": "Button",
+			"hover_color": [1.0, 1.0, 1.0, 1.0],
+			"hover_uv_dimensions": [8, 8]
+		},
+		{
+			"type": "Color",
+			"color": [1.0, 1.0, 1.0, 1.0]
+		},
+		{
+			"type": "Model",
+			"model": 2
+		},
+		{
+			"type": "Transform",
+			"scale": [100.0, 100.0, 0.0],
+			"position": [0.0, 175.0, 0.0]
+		},
+		{
+			"type": "Sprite",
+			"texture": "assets/textures/gold_block.png"
+		}
+	]
+}
