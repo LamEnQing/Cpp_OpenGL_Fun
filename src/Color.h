@@ -10,21 +10,20 @@ namespace OpenGLFun {
 
 		Color() : IComponent(), mRgba{ 1.0f } {
 			mCompType = ComponentType::Color;
-			std::cout << "Color constructor\n";
 		}
 
 		~Color() override {}
 
 		void Deserialize(rapidjson::Value const& jsonObj) override {
 			if (!jsonObj.HasMember("color") || !jsonObj["color"].IsArray() || jsonObj["color"].Size() < 3)
-				throw SimpleException("Component of type Color must have key 'color' with an array of size 3");
+				throw JsonReadException("component of type Color", "color", "array with minimum 3 elements");
+			if (jsonObj["color"].Size() > 4)
+				throw JsonReadException("component of type Color", "color", "array with maximum 4 elements");
 
-			const rapidjson::Value& colorArr = jsonObj["color"];
-			for (int i = 0; i < 4; i++) {
-				if (colorArr.Size() == 3 && i == 3) continue; // skip alpha if size is 3 and i is 4
-
+			const rapidjson::Value& colorArr = jsonObj["color"].GetArray();
+			for (rapidjson::SizeType i = 0; i < colorArr.Size(); i++) {
 				float value;
-				if (!colorArr[i].IsFloat() && !colorArr[i].IsInt())
+				if (!colorArr[i].IsNumber())
 					throw JsonReadException("component of type Color", std::string("color[") + std::to_string(i) + "]", "integer or float");
 
 				if (colorArr[i].IsInt())

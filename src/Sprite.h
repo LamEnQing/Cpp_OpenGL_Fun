@@ -11,7 +11,6 @@ namespace OpenGLFun {
 
 		Sprite() : IComponent(), mTextureFilepath(""), mUVPosition{ 0, 0 }, mUVDimensions{ 0, 0 } {
 			mCompType = ComponentType::Sprite;
-			std::cout << "Sprite constructor\n";
 		}
 		~Sprite() override {}
 

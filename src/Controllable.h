@@ -6,7 +6,6 @@ namespace OpenGLFun {
 	public:
 		Controllable() : IComponent() {
 			mCompType = ComponentType::Controllable;
-			std::cout << "Controllable constructor\n";
 		};
 
 		Controllable(EntityId const& owner) : Controllable() {

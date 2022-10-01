@@ -13,7 +13,6 @@ namespace OpenGLFun {
 
 		Camera() : IComponent(), mCamOffset{}, mLookAtPrev{}, mLookAt{}, mCamUp{} {
 			mCompType = ComponentType::Camera;
-			std::cout << "Camera constructor\n";
 		}
 
 		Camera(EntityId const& owner, Vec3f camOffset, Vec3f lookAt, Vec3f camUp) : Camera() {

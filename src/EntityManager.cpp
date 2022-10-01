@@ -31,8 +31,6 @@ namespace OpenGLFun {
 
 		_livingEntities.push_back(id);
 
-		std::cout << "Spawned entity " << std::to_string(id) << '\n';
-
 		return id;
 	}
 
