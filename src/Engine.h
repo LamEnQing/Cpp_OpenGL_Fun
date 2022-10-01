@@ -8,6 +8,8 @@ namespace OpenGLFun {
 	class Engine {
 		public:
 			EntityId mPlayerId;
+			bool mInDebugMode;
+
 			Engine();
 			~Engine();
 

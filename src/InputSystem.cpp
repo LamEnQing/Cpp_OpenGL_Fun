@@ -88,6 +88,10 @@ namespace OpenGLFun {
 			LEVEL_MANAGER.get()->Load();
 		}
 
+		if (IsKeyTriggered(GLFW_KEY_F2) == GLFW_PRESS) {
+			engine->mInDebugMode = !engine->mInDebugMode;
+		}
+
 		if (playerTransform->mPositionOld != playerTransform->mPosition) {
 			//printf("Pos: %.2f, %.2f, %.2f\n", playerTransform->pos.x, playerTransform->pos.y, playerTransform->pos.z);
 			playerTransform->mPositionOld = playerTransform->mPosition;

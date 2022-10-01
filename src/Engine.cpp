@@ -19,7 +19,7 @@ namespace OpenGLFun {
 	std::unique_ptr<EntityFactory> ENTITY_FACTORY;
 	std::unique_ptr<LevelManager> LEVEL_MANAGER;
 
-	Engine::Engine(): mPlayerId(-1), _lastTime(0) {
+	Engine::Engine(): mPlayerId(-1), _lastTime(0), mInDebugMode(false) {
 		COMPONENT_MANAGER = new ComponentManager();
 		ENTITY_MANAGER = new EntityManager();
 		RESOURCE_MANAGER = new ResourceManager();
