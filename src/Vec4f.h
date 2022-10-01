@@ -14,4 +14,9 @@ namespace OpenGLFun {
 		const float& operator[](size_t idx) const;
 		float& operator[](size_t idx);
 	};
+
+	#ifdef _MSC_VER
+		// Supress warning: nonstandard extension used : nameless struct/union
+	#pragma warning( default : 4201 )
+	#endif
 }

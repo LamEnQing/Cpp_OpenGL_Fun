@@ -25,6 +25,11 @@ namespace OpenGLFun {
 		bool operator!=(const Vec3f& rhs);
 	};
 
+	#ifdef _MSC_VER
+		// Supress warning: nonstandard extension used : nameless struct/union
+	#pragma warning( default : 4201 )
+	#endif
+
 	Vec3f operator+(const Vec3f& lhs, const Vec3f& rhs);
 	Vec3f operator+(const Vec3f& lhs, const float& rhs);
 
