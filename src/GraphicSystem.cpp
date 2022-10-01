@@ -61,10 +61,7 @@ namespace OpenGLFun {
 			vertex.Pos(-0.5f, 0.5f, 0.0f).Color(1.0f, 1.0f, 1.0f).UV(0.0f, 0.0f), // top left
 			vertex.Pos(-0.5f, -0.5f, 0.0f).UV(0.0f, 1.0f), // bottom left
 			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
-
-			//vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
 			vertex.Pos(0.5f, 0.5f, 0.0f).UV(1.0f, 0.0f), // top right
-			//vertex.Pos(-0.5f, 0.5f, 0.0f).UV(0.0f, 0.0f), // top left
 		};
 		indices = {
 			0, 1, 2,
@@ -82,13 +79,11 @@ namespace OpenGLFun {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (INPUT_SYSTEM->IsKeyTriggered(GLFW_KEY_F2)) {
-			if (engine->mInDebugMode) {
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // enable wireframe mode
-			}
-			else {
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // reset to default view
-			}
+		if (engine->mInDebugMode) {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // enable wireframe mode
+		}
+		else {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // reset to default view
 		}
 
 		_mainShaderProgram.use();
