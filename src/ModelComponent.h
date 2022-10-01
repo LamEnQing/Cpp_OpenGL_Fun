@@ -23,12 +23,12 @@ namespace OpenGLFun {
 		~ModelComponent() override {}
 		void Deserialize(rapidjson::Value const& jsonObj) override {
 			if (!jsonObj.HasMember("model") || !jsonObj["model"].IsInt())
-				throw SimpleException("Component of type Model must have key 'model' with an integer");
+				throw SimpleException("Component of type Model must have key 'model' with an integer value");
 
 			int typeMax = static_cast<int>(Type::Maximum);
 			int modelVal = jsonObj["model"].GetInt();
 			if (modelVal >= typeMax)
-				throw SimpleException("Component of type Model's 'model' exceeded the maximum possible value of " + std::to_string(typeMax - 1));
+				throw SimpleException("Component of type Model's 'model' exceeded the maximum possible value " + std::to_string(typeMax - 1));
 
 			mModelType = static_cast<Type>(modelVal);
 

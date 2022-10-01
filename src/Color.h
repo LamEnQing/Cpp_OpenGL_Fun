@@ -1,21 +1,18 @@
 #pragma once
 #include "pch.h"
 #include "Component.h"
+#include "Vec4f.h"
 
 namespace OpenGLFun {
 	class Color : public IComponent {
 	public:
-		glm::vec4 mRgba;
+		Vec4f mRgba;
 
 		Color() : IComponent(), mRgba{ 1.0f } {
 			mCompType = ComponentType::Color;
 			std::cout << "Color constructor\n";
 		}
 
-		Color(EntityId const& owner, glm::vec4 rgba): Color() {
-			mOwner = owner;
-			mRgba = rgba;
-		}
 		~Color() override {}
 
 		void Deserialize(rapidjson::Value const& jsonObj) override {
@@ -27,13 +24,13 @@ namespace OpenGLFun {
 				if (colorArr.Size() == 3 && i == 3) continue; // skip alpha if size is 3 and i is 4
 
 				float value;
-				if (!colorArr[i].IsDouble() && !colorArr[i].IsInt())
-					throw JsonReadException("component of type Color", std::string("color[") + std::to_string(i) + "]", "integer or double");
+				if (!colorArr[i].IsFloat() && !colorArr[i].IsInt())
+					throw JsonReadException("component of type Color", std::string("color[") + std::to_string(i) + "]", "integer or float");
 
 				if (colorArr[i].IsInt())
-					value = static_cast<float>(colorArr[i].GetInt());
+					value = static_cast<float>(colorArr[i].GetInt()) / 255.0f;
 				else
-					value = static_cast<float>(colorArr[i].GetDouble());
+					value = colorArr[i].GetFloat();
 
 				mRgba[i] = value; // vec4 is double, even though in json, the values are integer
 			}

@@ -42,16 +42,16 @@ namespace OpenGLFun {
 		int frameCount = 0;
 
 		while (!glfwWindowShouldClose(WINDOW_SYSTEM->mWindow)) {
-			float currentTime = (float)glfwGetTime();
+			float currentTime = static_cast<float>(glfwGetTime());
 			float deltaTime = currentTime - _lastTime;
-			_lastTime = (float)glfwGetTime();
+			_lastTime = static_cast<float>(glfwGetTime());
 
 			for (std::unique_ptr<ISystem>& system : _systems)
 				system->Update(deltaTime);
 
 			// this adds a time buffer, to ensure it runs at 60 fps
 			do {
-				currentTime = (float)glfwGetTime(); // get current time and subtract that with the frame's start time
+				currentTime = static_cast<float>(glfwGetTime()); // get current time and subtract that with the frame's start time
 				deltaTime = currentTime - _lastTime;
 			} while (deltaTime < 1.0f / 60.0f); // measure the delta time, ensure it doesn't exceed the time for a single frame, that is: 1 second / 60 frames
 

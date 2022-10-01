@@ -1,17 +1,16 @@
 #pragma once
 #include "pch.h"
 #include "Component.h"
+#include "Vec4f.h"
 
 namespace OpenGLFun {
 	class Button : public IComponent {
 	public:
-		glm::vec4 mHoverRgba;
+		Vec4f mHoverRgba;
+		std::array<int, 2> mHoverUVPos;
+		std::array<int, 2> mHoverUVDimensions;
+		Button() : IComponent(), mHoverRgba{ 1.0f, 1.0f, 1.0f, 1.0f }, mHoverUVPos{ 0, 0 }, mHoverUVDimensions{ 0, 0 } { mCompType = ComponentType::Button; }
 
-		Button() : IComponent(), mHoverRgba{ 1 } { mCompType = ComponentType::Button; }
-		Button(EntityId& owner, glm::vec4 hoverRgba) : Button() {
-			mOwner = owner;
-			mHoverRgba = hoverRgba;
-		}
 		~Button() override {}
 		void Deserialize(rapidjson::Value const& jsonObj) {
 			if (!jsonObj.HasMember("hover_color") || !jsonObj["hover_color"].IsArray() || jsonObj["hover_color"].Size() < 3)
@@ -22,13 +21,13 @@ namespace OpenGLFun {
 				if (colorArr.Size() == 3 && i == 3) continue; // skip alpha if size is 3 and i is 4
 
 				float value;
-				if (!colorArr[i].IsDouble() && !colorArr[i].IsInt())
-					throw JsonReadException("component of type Button", std::string("hover_color[") + std::to_string(i) + "]", "integer or double");
+				if (!colorArr[i].IsFloat() && !colorArr[i].IsInt())
+					throw JsonReadException("component of type Button", std::string("hover_color[") + std::to_string(i) + "]", "integer or float");
 
 				if (colorArr[i].IsInt())
-					value = static_cast<float>(colorArr[i].GetInt());
+					value = static_cast<float>(colorArr[i].GetInt()) / 255.0f;
 				else
-					value = static_cast<float>(colorArr[i].GetDouble());
+					value = colorArr[i].GetFloat();
 
 				mHoverRgba[i] = value; // vec4 is double, even though in json, the values are integer
 			}

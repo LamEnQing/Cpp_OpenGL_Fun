@@ -1,21 +1,22 @@
 #pragma once
 #include "pch.h"
 #include "Component.h"
+#include "Vec3f.h"
 
 namespace OpenGLFun {
 	class Transform : public IComponent {
 	public:
-		glm::vec3 mPositionOld;
-		glm::vec3 mPosition;
-		glm::vec3 mRotationOld;
-		glm::vec3 mRotation;
-		glm::vec3 mScale;
+		Vec3f mPositionOld;
+		Vec3f mPosition;
+		Vec3f mRotationOld;
+		Vec3f mRotation;
+		Vec3f mScale;
 
-		Transform() : IComponent(), mPositionOld{}, mPosition{}, mRotationOld{}, mRotation{}, mScale{1.0f} {
+		Transform() : IComponent(), mPositionOld{}, mPosition{}, mRotationOld{}, mRotation{}, mScale{ 1.0f } {
 			mCompType = ComponentType::Transform;
 			std::cout << "Transform constructor\n";
 		}
-		Transform(EntityId const& owner, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale) : Transform() {
+		Transform(EntityId const& owner, Vec3f pos, Vec3f rot, Vec3f scale) : Transform() {
 			mOwner = owner;
 
 			mPositionOld = mPosition = pos;
@@ -23,6 +24,7 @@ namespace OpenGLFun {
 			mScale = scale;
 		}
 		~Transform() override {}
+
 		void Deserialize(rapidjson::Value const& jsonObj) override {
 			if (jsonObj.HasMember("position")) {
 				if (!jsonObj["position"].IsArray() || jsonObj["position"].Size() < 3)
@@ -30,10 +32,10 @@ namespace OpenGLFun {
 
 				const rapidjson::Value& posArr = jsonObj["position"];
 				for (int i = 0; i < 3; i++) {
-					if (!posArr[i].IsDouble())
-						throw JsonReadException("component of type Transform", std::string("size[") + std::to_string(i) + "]", "double");
+					if (!posArr[i].IsFloat())
+						throw JsonReadException("component of type Transform", std::string("position[") + std::to_string(i) + "]", "float");
 
-					mPosition[i] = static_cast<float>(posArr[i].GetDouble());
+					mPosition[i] = posArr[i].GetFloat();
 				}
 			}
 
@@ -43,10 +45,10 @@ namespace OpenGLFun {
 
 				const rapidjson::Value& rotArr = jsonObj["rotation"];
 				for (int i = 0; i < 3; i++) {
-					if (!rotArr[i].IsDouble())
-						throw JsonReadException("component of type Transform", std::string("size[") + std::to_string(i) + "]", "double");
+					if (!rotArr[i].IsFloat())
+						throw JsonReadException("component of type Transform", std::string("rotation[") + std::to_string(i) + "]", "float");
 
-					mRotation[i] = static_cast<float>(rotArr[i].GetDouble());
+					mRotation[i] = rotArr[i].GetFloat();
 				}
 			}
 
@@ -56,10 +58,10 @@ namespace OpenGLFun {
 
 				const rapidjson::Value& scaleArr = jsonObj["scale"];
 				for (int i = 0; i < 3; i++) {
-					if (!scaleArr[i].IsDouble())
-						throw JsonReadException("component of type Transform", std::string("size[") + std::to_string(i) + "]", "double");
+					if (!scaleArr[i].IsFloat())
+						throw JsonReadException("component of type Transform", std::string("scale[") + std::to_string(i) + "]", "float");
 
-					mScale[i] = static_cast<float>(scaleArr[i].GetDouble());
+					mScale[i] = scaleArr[i].GetFloat();
 				}
 			}
 		}

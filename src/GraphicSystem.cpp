@@ -155,32 +155,35 @@ namespace OpenGLFun {
 
 		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(engine->mPlayerId, ComponentType::Camera);
 		Transform* playerPos = COMPONENT_MANAGER->GetComponent<Transform>(engine->mPlayerId, ComponentType::Transform);
-		// camera pos, target pos, up direction
-		glm::vec3 lookAtLerp = playerCamera->mLookAt;
-		glm::mat4 view = glm::lookAt(playerPos->mPosition + playerCamera->mCamOffset, playerPos->mPosition + playerCamera->mCamOffset + lookAtLerp, playerCamera->mCamUp);
+		// camera pos, target pos, up direction1
+		Vec3f lookAtLerp = playerCamera->mLookAt;
+		Vec3f eye = playerPos->mPosition + playerCamera->mCamOffset;
+		Vec3f center = playerPos->mPosition + playerCamera->mCamOffset + lookAtLerp;
+		glm::mat4 view = glm::lookAt(glm::vec3(eye.x, eye.y, eye.z), glm::vec3(center.x, center.y, center.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
 		glm::mat4 model;
 		glm::mat4 proj = glm::mat4(1.0f);
 
 		// fov, width/height ratio, near, far
-		proj = glm::perspective(glm::radians(45.f), (float)WINDOW_SYSTEM->GetWindowWidth() / WINDOW_SYSTEM->GetWindowHeight(), 0.1f, 50.0f);
+		proj = glm::perspective(glm::radians(45.0f), static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / WINDOW_SYSTEM->GetWindowHeight(), 0.1f, 50.0f);
 
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
 			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
 				continue;
 
+			model = glm::mat4(1.0f);
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
 			if (modelComp->mModelType == ModelComponent::Type::Axis) {
-				model = glm::translate(glm::mat4(1.0f), entityTransform->mPosition);
-				_axisModel.Draw3D(_mainShaderProgram.programId, model, view, proj);
+				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
+				_axisModel.Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
 			}
 
 			if (modelComp->mModelType == ModelComponent::Type::Cube) {
 				// SRT
 				// rotation is zyx. That is when we apply in math, it's reversed order
-				model = glm::scale(model, entityTransform->mScale);
-				model = glm::translate(model, entityTransform->mPosition);
+				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
+				model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
 
 				/*glm::mat4 mtxRotX = {
 					1, 0, 0, 0,
@@ -206,12 +209,12 @@ namespace OpenGLFun {
 				/*model = glm::rotate(model, glm::radians(entityTransform->mRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 				model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 				model = glm::rotate(model, glm::radians(entityTransform->mRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));*/
-				_rainbowCubeModel.Draw3D(_mainShaderProgram.programId, model, view, proj);
+				_rainbowCubeModel.Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
 			}
 		}
 
 		if (INPUT_SYSTEM->mIsPaused) {
-			glm::vec2 scale(WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight());
+			glm::vec3 sample_vec3;
 			_2DShaderProgram.use();
 
 			//glDisable(GL_DEPTH);
@@ -223,33 +226,40 @@ namespace OpenGLFun {
 				if (modelComp->mModelType != ModelComponent::Type::TwoD) continue;
 				Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
-				model = glm::translate(glm::mat4(1.0f), entityTransform->mPosition);
-				scale = { (float)entityTransform->mScale.x / WINDOW_SYSTEM->GetWindowWidth(), (float)entityTransform->mScale.y / WINDOW_SYSTEM->GetWindowHeight() };
-				scale *= 2;
+				sample_vec3 = vec3f_to_vec3(entityTransform->mPosition);
+				sample_vec3[0] /= WINDOW_SYSTEM->GetWindowWidth();
+				sample_vec3[1] /= WINDOW_SYSTEM->GetWindowHeight();
+				model = glm::translate(glm::mat4(1.0f), sample_vec3);
 
-				glm::vec4 color = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
+				sample_vec3 = vec3f_to_vec3(entityTransform->mScale);
+				sample_vec3[0] /= WINDOW_SYSTEM->GetWindowWidth();
+				sample_vec3[1] /= WINDOW_SYSTEM->GetWindowHeight();
+				sample_vec3[2] = 0.0f;
+				sample_vec3 *= 2.0f;
+				model = glm::scale(model, sample_vec3);
+
+				auto color = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
 
 				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Button)) {
 					// need to localise the mouse pos origin (top left) to opengl origin (center of screen)
-					float mousePosX = INPUT_SYSTEM->mMousePos.x - WINDOW_SYSTEM->GetWindowWidth() / 2.f;
-					float mousePosY = WINDOW_SYSTEM->GetWindowHeight() - INPUT_SYSTEM->mMousePos.y - WINDOW_SYSTEM->GetWindowHeight() / 2.f;
+					float mousePosX = INPUT_SYSTEM->mMousePos.x - WINDOW_SYSTEM->GetWindowWidth() / 2.0f;
+					float mousePosY = WINDOW_SYSTEM->GetWindowHeight() - INPUT_SYSTEM->mMousePos.y - WINDOW_SYSTEM->GetWindowHeight() / 2.0f;
 					float buttonPosX = entityTransform->mPosition.x;
 					float buttonPosY = entityTransform->mPosition.y;
-					float buttonWidth = entityTransform->mScale.x / 2.f;
-					float buttonHeight = entityTransform->mScale.y / 2.f;
+					float buttonWidth = entityTransform->mScale.x / 2.0f;
+					float buttonHeight = entityTransform->mScale.y / 2.0f;
 
-					std::cout << "==== Hovering ====\n";
+					/*std::cout << "==== Hovering ====\n";
 					std::cout << "Mouse Pos:" << mousePosX << ' ' << mousePosY << '\n';
-					std::cout << "==== End Hovering ====\n";
+					std::cout << "==== End Hovering ====\n";*/
 
 					if (mousePosX >= buttonPosX - buttonWidth && mousePosX < buttonPosX + buttonWidth
 						&& mousePosY > buttonPosY - buttonHeight && mousePosY <= buttonPosY + buttonHeight) {
-						color = COMPONENT_MANAGER->GetComponent<Button>(entityId, ComponentType::Button)->mHoverRgba;
 					}
 				}
 				_2DShapeModel
 					.SetBlend(modelComp->mEnableBlend)
-					.Draw2D(_2DShaderProgram.programId, model, scale, color);
+					.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, color);
 			}
 			//glEnable(GL_DEPTH);
 		}

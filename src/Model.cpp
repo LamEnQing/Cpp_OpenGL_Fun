@@ -23,7 +23,7 @@ namespace OpenGLFun {
 		*/
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0); // assign to location = 0, or the position variable in the vertex shader
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vertex::pos))); // assign to location = 1, or the color variable in the vertex shader, also set the offset, offset of Pos
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vertex::mPos))); // assign to location = 1, or the color variable in the vertex shader, also set the offset, offset of Pos
 		glEnableVertexAttribArray(1);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO
@@ -38,13 +38,22 @@ namespace OpenGLFun {
 		return *this;
 	}
 
-	Model& Model::Draw2D(unsigned int& shaderProgram, glm::mat4& transMtx, glm::vec2& scaleVec, glm::vec4 tintVec) {
-		unsigned int modelLoc = glGetUniformLocation(shaderProgram, "transformation");
-		unsigned int tintColorLoc = glGetUniformLocation(shaderProgram, "tintColor");
+	Model& Model::Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor) {
+		unsigned int transformLoc = glGetUniformLocation(shaderProgram, "uTransformation");
+		unsigned int tintColorLoc = glGetUniformLocation(shaderProgram, "uTintColor");
+		unsigned int texDimLoc = glGetUniformLocation(shaderProgram, "uTexDimensions");
+		unsigned int texCoordLoc = glGetUniformLocation(shaderProgram, "uTexCoord");
 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transMtx * glm::scale(glm::mat4(1.0f), glm::vec3(scaleVec, 1.0f))));
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformMtx));
 
+		glm::vec4 tintVec{ tintColor[0], tintColor[1], tintColor[2], tintColor[3] };
 		glUniform4fv(tintColorLoc, 1, glm::value_ptr(tintVec));
+
+		glm::vec2 someVec2{ uvDimensions[0], uvDimensions[1] };
+		glUniform2fv(texDimLoc, 1, glm::value_ptr(someVec2));
+
+		someVec2 = { uvOffsetPos[0], uvOffsetPos[1] };
+		glUniform2fv(texCoordLoc, 1, glm::value_ptr(someVec2));
 
 		if (this->_shouldCull)
 			glEnable(GL_CULL_FACE); // enable cull, by default culls back faces. Back faces are CW
@@ -55,23 +64,29 @@ namespace OpenGLFun {
 			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
 		else {
-			//glDisable(GL_BLEND);
+			glDisable(GL_BLEND);
 		}
 
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, textureId);
 		glBindVertexArray(_vao);
 		glDrawArrays(this->_drawMode, 0, _vertexCount);
 		glBindVertexArray(0); // unbind
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		if (this->_shouldBlend)
 			glDisable(GL_BLEND);
+		else
+			glEnable(GL_BLEND);
 
 		if (this->_shouldCull)
 			glDisable(GL_CULL_FACE);
+		glDisable(GL_TEXTURE_2D);
 
 		return *this;
 	}
 
-	Model& Model::Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, glm::vec4 tintVec) {
+	Model& Model::Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor) {
 		unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
 		unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
 		unsigned int projLoc = glGetUniformLocation(shaderProgram, "proj");
@@ -81,6 +96,7 @@ namespace OpenGLFun {
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMtx));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projMtx));
 
+		glm::vec4 tintVec{ tintColor[0], tintColor[1], tintColor[2], tintColor[3] };
 		glUniform4fv(tintColorLoc, 1, glm::value_ptr(tintVec));
 
 		if (this->_shouldCull)
@@ -88,16 +104,24 @@ namespace OpenGLFun {
 
 		if (this->_shouldBlend)
 			glEnable(GL_BLEND);
+		else
+			glDisable(GL_BLEND);
 
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, textureId);
 		glBindVertexArray(_vao);
 		glDrawArrays(this->_drawMode, 0, _vertexCount);
 		glBindVertexArray(0); // unbind
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		if (this->_shouldBlend)
 			glDisable(GL_BLEND);
+		else
+			glEnable(GL_BLEND);
 
 		if (this->_shouldCull)
 			glDisable(GL_CULL_FACE);
+		glDisable(GL_TEXTURE_2D);
 
 		return *this;
 	}

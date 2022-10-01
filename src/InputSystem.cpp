@@ -5,9 +5,10 @@
 #include "Transform.h"
 #include "WindowSystem.h"
 #include "Camera.h"
+#include "Vec2f.h"
 
 namespace OpenGLFun {
-	double _deltaTime = 0.0f;
+	float _deltaTime = 0.0f;
 	InputSystem* INPUT_SYSTEM = nullptr;
 	void MousePosCallback(GLFWwindow* window, double xPosIn, double yPosIn);
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -34,7 +35,7 @@ namespace OpenGLFun {
 		};
 	}
 
-	void InputSystem::Update(double const& deltaTime) {
+	void InputSystem::Update(float const& deltaTime) {
 		_deltaTime = deltaTime;
 
 		for (int& key : _availableKeys) {
@@ -53,24 +54,24 @@ namespace OpenGLFun {
 		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(engine->mPlayerId, ComponentType::Camera);
 		Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(engine->mPlayerId, ComponentType::Transform);
 
-		float playerSpeed = 3.0f * (float) deltaTime;
+		float playerSpeed = 3.0f * deltaTime;
 		//float rotation = 10.0f * deltaTime;
 		if (IsKeyHeld(GLFW_KEY_W)) {
 			playerTransform->mPositionOld = playerTransform->mPosition;
-			playerTransform->mPosition += glm::normalize(playerCamera->mLookAt) * playerSpeed;
+			playerTransform->mPosition += OpenGLFun::normalize(playerCamera->mLookAt) * playerSpeed;
 		}
 		else if (IsKeyHeld(GLFW_KEY_S)) {
 			playerTransform->mPositionOld = playerTransform->mPosition;
-			playerTransform->mPosition -= glm::normalize(playerCamera->mLookAt) * playerSpeed;
+			playerTransform->mPosition -= OpenGLFun::normalize(playerCamera->mLookAt) * playerSpeed;
 		}
 
 		if (IsKeyHeld(GLFW_KEY_A)) {
 			playerTransform->mPositionOld = playerTransform->mPosition;
-			playerTransform->mPosition -= glm::normalize(glm::cross(playerCamera->mLookAt, playerCamera->mCamUp)) * playerSpeed;
+			playerTransform->mPosition -= OpenGLFun::normalize(OpenGLFun::cross(playerCamera->mLookAt, playerCamera->mCamUp)) * playerSpeed;
 		}
 		else if (IsKeyHeld(GLFW_KEY_D)) {
 			playerTransform->mPositionOld = playerTransform->mPosition;
-			playerTransform->mPosition += glm::normalize(glm::cross(playerCamera->mLookAt, playerCamera->mCamUp)) * playerSpeed;
+			playerTransform->mPosition += OpenGLFun::normalize(cross(playerCamera->mLookAt, playerCamera->mCamUp)) * playerSpeed;
 		}
 
 		if (IsKeyHeld(GLFW_KEY_SPACE)) {
@@ -112,13 +113,13 @@ namespace OpenGLFun {
 
 		if (INPUT_SYSTEM->mIsPaused) return;
 		if (INPUT_SYSTEM->mInitialMouseMovement) {
-			INPUT_SYSTEM->mMousePosOld = { (float)xPosIn, (float)yPosIn };
+			INPUT_SYSTEM->mMousePosOld = { static_cast<float>(xPosIn), static_cast<float>(yPosIn) };
 			INPUT_SYSTEM->mInitialMouseMovement = false;
 		}
 		//printf("Mouse Input: %.2f, %.2f\n", xPosIn, yPosIn);
 		//printf("Mouse Old: %.2f, %.2f\n", INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y);
 
-		glm::vec2 mouseOffset = glm::vec2((float)xPosIn - INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y - (float)yPosIn); // mouse origin starts from top-left, so for y it has to be old-new to get the correct signed value
+		Vec2f mouseOffset = { static_cast<float>(xPosIn) - INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y - static_cast<float>(yPosIn) }; // mouse origin starts from top-left, so for y it has to be old-new to get the correct signed value
 		INPUT_SYSTEM->mMousePosOld = { xPosIn, yPosIn };
 		//printf("Mouse Offset: %.2f, %.2f\n", mouseOffset.x, mouseOffset.y);
 
@@ -127,8 +128,8 @@ namespace OpenGLFun {
 		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(engine->mPlayerId, ComponentType::Camera);
 		Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(engine->mPlayerId, ComponentType::Transform);
 
-		//std::cout << "Player Rotation Old:" << glm::to_string(playerTransform->mRotationOld) << '\n';
-		//std::cout << "Player Rotation:" << glm::to_string(playerTransform->mRotation) << '\n';
+		/*std::cout << "Player Rotation Old:" << playerTransform->mRotationOld << '\n';
+		std::cout << "Player Rotation:" << playerTransform->mRotation << '\n';*/
 
 		playerTransform->mRotationOld.x = playerTransform->mRotation.x;
 		playerTransform->mRotationOld.y = playerTransform->mRotation.y;
@@ -141,13 +142,12 @@ namespace OpenGLFun {
 		else if (playerTransform->mRotation.y < -89.0f)
 			playerTransform->mRotation.y = -89.0f;
 
-		glm::vec3 dir = glm::vec3(1.0f);
+		Vec3f dir(1.0f);
 		dir.x = cos(glm::radians(playerTransform->mRotation.x)) * cos(glm::radians(playerTransform->mRotation.y));
 		dir.y = sin(glm::radians(playerTransform->mRotation.y));
 		dir.z = sin(glm::radians(playerTransform->mRotation.x)) * cos(glm::radians(playerTransform->mRotation.y));
 		playerCamera->mLookAtPrev = playerCamera->mLookAt;
-		playerCamera->mLookAt = glm::normalize(dir);
-		//printf("Camera Look At: %.2f, %.2f, %.2f\n", dir.x, dir.y, dir.z);
+		playerCamera->mLookAt = OpenGLFun::normalize(dir);
 	}
 
 	void KeyCallback(GLFWwindow* window, int key, int, int action, int) {
@@ -164,8 +164,8 @@ namespace OpenGLFun {
 					INPUT_SYSTEM->mIsPaused = false;
 					std::cout << "Game unpaused\n";
 					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-					glfwSetCursorPos(window, (double)WINDOW_SYSTEM->GetWindowWidth() / 2.0, (double)WINDOW_SYSTEM->GetWindowHeight() / 2.0);
-					INPUT_SYSTEM->mMousePosOld = { (float)WINDOW_SYSTEM->GetWindowWidth() / 2.0f, (float)WINDOW_SYSTEM->GetWindowHeight() / 2.0f };
+					glfwSetCursorPos(window, static_cast<double>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0, static_cast<double>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0);
+					INPUT_SYSTEM->mMousePosOld = { static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f, static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f };
 				}
 			}
 		}
