@@ -1,13 +1,18 @@
 #include "LevelManager.h"
 #include <filesystem>
 
-#include "ComponentManager.h"
 #include "main.h"
+#include "ComponentManager.h"
 #include "EntityFactory.h"
 #include "EntityManager.h"
+#include "GraphicSystem.h"
+#include "ResourceManager.h"
+
 #include "Camera.h"
 #include "Controllable.h"
 #include "Transform.h"
+#include "Serializer.h"
+#include "Sprite.h"
 
 namespace OpenGLFun {
 	const std::string LEVEL_DIR = "assets\\data\\levels";
@@ -37,7 +42,11 @@ namespace OpenGLFun {
 				std::cout << "Failed to parse " << entry.path().string() << ", here's the error: " << e.what() << '\n';
 			}
 		}*/
-		for (const auto& entry : std::filesystem::directory_iterator("assets\\data")) {
+		for (const auto& entry : std::filesystem::directory_iterator("data")) {
+			if (!Serializer::DoesFilenameEndWith(entry.path().string(), ".json")) {
+				continue;
+			}
+
 			std::cout << "Discovered:" << entry.path().string() << '\n';
 			try {
 				ENTITY_FACTORY.get()->CreateEntityFromFile(entry.path().string().c_str());
@@ -57,9 +66,21 @@ namespace OpenGLFun {
 
 		Transform* transform = new Transform(engine->mPlayerId, { -3, 0, 0 }, {}, {});
 		COMPONENT_MANAGER->AddComponent(transform);
+
+		// Load textures
+		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
+			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
+				continue;
+
+			RESOURCE_MANAGER->LoadTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
+		}
+
+		RESOURCE_MANAGER->LoadTexture("assets/textures/no_texture.png");
 	}
 
 	void LevelManager::Unload() {
+		RESOURCE_MANAGER->UnloadTextures();
+
 		COMPONENT_MANAGER->Clear();
 		ENTITY_MANAGER->Clear();
 	}

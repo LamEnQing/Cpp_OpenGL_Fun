@@ -19,5 +19,19 @@ namespace OpenGLFun {
 
 			return file_contents;
 		}
+
+		bool DoesFilenameEndWith(std::string const& filename, std::string endStr) {
+			if (endStr.size() > filename.size())
+				return false;
+
+			// say filename is 5 chars, and endStr is 4 chars, you should start at 1 which is 5 - 4.
+			// say filename is 5 chars, and endStr is 4 chars, you should start at 1 which is 5 - 4.
+			for (size_t i = 0; i < endStr.size(); i++) {
+				if (filename[filename.size() - endStr.size() + i] !=
+					endStr[i])
+					return false;
+			}
+			return true;
+		}
 	}
 }

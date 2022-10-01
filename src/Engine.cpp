@@ -3,8 +3,8 @@
 
 #include "ComponentManager.h"
 #include "GraphicSystem.h"
-#include "LevelManager.h"
 #include "InputSystem.h"
+#include "LevelManager.h"
 #include "ResourceManager.h"
 #include "WindowSystem.h"
 
@@ -68,5 +68,7 @@ namespace OpenGLFun {
 				frameCount = 0;
 			}
 		}
+
+		LEVEL_MANAGER.get()->Unload();
 	}
 }

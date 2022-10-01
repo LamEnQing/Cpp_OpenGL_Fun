@@ -40,6 +40,9 @@
     <Filter Include="resource_manager">
       <UniqueIdentifier>{a4eb2ee6-0550-4aa6-abb2-86ee49d5e59e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{376b98e1-1468-4e6e-a190-9e870a6eb60e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
@@ -85,6 +88,15 @@
     </ClCompile>
     <ClCompile Include="src\ResourceManager.cpp">
       <Filter>resource_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vec3f.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vec2f.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vec4f.cpp">
+      <Filter>math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +185,15 @@
     </ClInclude>
     <ClInclude Include="src\ResourceManager.h">
       <Filter>resource_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vec2f.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vec3f.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vec4f.h">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
