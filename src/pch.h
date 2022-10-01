@@ -2,6 +2,7 @@
 
 #ifndef OPENGLFUN_PCH_H
 #define OPENGLFUN_PCH_H
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,6 +12,7 @@
 #include <rapidjson/document.h>
 
 #include <algorithm>
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <map>

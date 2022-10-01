@@ -1,10 +1,10 @@
 #pragma once
-#include <string>
+#include "pch.h"
 
 namespace OpenGLFun {
 	struct Texture {
-		unsigned int ID;
-
-		bool create(std::string imageFilepath);
+		unsigned int mGLTextureId{ 0 };
+		int imgWidth{ 0 }, imgHeight{ 0 }, imgChannels{ 0 };
+		unsigned char* imgData = nullptr;
 	};
 }

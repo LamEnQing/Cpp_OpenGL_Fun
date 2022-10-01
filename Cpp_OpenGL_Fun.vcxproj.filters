@@ -34,6 +34,12 @@
     <Filter Include="level_manager">
       <UniqueIdentifier>{d32f1bbb-43fc-43ea-9fd7-ac08983e0d3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system\graphics\texture">
+      <UniqueIdentifier>{349d97e8-42db-4c30-9351-402d182619f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource_manager">
+      <UniqueIdentifier>{a4eb2ee6-0550-4aa6-abb2-86ee49d5e59e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
@@ -46,14 +52,8 @@
     <ClCompile Include="src\Model.cpp">
       <Filter>system\graphics\model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shapes.cpp">
-      <Filter>system\graphics\model</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vertex.cpp">
       <Filter>system\graphics\model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EntityManager.cpp">
-      <Filter>entity</Filter>
     </ClCompile>
     <ClCompile Include="src\InputSystem.cpp">
       <Filter>system</Filter>
@@ -80,12 +80,15 @@
     <ClCompile Include="src\LevelManager.cpp">
       <Filter>level_manager</Filter>
     </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ResourceManager.cpp">
+      <Filter>resource_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entity.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntityManager.h">
       <Filter>entity</Filter>
     </ClInclude>
     <ClInclude Include="src\Component.h">
@@ -113,9 +116,6 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Texture.h">
-      <Filter>system\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\GraphicSystem.h">
       <Filter>system\graphics</Filter>
     </ClInclude>
@@ -161,6 +161,18 @@
     </ClInclude>
     <ClInclude Include="src\Button.h">
       <Filter>component\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>system\graphics\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sprite.h">
+      <Filter>component\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResourceManager.h">
+      <Filter>resource_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
