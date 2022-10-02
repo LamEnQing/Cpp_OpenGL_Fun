@@ -89,6 +89,7 @@ namespace OpenGLFun {
 			}
 		}
 		RESOURCE_MANAGER->LoadTexture("no_texture.png");
+		std::cout << "--------------------------\n";
 	}
 
 	void LevelManager::Unload() {
