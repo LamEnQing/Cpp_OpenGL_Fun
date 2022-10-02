@@ -236,7 +236,7 @@ namespace OpenGLFun {
 			if (!shapeArr[i].IsObject())
 				throw JsonReadException("Model", std::string("shapes[") + std::to_string(i) + "]", "JSON object");
 
-			shapes.push_back(Shape::Deserialize(shapeArr[i]));
+			shapes.push_back(Shape().Deserialize(shapeArr[i]));
 		}
 
 		Init(shapes);

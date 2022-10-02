@@ -10,7 +10,7 @@ namespace OpenGLFun {
 	const std::vector<Vertex>& Shape::Vertices() const { return _vertices; }
 	std::vector<Shape::ElementIndex>& Shape::Indices() { return _indices; }
 
-	Shape Shape::Deserialize(rapidjson::Value const& jsonObj) {
+	Shape& Shape::Deserialize(rapidjson::Value const& jsonObj) {
 		if (!jsonObj.HasMember("color") || !jsonObj["color"].IsArray() || jsonObj["color"].Size() < 3)
 			throw JsonReadException("Shape", "color", "array with minimum 3 elements");
 		if (jsonObj["color"].Size() > 4)
@@ -33,8 +33,7 @@ namespace OpenGLFun {
 
 		if (!jsonObj.HasMember("vertices") || !jsonObj["vertices"].IsArray() || jsonObj["vertices"].Size() < 2)
 			throw JsonReadException("Shape", "vertices", "array with minimum 2 elements");
-
-		std::vector<Vertex> vertices;
+		
 		const rapidjson::Value& vertexArr = jsonObj["vertices"].GetArray();
 		for (rapidjson::SizeType i = 0; i < vertexArr.Size(); i++) {
 			Vertex vertex;
@@ -48,21 +47,21 @@ namespace OpenGLFun {
 			catch (std::exception& e) {
 				throw SimpleException(std::string("In Shape, here's the parse error for vertices[") + std::to_string(i) + "]: " + e.what());
 			}
-			vertices.push_back(vertex);
+			vertex.mColor = color;
+			_vertices.push_back(vertex);
 		}
 
 		if (!jsonObj.HasMember("indices") || !jsonObj["indices"].IsArray() || jsonObj["indices"].Size() < 2)
 			throw JsonReadException("Shape", "indices", "array with minimum 2 elements");
 
-		std::vector<ElementIndex> indices;
 		const rapidjson::Value& indexArr = jsonObj["indices"].GetArray();
 		for (rapidjson::SizeType i = 0; i < indexArr.Size(); i++) {
 			if (!indexArr[i].IsInt())
 				throw JsonReadException("Shape", std::string("indices[") + std::to_string(i) + "]", "integer");
 
-			indices.push_back(static_cast<ElementIndex>(indexArr[i].GetInt()));
+			_indices.push_back(static_cast<ElementIndex>(indexArr[i].GetInt()));
 		}
 
-		return Shape(vertices, indices, color);
+		return *this;
 	}
 }

@@ -15,7 +15,7 @@ namespace OpenGLFun {
 		const std::vector<Vertex>& Vertices() const;
 		std::vector<ElementIndex>& Indices();
 
-		static Shape Deserialize(rapidjson::Value const& jsonObj);
+		Shape& Deserialize(rapidjson::Value const& jsonObj);
 	private:
 		std::vector<Vertex> _vertices;
 		std::vector<ElementIndex> _indices;
