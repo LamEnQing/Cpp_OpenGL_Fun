@@ -51,6 +51,17 @@ namespace OpenGLFun {
 			}
 		}
 
+		if (IsKeyTriggered(GLFW_KEY_F3) == GLFW_PRESS) {
+			LEVEL_MANAGER.get()->Unload();
+			LEVEL_MANAGER.get()->Load();
+		}
+
+		if (IsKeyTriggered(GLFW_KEY_F2) == GLFW_PRESS) {
+			engine->mInDebugMode = !engine->mInDebugMode;
+		}
+
+		if (INPUT_SYSTEM->mIsPaused) return;
+
 		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(engine->mPlayerId, ComponentType::Camera);
 		Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(engine->mPlayerId, ComponentType::Transform);
 
@@ -83,15 +94,6 @@ namespace OpenGLFun {
 			playerTransform->mPosition -= playerCamera->mCamUp * playerSpeed;
 		}
 
-		if (IsKeyTriggered(GLFW_KEY_F3) == GLFW_PRESS) {
-			LEVEL_MANAGER.get()->Unload();
-			LEVEL_MANAGER.get()->Load();
-		}
-
-		if (IsKeyTriggered(GLFW_KEY_F2) == GLFW_PRESS) {
-			engine->mInDebugMode = !engine->mInDebugMode;
-		}
-
 		if (playerTransform->mPositionOld != playerTransform->mPosition) {
 			//printf("Pos: %.2f, %.2f, %.2f\n", playerTransform->pos.x, playerTransform->pos.y, playerTransform->pos.z);
 			playerTransform->mPositionOld = playerTransform->mPosition;
@@ -110,6 +112,10 @@ namespace OpenGLFun {
 		if (_keyTriggerStateMap.find(key) == _keyTriggerStateMap.end())
 			return false;
 		return _keyTriggerStateMap.at(key);
+	}
+
+	bool InputSystem::IsMouseButtonPressed(int mouseButton) {
+		return glfwGetMouseButton(WINDOW_SYSTEM->mWindow, mouseButton);
 	}
 
 	void MousePosCallback(GLFWwindow*, double xPosIn, double yPosIn) {
