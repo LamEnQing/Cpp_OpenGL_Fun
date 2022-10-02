@@ -1,18 +1,23 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 #include "ResourceManager.h"
+#include "Shape.h"
 #include "GraphicSystem.h"
 #include "Serializer.h"
 
 namespace OpenGLFun {
+	ShapeManager* SHAPE_MANAGER = nullptr;
 
 	ResourceManager::ResourceManager() : _texturesDataMap{} {
 		if (RESOURCE_MANAGER != nullptr)
 			throw SimpleException("Resource manager has already been created!");
 
 		RESOURCE_MANAGER = this;
+
+		SHAPE_MANAGER = new ShapeManager();
 	}
 	ResourceManager::~ResourceManager() {
+		delete SHAPE_MANAGER;
 		UnloadTextures();
 		UnloadModels();
 	}
@@ -87,7 +92,7 @@ namespace OpenGLFun {
 		catch (std::exception const& e) { // catch all parse errors, so that we can include the filename in the error too!
 			if (model != nullptr)
 				delete model;
-			throw SimpleException(std::string("Failed to parse ") + modelDirPath + modelFilepath + ", here's the parse error:\n\t\t" + e.what());
+			throw SimpleException(std::string("Failed to parse ") + modelDirPath + modelFilepath + ", here's the parse error:\n\t" + e.what());
 		}
 
 		_modelsDataMap.insert({ modelFilepath, std::shared_ptr<Model>(model) });

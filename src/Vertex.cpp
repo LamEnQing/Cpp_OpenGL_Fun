@@ -23,8 +23,8 @@ namespace OpenGLFun {
 		if (!jsonObj.HasMember("position") || !jsonObj["position"].IsArray() || jsonObj["position"].Size() != 3)
 			throw JsonReadException("Vertex", "position", "array with 3 elements");
 
-		const auto& posArr = jsonObj["position"].GetArray();
-		for (int i = 0; i < posArr.Size(); i++) {
+		const rapidjson::Value& posArr = jsonObj["position"].GetArray();
+		for (rapidjson::SizeType i = 0; i < posArr.Size(); i++) {
 			if (!posArr[i].IsFloat())
 				throw JsonReadException("Vertex", std::string("position[") + std::to_string(i) + "]", "float");
 
@@ -37,7 +37,7 @@ namespace OpenGLFun {
 			if (jsonObj["color"].Size() > 4)
 				throw JsonReadException("Vertex", "color", "array with maximum 4 elements");
 
-			const auto& colorArr = jsonObj["color"].GetArray();
+			const rapidjson::Value& colorArr = jsonObj["color"].GetArray();
 			for (rapidjson::SizeType i = 0; i < colorArr.Size(); i++) {
 				float value;
 				if (!colorArr[i].IsNumber())
@@ -56,8 +56,8 @@ namespace OpenGLFun {
 			if (!jsonObj["uv"].IsArray() || jsonObj["uv"].Size() != 2)
 				throw JsonReadException("Vertex", "uv", "array with 2 elements");
 
-			const auto& uvArr = jsonObj["uv"].GetArray();
-			for (int i = 0; i < uvArr.Size(); i++) {
+			const rapidjson::Value& uvArr = jsonObj["uv"].GetArray();
+			for (rapidjson::SizeType i = 0; i < uvArr.Size(); i++) {
 				if (!uvArr[i].IsFloat())
 					throw JsonReadException("Vertex", std::string("uv[") + std::to_string(i) + "]", "float");
 

@@ -7,7 +7,7 @@
 
 namespace OpenGLFun {
 	struct Model {
-		Model& Init(std::vector<Shape>& shapes);
+		Model& Init(std::vector<std::shared_ptr<IShape>>& shapes);
 
 		Model& Init(std::vector<Vertex>& vertices);
 		Model& Init(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);

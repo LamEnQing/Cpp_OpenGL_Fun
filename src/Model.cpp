@@ -9,17 +9,17 @@ namespace OpenGLFun {
 		{ "lines", GL_LINE_STRIP }
 	};
 
-	Model& Model::Init(std::vector<Shape>& shapes) {
+	Model& Model::Init(std::vector<std::shared_ptr<IShape>>& shapes) {
 		_vertexCount = 0;
 		std::vector<Vertex> vertices;
-		std::vector<Shape::ElementIndex> indices;
-		for (Shape& shape : shapes) {
-			vertices.insert(vertices.end(), shape.Vertices().begin(), shape.Vertices().end());
-			for (Shape::ElementIndex& index : shape.Indices()) {
-				index += static_cast<Shape::ElementIndex>(_vertexCount); // offset the index by how many vertices were added before this shape
+		std::vector<IShape::ElementIndex> indices;
+		for (std::shared_ptr<IShape> shape : shapes) {
+			vertices.insert(vertices.end(), shape->Vertices().begin(), shape->Vertices().end());
+			for (IShape::ElementIndex& index : shape->Indices()) {
+				index += static_cast<IShape::ElementIndex>(_vertexCount); // offset the index by how many vertices were added before this shape
 				indices.push_back(index);
 			}
-			_vertexCount += static_cast<int>(shape.Vertices().size());
+			_vertexCount += static_cast<int>(shape->Vertices().size());
 		}
 
 		return Init(vertices, indices);
@@ -55,7 +55,7 @@ namespace OpenGLFun {
 		return *this;
 	}
 
-	Model& Model::Init(std::vector<Vertex>& vertices, std::vector<Shape::ElementIndex>& indices) {
+	Model& Model::Init(std::vector<Vertex>& vertices, std::vector<IShape::ElementIndex>& indices) {
 		_vertexCount = static_cast<int>(vertices.size());
 		_indexCount = static_cast<int>(indices.size());
 
@@ -226,17 +226,25 @@ namespace OpenGLFun {
 			throw SimpleException(std::string("In Model, could not find draw_mode \"") + drawModeStr + "\"");
 
 		SetDrawMode(DRAW_MODES.at(drawModeStr));
-		std::vector<Shape> shapes;
+		std::vector<std::shared_ptr<IShape>> shapes;
 
 		if (!jsonObj.HasMember("shapes") || !jsonObj["shapes"].IsArray())
 			throw JsonReadException("Model", "shapes", "array");
 
 		rapidjson::Value const& shapeArr = jsonObj["shapes"].GetArray();
 		for (rapidjson::SizeType i = 0; i < shapeArr.Size(); i++) {
-			if (!shapeArr[i].IsObject())
+			const rapidjson::Value& shapeJson = shapeArr[i];
+
+			if (!shapeJson.IsObject())
 				throw JsonReadException("Model", std::string("shapes[") + std::to_string(i) + "]", "JSON object");
 
-			shapes.push_back(Shape().Deserialize(shapeArr[i]));
+			// "type" member must be a string
+			if (!shapeJson.HasMember("type") || !shapeJson["type"].IsString())
+				throw JsonReadException("Model", std::string("shapes[") + std::to_string(i) + "]", "type", "string");
+
+			IShape* shape = SHAPE_MANAGER->GetShapeCreator(shapeJson["type"].GetString())->Create();
+			shape->Deserialize(shapeJson);
+			shapes.emplace_back(shape);
 		}
 
 		Init(shapes);
