@@ -5,7 +5,7 @@ namespace OpenGLFun {
 	class ModelComponent : public IComponent {
 	public:
 		enum class Type {
-			Cube, Axis, TwoD, ThreeD, Maximum
+			TwoD, ThreeD, Maximum
 		};
 
 		Type mModelType;
@@ -13,7 +13,7 @@ namespace OpenGLFun {
 		bool mEnableBlend;
 		bool mShouldCull;
 
-		ModelComponent() : IComponent(), mModelType{ Type::Cube }, mModelFilepath(""), mEnableBlend{false}, mShouldCull{false}  {
+		ModelComponent() : IComponent(), mModelType{ Type::TwoD }, mModelFilepath(""), mEnableBlend{false}, mShouldCull{false}  {
 			mCompType = ComponentType::Model;
 		}
 		ModelComponent(EntityId const& owner, Type modelType) : ModelComponent() {

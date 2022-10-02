@@ -1,9 +1,12 @@
 #pragma once
 #include "pch.h"
+#include "EntityManager.h"
 
 namespace OpenGLFun {
 	class LevelManager {
 	public:
+		std::vector<EntityId> mPauseScreenObjs;
+
 		LevelManager();
 		~LevelManager();
 

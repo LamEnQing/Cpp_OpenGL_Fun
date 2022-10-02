@@ -19,7 +19,7 @@ namespace OpenGLFun {
 	const std::string LEVEL_DIR = "assets\\data\\levels";
 	const std::string ENITY_DIR = "\\entity";
 
-	LevelManager::LevelManager() : _currentLevel(0), _maxLevel(1) {
+	LevelManager::LevelManager() : _currentLevel(0), _maxLevel(1), mPauseScreenObjs{} {
 		/*for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR)) {
 			std::cout << "Discovered:" << entry.path().string() << '\n';
 			try {
@@ -36,15 +36,6 @@ namespace OpenGLFun {
 	void LevelManager::Load() {
 		std::cout << "Level Manager Loading\n";
 		std::cout << "----------------------------------------------------------------------\n";
-		/*for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR + std::to_string(_currentLevel) + "\\entity")) {
-			std::cout << "Discovered:" << entry.path().string() << '\n';
-			try {
-				ENTITY_FACTORY.get()->CreateEntityFromFile(entry.path().string().c_str());
-			}
-			catch (std::exception& e) {
-				std::cout << "Failed to parse " << entry.path().string() << ", here's the error: " << e.what() << '\n';
-			}
-		}*/
 		for (const auto& entry : std::filesystem::directory_iterator("data")) {
 			if (!Serializer::DoesFilenameEndWith(entry.path().string(), ".json")) {
 				continue;
@@ -53,6 +44,20 @@ namespace OpenGLFun {
 			std::cout << "Discovered:" << entry.path().string() << '\n';
 			try {
 				ENTITY_FACTORY.get()->CreateEntityFromFile(entry.path().string().c_str());
+			}
+			catch (std::exception& e) {
+				std::cout << "Failed to parse " << entry.path().string() << ", here's the error:\n\t" << e.what() << '\n';
+			}
+		}
+
+		for (const auto& entry : std::filesystem::directory_iterator("data/pause_screen")) {
+			if (!Serializer::DoesFilenameEndWith(entry.path().string(), ".json")) {
+				continue;
+			}
+
+			std::cout << "Discovered:" << entry.path().string() << '\n';
+			try {
+				mPauseScreenObjs.push_back(ENTITY_FACTORY.get()->CreateEntityFromFile(entry.path().string().c_str()));
 			}
 			catch (std::exception& e) {
 				std::cout << "Failed to parse " << entry.path().string() << ", here's the error:\n\t" << e.what() << '\n';

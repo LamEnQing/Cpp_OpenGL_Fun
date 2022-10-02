@@ -4,6 +4,7 @@
 #include "ComponentManager.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
+#include "LevelManager.h"
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "WindowSystem.h"
@@ -158,7 +159,7 @@ namespace OpenGLFun {
 			_2DShaderProgram.use();
 
 			glDisable(GL_DEPTH_TEST);
-			for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
+			for (EntityId const& entityId : LEVEL_MANAGER->mPauseScreenObjs) {
 				if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
 					continue;
 
@@ -171,8 +172,8 @@ namespace OpenGLFun {
 				Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
 				sample_vec3 = vec3f_to_vec3(entityTransform->mPosition);
-				sample_vec3[0] /= WINDOW_SYSTEM->GetWindowWidth();
-				sample_vec3[1] /= WINDOW_SYSTEM->GetWindowHeight();
+				sample_vec3[0] /= static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f;
+				sample_vec3[1] /= static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f;
 				model = glm::translate(glm::mat4(1.0f), sample_vec3);
 
 				sample_vec3 = vec3f_to_vec3(entityTransform->mScale);
@@ -191,18 +192,19 @@ namespace OpenGLFun {
 				}
 				auto color = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
 
+				// need to localise the mouse pos origin (top left) to opengl origin (center of screen)
+				float mousePosX = INPUT_SYSTEM->mMousePos.x - WINDOW_SYSTEM->GetWindowWidth() / 2.0f;
+				float mousePosY = WINDOW_SYSTEM->GetWindowHeight() - INPUT_SYSTEM->mMousePos.y - WINDOW_SYSTEM->GetWindowHeight() / 2.0f;
+
+				if (INPUT_SYSTEM->IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+					std::cout << "Mouse Pos:" << mousePosX << ' ' << mousePosY << '\n';
+				}
+
 				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Button)) {
-					// need to localise the mouse pos origin (top left) to opengl origin (center of screen)
-					float mousePosX = INPUT_SYSTEM->mMousePos.x - WINDOW_SYSTEM->GetWindowWidth() / 2.0f;
-					float mousePosY = WINDOW_SYSTEM->GetWindowHeight() - INPUT_SYSTEM->mMousePos.y - WINDOW_SYSTEM->GetWindowHeight() / 2.0f;
 					float buttonPosX = entityTransform->mPosition.x;
 					float buttonPosY = entityTransform->mPosition.y;
 					float buttonWidth = entityTransform->mScale.x / 2.0f;
 					float buttonHeight = entityTransform->mScale.y / 2.0f;
-
-					/*std::cout << "==== Hovering ====\n";
-					std::cout << "Mouse Pos:" << mousePosX << ' ' << mousePosY << '\n';
-					std::cout << "==== End Hovering ====\n";*/
 
 					if (mousePosX >= buttonPosX - buttonWidth && mousePosX < buttonPosX + buttonWidth
 						&& mousePosY > buttonPosY - buttonHeight && mousePosY <= buttonPosY + buttonHeight) {
