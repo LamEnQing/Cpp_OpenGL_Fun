@@ -18,16 +18,11 @@ namespace OpenGLFun {
 	ComponentManager::~ComponentManager() {
 		Clear();
 
-		for (auto creatorIt = mComponentCreatorsMap.rbegin(); creatorIt != mComponentCreatorsMap.rend(); creatorIt++) {
-			delete creatorIt->second;
-		}
 		mComponentCreatorsMap.clear();
 	}
 
 	void ComponentManager::Clear() {
-		for (auto entityIt = _mapEntityComponents.begin(); entityIt != _mapEntityComponents.end(); entityIt++) {
-			for (IComponent* comp : entityIt->second)
-				delete comp;
+		for (auto entityIt = _mapEntityComponents.rbegin(); entityIt != _mapEntityComponents.rend(); entityIt++) {
 			entityIt->second.clear();
 		}
 		_mapEntityComponents.clear();

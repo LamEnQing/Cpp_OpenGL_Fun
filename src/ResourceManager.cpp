@@ -55,7 +55,6 @@ namespace OpenGLFun {
 		for (auto textureIt = _texturesDataMap.rbegin(); textureIt != _texturesDataMap.rend(); textureIt++) {
 			delete textureIt->second->imgData; // need to remove this img data
 			GRAPHICS_SYSTEM->DeleteGLTexture(textureIt->second->mGLTextureId);
-			delete textureIt->second;
 		}
 		_texturesDataMap.clear();
 	}
@@ -106,9 +105,6 @@ namespace OpenGLFun {
 	}
 
 	void ResourceManager::UnloadModels() {
-		for (auto modelIt = _modelsDataMap.rbegin(); modelIt != _modelsDataMap.rend(); modelIt++) {
-			delete modelIt->second;
-		}
 		_modelsDataMap.clear();
 	}
 }

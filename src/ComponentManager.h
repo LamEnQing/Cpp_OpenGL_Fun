@@ -23,7 +23,7 @@ namespace OpenGLFun {
 
 		bool HasComponent(EntityId const&, ComponentType const&);
 	private:
-		std::unordered_map<EntityId, std::vector<IComponent*>> _mapEntityComponents;
+		std::map<EntityId, std::vector<IComponent*>> _mapEntityComponents;
 	};
 	extern ComponentManager* COMPONENT_MANAGER;
 
