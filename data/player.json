@@ -5,7 +5,8 @@
 		{
 			"type": "Model",
 			"model": 1,
-			"model_filename": "player.json"
+			"model_filename": "test_cube.json",
+			"should_cull": true
 		},
 		{
 			"type": "Transform",

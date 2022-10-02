@@ -14,6 +14,7 @@ namespace OpenGLFun {
 			throw SimpleException("Shape manager already created!");
 
 		_mapShapeData.insert({ "basic", std::shared_ptr<IShapeCreator>(new ShapeCreator<BasicShape>()) });
+		_mapShapeData.insert({ "cuboid", std::shared_ptr<IShapeCreator>(new ShapeCreator<CuboidShape>()) });
 	}
 	ShapeManager::~ShapeManager() { _mapShapeData.clear(); }
 
