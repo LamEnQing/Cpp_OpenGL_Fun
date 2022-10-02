@@ -13,12 +13,12 @@
 		},
 		{
 			"type": "Model",
-			"model": 2
+			"model": 0
 		},
 		{
 			"type": "Transform",
 			"scale": [100.0, 100.0, 0.0],
-			"position": [0.0, 175.0, 0.0]
+			"position": [0.0, 200.0, 0.0]
 		},
 		{
 			"type": "Sprite",
