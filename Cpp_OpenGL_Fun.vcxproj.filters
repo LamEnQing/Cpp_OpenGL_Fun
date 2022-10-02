@@ -43,6 +43,9 @@
     <Filter Include="math">
       <UniqueIdentifier>{376b98e1-1468-4e6e-a190-9e870a6eb60e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system\graphics\model\shapes">
+      <UniqueIdentifier>{65238a22-c437-404e-8154-fe51131ebd39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
@@ -100,6 +103,12 @@
     </ClCompile>
     <ClCompile Include="src\Shape.cpp">
       <Filter>system\graphics\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BasicShape.cpp">
+      <Filter>system\graphics\model\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CuboidShape.cpp">
+      <Filter>system\graphics\model\shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +209,12 @@
     </ClInclude>
     <ClInclude Include="src\Vec4f.h">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BasicShape.h">
+      <Filter>system\graphics\model\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CuboidShape.h">
+      <Filter>system\graphics\model\shapes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -14,7 +14,7 @@ namespace OpenGLFun {
 	public:
 		ComponentCreator() {}
 		~ComponentCreator() {}
-		IComponent* Create() {
+		IComponent* Create() override {
 			return new T();
 		}
 	};

@@ -25,11 +25,11 @@ namespace OpenGLFun {
 		 * @param propertyJsonType The value type of the property you are parsing
 		*/
 		JsonReadException(std::string filename, std::string propertyOwner, std::string propertyName, std::string propertyJsonType) : SimpleException("In ") {
-			_message += filename + ", " + propertyOwner + "'s \"" + propertyName + "\" must have a value of a " + propertyJsonType;
+			_message += filename + ", " + propertyOwner + "'s \"" + propertyName + "\" must have a value as " + propertyJsonType;
 		}
 
 		JsonReadException(std::string filename, std::string propertyName, std::string propertyJsonType) : SimpleException("In ") {
-			_message += filename + ", \"" + propertyName + "\" must have a value of a " + propertyJsonType;
+			_message += filename + ", \"" + propertyName + "\" must have a value as " + propertyJsonType;
 		}
 	};
 }
