@@ -1,0 +1,17 @@
+{
+	"name": "Hello World",
+	"type": "experiment",
+	"components": [
+		{
+			"type": "Model",
+			"model": 1,
+			"model_filename": "player.json"
+		},
+		{
+			"type": "Transform",
+			"position": [1.0, 0.26, 0.0],
+			"rotation": [0.0, 0.0, 0.0],
+			"scale": [1.0, 1.0, 1.0]
+		}
+	]
+}
