@@ -52,15 +52,17 @@ namespace OpenGLFun {
 			}
 		}
 
-		if (!jsonObj.HasMember("uv") || !jsonObj["uv"].IsArray() || jsonObj["uv"].Size() != 2)
-			throw JsonReadException("Vertex", "uv", "array with 2 elements");
+		if (jsonObj.HasMember("uv")) {
+			if (!jsonObj["uv"].IsArray() || jsonObj["uv"].Size() != 2)
+				throw JsonReadException("Vertex", "uv", "array with 2 elements");
 
-		const auto& uvArr = jsonObj["uv"].GetArray();
-		for (int i = 0; i < uvArr.Size(); i++) {
-			if (!uvArr[i].IsFloat())
-				throw JsonReadException("Vertex", std::string("uv[") + std::to_string(i) + "]", "float");
+			const auto& uvArr = jsonObj["uv"].GetArray();
+			for (int i = 0; i < uvArr.Size(); i++) {
+				if (!uvArr[i].IsFloat())
+					throw JsonReadException("Vertex", std::string("uv[") + std::to_string(i) + "]", "float");
 
-			mUV[i] = uvArr[i].GetFloat();
+				mUV[i] = uvArr[i].GetFloat();
+			}
 		}
 	}
 }
