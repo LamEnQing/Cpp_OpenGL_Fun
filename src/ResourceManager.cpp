@@ -22,7 +22,7 @@ namespace OpenGLFun {
 
 		if (_texturesDataMap.find(textureFilepath) != _texturesDataMap.end()) {
 			std::cout << textureFilepath + " was already loaded, getting you the existing texture instead!\n";
-			return _texturesDataMap.at(textureFilepath);
+			return _texturesDataMap.at(textureFilepath).get();
 		}
 
 		Texture* texture = new Texture();
@@ -35,12 +35,12 @@ namespace OpenGLFun {
 
 		std::cout << "Loading texture " << textureFilepath << '\n';
 
-		_texturesDataMap.insert({ textureFilepath, texture });
+		_texturesDataMap.insert({ textureFilepath, std::shared_ptr<Texture>(texture) });
 
 		GRAPHICS_SYSTEM->CreateGLTexture(texture);
 
 		// texture variable will be out of scope, so instead we return the texture from the map
-		return _texturesDataMap.at(textureFilepath);
+		return _texturesDataMap.at(textureFilepath).get();
 	}
 
 	Texture* ResourceManager::GetTexture(std::string textureFilepath) {
@@ -48,7 +48,7 @@ namespace OpenGLFun {
 			throw SimpleException(std::string("Could not find ") + textureFilepath + " in texture database");
 		}
 
-		return _texturesDataMap.at(textureFilepath);
+		return _texturesDataMap.at(textureFilepath).get();
 	}
 
 	void ResourceManager::UnloadTextures() {
@@ -63,7 +63,7 @@ namespace OpenGLFun {
 		std::string modelDirPath = std::string("assets/models/");
 		if (_modelsDataMap.find(modelFilepath) != _modelsDataMap.end()) {
 			std::cout << modelFilepath + " was already loaded, getting you an existing model instead!\n";
-			return _modelsDataMap.at(modelFilepath);
+			return _modelsDataMap.at(modelFilepath).get();
 		}
 
 		std::string json_from_file = Serializer::GetFileContents((modelDirPath + modelFilepath).c_str());
@@ -90,10 +90,10 @@ namespace OpenGLFun {
 			throw SimpleException(std::string("Failed to parse ") + modelDirPath + modelFilepath + ", here's the parse error:\n\t\t" + e.what());
 		}
 
-		_modelsDataMap.insert({ modelFilepath, model });
+		_modelsDataMap.insert({ modelFilepath, std::shared_ptr<Model>(model) });
 
 		// texture variable will be out of scope, so instead we return the texture from the map
-		return _modelsDataMap.at(modelFilepath);
+		return _modelsDataMap.at(modelFilepath).get();
 	}
 
 	Model* ResourceManager::GetModel(std::string modelFilepath) {
@@ -101,7 +101,7 @@ namespace OpenGLFun {
 			throw SimpleException(std::string("Could not find ") + modelFilepath + " in model database");
 		}
 
-		return _modelsDataMap.at(modelFilepath);
+		return _modelsDataMap.at(modelFilepath).get();
 	}
 
 	void ResourceManager::UnloadModels() {

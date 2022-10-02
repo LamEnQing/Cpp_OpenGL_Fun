@@ -18,8 +18,8 @@ namespace OpenGLFun {
 		void UnloadModels();
 		Model* GetModel(std::string modelFilepath);
 	private:
-		std::map<std::string, Texture*> _texturesDataMap;
-		std::map<std::string, Model*> _modelsDataMap;
+		std::map<std::string, std::shared_ptr<Texture>> _texturesDataMap;
+		std::map<std::string, std::shared_ptr<Model>> _modelsDataMap;
 	};
 
 	extern ResourceManager* RESOURCE_MANAGER;
