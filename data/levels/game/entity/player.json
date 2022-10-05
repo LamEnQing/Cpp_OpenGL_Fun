@@ -4,8 +4,8 @@
 	"components": [
 		{
 			"type": "Model",
-			"model": 1,
-			"model_filename": "test_cube.json",
+			"model_type": 1,
+			"model": "player.json",
 			"should_cull": true
 		},
 		{

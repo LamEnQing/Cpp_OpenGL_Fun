@@ -88,69 +88,72 @@ namespace OpenGLFun {
 
 		_mainShaderProgram.use();
 
-		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(engine->mPlayerId, ComponentType::Camera);
-		Transform* playerPos = COMPONENT_MANAGER->GetComponent<Transform>(engine->mPlayerId, ComponentType::Transform);
-		// camera pos, target pos, up direction1
-		Vec3f lookAtLerp = playerCamera->mLookAt;
-		Vec3f eye = playerPos->mPosition + playerCamera->mCamOffset;
-		Vec3f center = playerPos->mPosition + playerCamera->mCamOffset + lookAtLerp;
-		glm::mat4 view = glm::lookAt(glm::vec3(eye.x, eye.y, eye.z), glm::vec3(center.x, center.y, center.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
-		glm::mat4 model;
-		glm::mat4 proj = glm::mat4(1.0f);
+		if (ENGINE->mPlayerId != -1 && COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
+			glEnable(GL_DEPTH_TEST);
+			Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(ENGINE->mPlayerId, ComponentType::Camera);
+			Transform* playerPos = COMPONENT_MANAGER->GetComponent<Transform>(ENGINE->mPlayerId, ComponentType::Transform);
+			// camera pos, target pos, up direction1
+			Vec3f lookAtLerp = playerCamera->mLookAt;
+			Vec3f eye = playerPos->mPosition + playerCamera->mCamOffset;
+			Vec3f center = playerPos->mPosition + playerCamera->mCamOffset + lookAtLerp;
+			glm::mat4 view = glm::lookAt(glm::vec3(eye.x, eye.y, eye.z), glm::vec3(center.x, center.y, center.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
+			glm::mat4 model;
+			glm::mat4 proj = glm::mat4(1.0f);
 
-		// fov, width/height ratio, near, far
-		proj = glm::perspective(glm::radians(45.0f), static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / WINDOW_SYSTEM->GetWindowHeight(), 0.1f, 50.0f);
+			// fov, width/height ratio, near, far
+			proj = glm::perspective(glm::radians(45.0f), static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / WINDOW_SYSTEM->GetWindowHeight(), 0.1f, 50.0f);
 
-		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
-			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
-				continue;
+			for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
+				if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
+					continue;
 
-			model = glm::mat4(1.0f);
-			Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
-			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
-				texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
+				model = glm::mat4(1.0f);
+				Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
+				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
+					texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
 
-			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
-			Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
-			
-			if (modelComp->mModelFilepath.empty()) continue;
-			model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
-			model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
-			RESOURCE_MANAGER->GetModel(modelComp->mModelFilepath)
-				->SetCull(modelComp->mShouldCull).Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
+				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
+				Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
-			/*if (modelComp->mModelType == ModelComponent::Type::Cube) {
-				// SRT
-				// rotation is zyx. That is when we apply in math, it's reversed order
+				if (modelComp->mModelFilepath.empty()) continue;
 				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
 				model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
+				RESOURCE_MANAGER->GetModel(modelComp->mModelFilepath)
+					->SetCull(modelComp->mShouldCull).Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
 
-				/*glm::mat4 mtxRotX = {
-					1, 0, 0, 0,
-					0, glm::cos(glm::radians(45.0f)), -glm::sin(glm::radians(45.0f)), 0,
-					0, glm::sin(glm::radians(45.0f)), glm::cos(glm::radians(45.0f)), 0,
-					0, 0, 0, 1
-				};
-				glm::mat4 mtxRotY = {
-					glm::cos(glm::radians(45.0f)), 0, -glm::sin(glm::radians(45.0f)), 0,
-					0, 1, 0, 0,
-					glm::sin(glm::radians(45.0f)), 0, glm::cos(glm::radians(45.0f)), 0,
-					0, 0, 0, 1
-				};
-				glm::mat4 mtxRotZ = {
-					glm::cos(glm::radians(45.0f)), -glm::sin(glm::radians(45.0f)), 0, 0,
-					glm::sin(glm::radians(45.0f)), glm::cos(glm::radians(45.0f)), 0, 0,
-					0, 0, 1, 0,
-					0, 0, 0, 1
-				};
-				model = glm::transpose(mtxRotZ * mtxRotY * mtxRotX) * model;
-				std::cout << "I believe this is identity:" << glm::to_string(glm::mat4(1.0f)) << '\n';
-				std::cout << glm::to_string(glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f))) << '\n';*
-				/*model = glm::rotate(model, glm::radians(entityTransform->mRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-				model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-				model = glm::rotate(model, glm::radians(entityTransform->mRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));*
-				_rainbowCubeModel.Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
-			}*/
+				/*if (modelComp->mModelType == ModelComponent::Type::Cube) {
+					// SRT
+					// rotation is zyx. That is when we apply in math, it's reversed order
+					model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
+					model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
+
+					/*glm::mat4 mtxRotX = {
+						1, 0, 0, 0,
+						0, glm::cos(glm::radians(45.0f)), -glm::sin(glm::radians(45.0f)), 0,
+						0, glm::sin(glm::radians(45.0f)), glm::cos(glm::radians(45.0f)), 0,
+						0, 0, 0, 1
+					};
+					glm::mat4 mtxRotY = {
+						glm::cos(glm::radians(45.0f)), 0, -glm::sin(glm::radians(45.0f)), 0,
+						0, 1, 0, 0,
+						glm::sin(glm::radians(45.0f)), 0, glm::cos(glm::radians(45.0f)), 0,
+						0, 0, 0, 1
+					};
+					glm::mat4 mtxRotZ = {
+						glm::cos(glm::radians(45.0f)), -glm::sin(glm::radians(45.0f)), 0, 0,
+						glm::sin(glm::radians(45.0f)), glm::cos(glm::radians(45.0f)), 0, 0,
+						0, 0, 1, 0,
+						0, 0, 0, 1
+					};
+					model = glm::transpose(mtxRotZ * mtxRotY * mtxRotX) * model;
+					std::cout << "I believe this is identity:" << glm::to_string(glm::mat4(1.0f)) << '\n';
+					std::cout << glm::to_string(glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f))) << '\n';*
+					/*model = glm::rotate(model, glm::radians(entityTransform->mRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+					model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+					model = glm::rotate(model, glm::radians(entityTransform->mRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));*
+					_rainbowCubeModel.Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
+				}*/
+			}
 		}
 
 		if (ENGINE->mIsPaused) {
@@ -167,7 +170,6 @@ namespace OpenGLFun {
 					texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
 
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
-				if (modelComp->mModelType != ModelComponent::Type::TwoD) continue;
 				Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
 				sample_vec3 = vec3f_to_vec3(entityTransform->mPosition);
