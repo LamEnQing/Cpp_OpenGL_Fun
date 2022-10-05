@@ -9,7 +9,6 @@
 #include "WindowSystem.h"
 
 #include "Camera.h"
-#include "Controllable.h"
 #include "Transform.h"
 
 namespace OpenGLFun {

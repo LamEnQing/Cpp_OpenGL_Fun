@@ -5,7 +5,6 @@
 namespace OpenGLFun {
 	enum class ComponentType {
 		Camera,
-		Controllable,
 
 		Button,
 		Color,

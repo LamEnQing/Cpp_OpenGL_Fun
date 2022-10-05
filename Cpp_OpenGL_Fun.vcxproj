@@ -182,7 +182,6 @@
     <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\ComponentCreator.h" />
     <ClInclude Include="src\ComponentManager.h" />
-    <ClInclude Include="src\Controllable.h" />
     <ClInclude Include="src\CuboidShape.h" />
     <ClInclude Include="src\ModelComponent.h" />
     <ClInclude Include="src\Engine.h" />

@@ -9,7 +9,6 @@
 #include "ResourceManager.h"
 
 #include "Camera.h"
-#include "Controllable.h"
 #include "Transform.h"
 #include "Serializer.h"
 #include "Sprite.h"
