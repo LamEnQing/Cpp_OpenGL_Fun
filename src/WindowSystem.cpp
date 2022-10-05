@@ -1,13 +1,33 @@
 #include "WindowSystem.h"
 #include "Exceptions.h"
+#include "Serializer.h"
 
 namespace OpenGLFun {
 	WindowSystem* WINDOW_SYSTEM;
 
-	WindowSystem::WindowSystem() : ISystem(), mWindow(nullptr) {
+	WindowSystem::WindowSystem() : ISystem(), mWindow(nullptr), _windowWidth(0), _windowHeight(0) {
 		if (WINDOW_SYSTEM != nullptr)
 			throw SimpleException("WindowSystem already created!");
 		WINDOW_SYSTEM = this;
+
+		// Read JSON data
+		std::string configFilepath = "data\\config.json";
+		rapidjson::Document document;
+		if (document.Parse(Serializer::GetFileContents(configFilepath.c_str()).c_str()).HasParseError()) {
+			throw SimpleException(configFilepath + " has an incorrect JSON format");
+		}
+
+		if (!document.IsObject())
+			throw SimpleException(configFilepath + " must start with a JSON object");
+		if (!document.HasMember("window_width") || !document["window_width"].IsInt())
+			throw JsonReadException(configFilepath, "window_width", "integer");
+		if (!document.HasMember("window_height") || !document["window_height"].IsInt())
+			throw JsonReadException(configFilepath, "window_height", "integer");
+		if (!document.HasMember("window_title") || !document["window_title"].IsString())
+			throw JsonReadException(configFilepath, "window_title", "string");
+
+		_windowWidth = document["window_width"].GetInt();
+		_windowHeight = document["window_height"].GetInt();
 
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -15,14 +35,14 @@ namespace OpenGLFun {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-		mWindow = glfwCreateWindow(GetWindowWidth(), GetWindowHeight(), "OpenGL_Fun", NULL, NULL);
+		mWindow = glfwCreateWindow(GetWindowWidth(), GetWindowHeight(), document["window_title"].GetString(), NULL, NULL);
 		if (mWindow == nullptr) {
 			throw SimpleException("Failed to create GLFW window");
 		}
 		glfwMakeContextCurrent(mWindow);
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-			glfwTerminate();
+			glfwTerminate(); // exception thrown in construction, so destructor for system won't run
 			throw SimpleException("Failed to initialize GLAD");
 		}
 
@@ -37,6 +57,6 @@ namespace OpenGLFun {
 		glfwPollEvents();
 	}
 
-	int WindowSystem::GetWindowWidth() { return 1280; }
-	int WindowSystem::GetWindowHeight() { return 720; }
+	int WindowSystem::GetWindowWidth() { return _windowWidth; }
+	int WindowSystem::GetWindowHeight() { return _windowHeight; }
 }

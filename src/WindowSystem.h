@@ -12,6 +12,9 @@ namespace OpenGLFun {
 
 		int GetWindowWidth();
 		int GetWindowHeight();
+	private:
+		int _windowWidth;
+		int _windowHeight;
 	};
 
 	extern WindowSystem* WINDOW_SYSTEM;
