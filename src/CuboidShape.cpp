@@ -1,6 +1,8 @@
 #include "CuboidShape.h"
 
 namespace OpenGLFun {
+	static std::array<std::string, 6> FACE_NAMES = { "bottom_face", "top_face", "positive_z_face", "negative_z_face", "negative_x_face", "positive_x_face" };
+
 	CuboidShape::CuboidShape() {}
 	CuboidShape::~CuboidShape() {}
 
@@ -38,18 +40,21 @@ namespace OpenGLFun {
 		}
 
 		if (jsonObj.HasMember("colors")) {
-			if (!jsonObj["colors"].IsArray() || jsonObj["colors"].Size() != 6)
-				throw JsonReadException("CuboidShape", "colors", "array with 6 elements");
+			if (!jsonObj["colors"].IsObject())
+				throw JsonReadException("CuboidShape", "colors", "JSON object");
 
-			const rapidjson::Value& colorsArr = jsonObj["colors"].GetArray();
-			for (rapidjson::SizeType i = 0; i < colorsArr.Size(); i++) {
-				if (!colorsArr[i].IsArray() || colorsArr[i].Size() != 3)
-					throw JsonReadException("CuboidShape", "colors[" + std::to_string(i) + "]", "array with 3 elements");
+			const rapidjson::Value& colorsObj = jsonObj["colors"];
 
-				const rapidjson::Value& colorArr = colorsArr[i].GetArray();
+			for (size_t i = 0; i < FACE_NAMES.size(); i++) {
+				const char* faceName = FACE_NAMES.at(i).c_str();
+				if (!colorsObj.HasMember(faceName)) continue;
+				if (!colorsObj[faceName].IsArray() || colorsObj[faceName].Size() != 3)
+					throw JsonReadException("CuboidShape", "colors", faceName, "array with 3 elements");
+
+				const rapidjson::Value& colorArr = colorsObj[faceName].GetArray();
 				for (rapidjson::SizeType j = 0; j < colorArr.Size(); j++) {
 					if (!colorArr[j].IsNumber())
-						throw JsonReadException("CuboidShape", "colors[" + std::to_string(i) + "]" + "[" + std::to_string(j) + "]", "number");
+						throw JsonReadException("CuboidShape", "colors", std::string(faceName) + "[" + std::to_string(j) + "]", "number");
 
 					float value;
 					if (colorArr[j].IsInt()) {

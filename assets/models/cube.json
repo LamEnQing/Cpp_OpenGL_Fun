@@ -3,10 +3,14 @@
 	"shapes": [
 		{
 			"type": "cuboid",
-			"colors": [
-				[ 0, 0, 1.0 ], [ 0, 1.0, 1.0 ], [ 0, 1.0, 0 ],
-				[ 1.0, 1.0, 0 ], [ 1.0, 0, 1.0 ], [ 1.0, 0, 0 ]
-			],
+			"colors": {
+				"bottom_face": [ 0, 0, 1.0 ],
+				"top_face": [ 0, 1.0, 1.0 ],
+				"positive_z_face": [ 0, 1.0, 0 ],
+				"negative_z_face": [ 1.0, 1.0, 0 ],
+				"negative_x_face": [ 1.0, 0, 1.0 ],
+				"positive_x_face": [ 1.0, 0, 0 ]
+			},
 			"size": [ 1.0, 1.0, 1.0 ],
 			"offset": [ -0.5, -0.5, -0.5 ]
 		}
