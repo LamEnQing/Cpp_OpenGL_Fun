@@ -6,6 +6,7 @@ namespace OpenGLFun {
 	class WindowSystem : public ISystem {
 	public:
 		GLFWwindow* mWindow;
+
 		WindowSystem();
 		~WindowSystem();
 		virtual void Update(float const&) override;
@@ -15,6 +16,7 @@ namespace OpenGLFun {
 	private:
 		int _windowWidth;
 		int _windowHeight;
+		std::string _levelOnStartup;
 	};
 
 	extern WindowSystem* WINDOW_SYSTEM;

@@ -1,8 +1,12 @@
 #include "WindowSystem.h"
 #include "Exceptions.h"
 #include "Serializer.h"
+#include "LevelManager.h"
+#include "InputSystem.h"
 
 namespace OpenGLFun {
+	static bool WAS_LEVEL_LOADED = false;
+	static std::string LEVEL_STARTUP{};
 	WindowSystem* WINDOW_SYSTEM;
 
 	WindowSystem::WindowSystem() : ISystem(), mWindow(nullptr), _windowWidth(0), _windowHeight(0) {
@@ -47,6 +51,12 @@ namespace OpenGLFun {
 		}
 
 		glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
+
+		LEVEL_MANAGER->Load();
+
+		if (!document.HasMember("level_on_startup") || !document["level_on_startup"].IsString())
+			throw JsonReadException(configFilepath, "level_on_startup", "string");
+		LEVEL_STARTUP = document["level_on_startup"].GetString();
 	}
 
 	WindowSystem::~WindowSystem() {
@@ -54,6 +64,11 @@ namespace OpenGLFun {
 	}
 
 	void WindowSystem::Update(float const&) {
+		if (!WAS_LEVEL_LOADED) {
+			LEVEL_MANAGER->LoadLevel(LEVEL_STARTUP);
+			WAS_LEVEL_LOADED = true;
+			INPUT_SYSTEM->LockMouse();
+		}
 		glfwPollEvents();
 	}
 

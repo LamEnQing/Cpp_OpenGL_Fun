@@ -5,16 +5,20 @@
 namespace OpenGLFun {
 	class LevelManager {
 	public:
-		std::vector<EntityId> mPauseScreenObjs;
+		//std::map<std::string, EntityId> mLoadedLevelEntities;
 
 		LevelManager();
 		~LevelManager();
 
 		void Load();
 		void Unload();
+
+		void LoadLevel(std::string const& levelId);
+
+		int MaxLevel() const;
 	private:
 		int _currentLevel;
-		int _maxLevel;
+		std::vector<std::string> _levels;
 	};
 
 	extern std::unique_ptr<LevelManager> LEVEL_MANAGER;
