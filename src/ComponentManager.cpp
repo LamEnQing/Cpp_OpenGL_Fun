@@ -5,13 +5,15 @@
 #include "ModelComponent.h"
 #include "Sprite.h"
 #include "Transform.h"
+#include "Camera.h"
 
 namespace OpenGLFun {
 	ComponentManager::ComponentManager() {
 		mComponentCreatorsMap.insert({ "Button", new ComponentCreator<Button>() });
+		mComponentCreatorsMap.insert({ "Camera", new ComponentCreator<Camera>() });
 		mComponentCreatorsMap.insert({ "Color", new ComponentCreator<Color>() });
 		mComponentCreatorsMap.insert({ "Model", new ComponentCreator<ModelComponent>() });
-		mComponentCreatorsMap.insert({ "Sprite", new ComponentCreator<Sprite>() });
+		//mComponentCreatorsMap.insert({ "Sprite", new ComponentCreator<Sprite>() });
 		mComponentCreatorsMap.insert({ "Transform", new ComponentCreator<Transform>() });
 	}
 
