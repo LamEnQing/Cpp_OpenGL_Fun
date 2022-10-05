@@ -1,11 +1,10 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
-#include "main.h"
+#include "Engine.h"
 
 namespace OpenGLFun {
-	Engine* engine;
+	Engine* ENGINE = nullptr;
 }
 
 int main() {
@@ -14,10 +13,9 @@ int main() {
 	//_CrtSetBreakAlloc(217);
 #endif
 
-	OpenGLFun::engine = nullptr;
 	try {
-		OpenGLFun::engine = new OpenGLFun::Engine();
-		OpenGLFun::engine->GameLoop();
+		OpenGLFun::ENGINE = new OpenGLFun::Engine();
+		OpenGLFun::ENGINE->GameLoop();
 	} catch (const std::exception& e) {
 		std::cout << "\nEncountered an error with the Engine:\n"
 			<< "------------------------------------------------------------------------\n"
@@ -25,8 +23,8 @@ int main() {
 		std::cout << "------------------------------------------------------------------------\n";
 	}
 
-	if (OpenGLFun::engine != nullptr)
-		delete OpenGLFun::engine;
+	if (OpenGLFun::ENGINE != nullptr)
+		delete OpenGLFun::ENGINE;
 
 	return 0;
 }

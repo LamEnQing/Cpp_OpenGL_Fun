@@ -1,8 +1,8 @@
 #include "LevelManager.h"
 #include <filesystem>
 
-#include "main.h"
 #include "ComponentManager.h"
+#include "Engine.h"
 #include "EntityFactory.h"
 #include "EntityManager.h"
 #include "GraphicSystem.h"

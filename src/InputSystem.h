@@ -8,9 +8,7 @@ namespace OpenGLFun {
 		glm::vec2 mMousePosOld;
 		glm::vec2 mMousePos;
 
-		bool mIsPaused;
 		bool mIsMouseLocked;
-		bool mInitialMouseMovement;
 		float mMouseSensitivity;
 
 		InputSystem();

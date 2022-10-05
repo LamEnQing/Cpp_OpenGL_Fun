@@ -1,5 +1,5 @@
-#include "main.h"
 #include "ComponentManager.h"
+#include "Engine.h"
 #include "LevelManager.h"
 #include "InputSystem.h"
 #include "Transform.h"
@@ -13,7 +13,7 @@ namespace OpenGLFun {
 	void MousePosCallback(GLFWwindow* window, double xPosIn, double yPosIn);
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-	InputSystem::InputSystem() : ISystem(), mIsPaused(false), mIsMouseLocked(true), mInitialMouseMovement(true), mMouseSensitivity(1.0f), mMousePosOld{ 0.0f }, mMousePos{ 0.0f } {
+	InputSystem::InputSystem() : ISystem(), mIsMouseLocked(true), mMouseSensitivity(1.0f), mMousePosOld{ 0.0f }, mMousePos{ 0.0f } {
 		if (INPUT_SYSTEM != nullptr)
 			throw SimpleException("InputSystem already created!");
 
@@ -57,7 +57,7 @@ namespace OpenGLFun {
 		}
 
 		if (IsKeyTriggered(GLFW_KEY_F2) == GLFW_PRESS) {
-			engine->mInDebugMode = !engine->mInDebugMode;
+			ENGINE->mInDebugMode = !ENGINE->mInDebugMode;
 		}
 
 		if (INPUT_SYSTEM->mIsPaused) return;
@@ -163,15 +163,15 @@ namespace OpenGLFun {
 	void KeyCallback(GLFWwindow* window, int key, int, int action, int) {
 		if (action == GLFW_PRESS) {
 			if (key == GLFW_KEY_ESCAPE) {
-				if (INPUT_SYSTEM->mIsMouseLocked) {
+				if (!ENGINE->mIsPaused) {
 					INPUT_SYSTEM->mIsMouseLocked = false;
-					INPUT_SYSTEM->mIsPaused = true;
+					ENGINE->mIsPaused = true;
 					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 					std::cout << "Game paused\n";
 				}
 				else {
 					INPUT_SYSTEM->mIsMouseLocked = true;
-					INPUT_SYSTEM->mIsPaused = false;
+					ENGINE->mIsPaused = false;
 					std::cout << "Game unpaused\n";
 					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 					glfwSetCursorPos(window, static_cast<double>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0, static_cast<double>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0);

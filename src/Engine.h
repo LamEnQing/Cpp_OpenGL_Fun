@@ -9,6 +9,8 @@ namespace OpenGLFun {
 		public:
 			EntityId mPlayerId;
 			bool mInDebugMode;
+			bool mIsPaused;
+			bool mShouldMouseBeLocked;
 
 			Engine();
 			~Engine();
@@ -18,4 +20,5 @@ namespace OpenGLFun {
 			std::vector<std::unique_ptr<ISystem>> _systems;
 			float _lastTime;
 	};
+	extern Engine* ENGINE;
 }

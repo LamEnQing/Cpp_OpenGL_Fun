@@ -149,7 +149,6 @@
     <ClInclude Include="src\Exceptions.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\main.h" />
     <ClInclude Include="src\Shader.h">
       <Filter>system\graphics\shader</Filter>
     </ClInclude>

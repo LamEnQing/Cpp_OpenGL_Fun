@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "main.h"
 
 #include "ComponentManager.h"
+#include "Engine.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
 #include "LevelManager.h"
@@ -69,7 +69,6 @@ namespace OpenGLFun {
 			2, 3, 0
 		};
 		_2DShapeModel.Init(vertices, indices).SetCull(false).SetBlend(true);
-		glEnable(GL_DEPTH_TEST);
 	}
 
 	GraphicSystem::~GraphicSystem() {
@@ -80,7 +79,7 @@ namespace OpenGLFun {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (engine->mInDebugMode) {
+		if (ENGINE->mInDebugMode) {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // enable wireframe mode
 		}
 		else {
@@ -154,7 +153,7 @@ namespace OpenGLFun {
 			}*/
 		}
 
-		if (INPUT_SYSTEM->mIsPaused) {
+		if (ENGINE->mIsPaused) {
 			glm::vec3 sample_vec3;
 			_2DShaderProgram.use();
 
