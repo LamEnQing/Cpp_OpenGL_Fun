@@ -158,10 +158,11 @@ namespace OpenGLFun {
 
 		if (ENGINE->mIsPaused) {
 			glm::vec3 sample_vec3;
+			glm::mat4 model;
 			_2DShaderProgram.use();
 
 			glDisable(GL_DEPTH_TEST);
-			for (EntityId const& entityId : LEVEL_MANAGER->mPauseScreenObjs) {
+			/*for (EntityId const& entityId : LEVEL_MANAGER->mPauseScreenObjs) {
 				if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
 					continue;
 
@@ -220,7 +221,7 @@ namespace OpenGLFun {
 					.SetCull(modelComp->mShouldCull)
 					.SetBlend(modelComp->mEnableBlend)
 					.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, color);
-			}
+			}*/
 			glEnable(GL_DEPTH_TEST);
 		}
 

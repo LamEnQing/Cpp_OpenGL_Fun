@@ -39,8 +39,6 @@ namespace OpenGLFun {
 	}
 
 	void Engine::GameLoop(void) {
-		LEVEL_MANAGER.get()->Load();
-
 		float totalFrameTime = 0.0f;
 		int frameCount = 0;
 

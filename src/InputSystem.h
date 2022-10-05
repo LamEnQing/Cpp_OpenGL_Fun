@@ -17,6 +17,8 @@ namespace OpenGLFun {
 		int IsKeyHeld(int key);
 		bool IsKeyTriggered(int key);
 		bool IsMouseButtonPressed(int mouseButton);
+
+		void LockMouse();
 	private:
 		std::vector<int> _availableKeys;
 		std::map<int, bool> _keyTriggerStateMap;

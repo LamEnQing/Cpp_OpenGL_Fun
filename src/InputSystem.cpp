@@ -21,7 +21,6 @@ namespace OpenGLFun {
 
 		glfwSetCursorPosCallback(WINDOW_SYSTEM->mWindow, MousePosCallback);
 		glfwSetKeyCallback(WINDOW_SYSTEM->mWindow, KeyCallback);
-		glfwSetInputMode(WINDOW_SYSTEM->mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		_availableKeys = {
 			GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C, GLFW_KEY_D, GLFW_KEY_E, GLFW_KEY_F, GLFW_KEY_G, GLFW_KEY_H,
@@ -60,10 +59,10 @@ namespace OpenGLFun {
 			ENGINE->mInDebugMode = !ENGINE->mInDebugMode;
 		}
 
-		if (INPUT_SYSTEM->mIsPaused) return;
+		if (ENGINE->mIsPaused || ENGINE->mPlayerId == -1 || !COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera) || !COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Transform)) return;
 
-		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(engine->mPlayerId, ComponentType::Camera);
-		Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(engine->mPlayerId, ComponentType::Transform);
+		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(ENGINE->mPlayerId, ComponentType::Camera);
+		Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(ENGINE->mPlayerId, ComponentType::Transform);
 
 		float playerSpeed = 3.0f * deltaTime;
 		//float rotation = 10.0f * deltaTime;
@@ -118,46 +117,53 @@ namespace OpenGLFun {
 		return glfwGetMouseButton(WINDOW_SYSTEM->mWindow, mouseButton);
 	}
 
+	void InputSystem::LockMouse() {
+		if (!ENGINE->mShouldMouseBeLocked) return;
+		INPUT_SYSTEM->mIsMouseLocked = true;
+		glfwSetInputMode(WINDOW_SYSTEM->mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetCursorPos(WINDOW_SYSTEM->mWindow, static_cast<double>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0, static_cast<double>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0);
+		INPUT_SYSTEM->mMousePosOld = { static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f, static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f };
+	}
+
 	void MousePosCallback(GLFWwindow*, double xPosIn, double yPosIn) {
 		INPUT_SYSTEM->mMousePos = { xPosIn, yPosIn };
 
-		if (INPUT_SYSTEM->mIsPaused) return;
-		if (INPUT_SYSTEM->mInitialMouseMovement) {
-			INPUT_SYSTEM->mMousePosOld = { static_cast<float>(xPosIn), static_cast<float>(yPosIn) };
-			INPUT_SYSTEM->mInitialMouseMovement = false;
+		if (ENGINE->mIsPaused) return;
+
+		if (ENGINE->mPlayerId != -1 && COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
+			//printf("Mouse Input: %.2f, %.2f\n", xPosIn, yPosIn);
+			//printf("Mouse Old: %.2f, %.2f\n", INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y);
+
+			Vec2f mouseOffset = { static_cast<float>(xPosIn) - INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y - static_cast<float>(yPosIn) }; // mouse origin starts from top-left, so for y it has to be old-new to get the correct signed value
+			INPUT_SYSTEM->mMousePosOld = { xPosIn, yPosIn };
+			//printf("Mouse Offset: %.2f, %.2f\n", mouseOffset.x, mouseOffset.y);
+
+			mouseOffset *= 1.0f * INPUT_SYSTEM->mMouseSensitivity * _deltaTime;
+
+			Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(ENGINE->mPlayerId, ComponentType::Camera);
+			Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(ENGINE->mPlayerId, ComponentType::Transform);
+
+			/*std::cout << "Player Rotation Old:" << playerTransform->mRotationOld << '\n';
+			std::cout << "Player Rotation:" << playerTransform->mRotation << '\n';*/
+
+			playerTransform->mRotationOld.x = playerTransform->mRotation.x;
+			playerTransform->mRotationOld.y = playerTransform->mRotation.y;
+
+			playerTransform->mRotation.x += mouseOffset.x;
+			playerTransform->mRotation.y += mouseOffset.y;
+
+			if (playerTransform->mRotation.y > 89.0f)
+				playerTransform->mRotation.y = 89.0f;
+			else if (playerTransform->mRotation.y < -89.0f)
+				playerTransform->mRotation.y = -89.0f;
+
+			Vec3f dir(1.0f);
+			dir.x = cos(glm::radians(playerTransform->mRotation.x)) * cos(glm::radians(playerTransform->mRotation.y));
+			dir.y = sin(glm::radians(playerTransform->mRotation.y));
+			dir.z = sin(glm::radians(playerTransform->mRotation.x)) * cos(glm::radians(playerTransform->mRotation.y));
+			playerCamera->mLookAtPrev = playerCamera->mLookAt;
+			playerCamera->mLookAt = OpenGLFun::normalize(dir);
 		}
-		//printf("Mouse Input: %.2f, %.2f\n", xPosIn, yPosIn);
-		//printf("Mouse Old: %.2f, %.2f\n", INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y);
-
-		Vec2f mouseOffset = { static_cast<float>(xPosIn) - INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y - static_cast<float>(yPosIn) }; // mouse origin starts from top-left, so for y it has to be old-new to get the correct signed value
-		INPUT_SYSTEM->mMousePosOld = { xPosIn, yPosIn };
-		//printf("Mouse Offset: %.2f, %.2f\n", mouseOffset.x, mouseOffset.y);
-
-		mouseOffset *= 1.0f * INPUT_SYSTEM->mMouseSensitivity * _deltaTime;
-
-		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(engine->mPlayerId, ComponentType::Camera);
-		Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(engine->mPlayerId, ComponentType::Transform);
-
-		/*std::cout << "Player Rotation Old:" << playerTransform->mRotationOld << '\n';
-		std::cout << "Player Rotation:" << playerTransform->mRotation << '\n';*/
-
-		playerTransform->mRotationOld.x = playerTransform->mRotation.x;
-		playerTransform->mRotationOld.y = playerTransform->mRotation.y;
-
-		playerTransform->mRotation.x += mouseOffset.x;
-		playerTransform->mRotation.y += mouseOffset.y;
-
-		if (playerTransform->mRotation.y > 89.0f)
-			playerTransform->mRotation.y = 89.0f;
-		else if (playerTransform->mRotation.y < -89.0f)
-			playerTransform->mRotation.y = -89.0f;
-
-		Vec3f dir(1.0f);
-		dir.x = cos(glm::radians(playerTransform->mRotation.x)) * cos(glm::radians(playerTransform->mRotation.y));
-		dir.y = sin(glm::radians(playerTransform->mRotation.y));
-		dir.z = sin(glm::radians(playerTransform->mRotation.x)) * cos(glm::radians(playerTransform->mRotation.y));
-		playerCamera->mLookAtPrev = playerCamera->mLookAt;
-		playerCamera->mLookAt = OpenGLFun::normalize(dir);
 	}
 
 	void KeyCallback(GLFWwindow* window, int key, int, int action, int) {
@@ -170,12 +176,11 @@ namespace OpenGLFun {
 					std::cout << "Game paused\n";
 				}
 				else {
-					INPUT_SYSTEM->mIsMouseLocked = true;
+					if (ENGINE->mShouldMouseBeLocked) {
+						INPUT_SYSTEM->LockMouse();
+					}
 					ENGINE->mIsPaused = false;
 					std::cout << "Game unpaused\n";
-					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-					glfwSetCursorPos(window, static_cast<double>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0, static_cast<double>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0);
-					INPUT_SYSTEM->mMousePosOld = { static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f, static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f };
 				}
 			}
 		}
