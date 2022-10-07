@@ -15,6 +15,8 @@ namespace OpenGLFun {
 		RESOURCE_MANAGER = this;
 
 		SHAPE_MANAGER = new ShapeManager();
+
+		stbi_set_flip_vertically_on_load(1);
 	}
 	ResourceManager::~ResourceManager() {
 		delete SHAPE_MANAGER;

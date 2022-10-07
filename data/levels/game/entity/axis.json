@@ -4,7 +4,8 @@
 	"components": [
 		{
 			"type": "Model",
-			"model_type": 1,
+			"shader_type": "color",
+			"model_type": "3d",
 			"model": "axis.json"
 		},
 		{
