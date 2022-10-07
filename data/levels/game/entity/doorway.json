@@ -1,18 +1,16 @@
 {
 	"name": "Hello World",
 	"type": "experiment",
-	"components": [
-		{
-			"type": "Model",
+	"components": {
+		"Model": {
 			"model_type": "3d",
 			"model": "doorway.obj",
 			"should_cull": true
 		},
-		{
-			"type": "Transform",
+		"Transform": {
 			"position": [2.0, 0.26, 0.0],
 			"rotation": [0.0, 180.0, 0.0],
 			"scale": [1.0, 1.0, 1.0]
 		}
-	]
+	}
 }

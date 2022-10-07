@@ -1,19 +1,16 @@
 {
 	"name": "Hello World",
 	"type": "experiment",
-	"components": [
-		{
-			"type": "Model",
-			"shader_type": "color",
+	"components": {
+		"Model": {
 			"model_type": "3d",
 			"model": "cube.json",
 			"should_cull": true
 		},
-		{
-			"type": "Transform",
+		"Transform": {
 			"position": [1.0, 0.0, 0.0],
 			"rotation": [0.0, 0.0, 0.0],
 			"scale": [0.5, 0.5, 0.5]
 		}
-	]
+	}
 }

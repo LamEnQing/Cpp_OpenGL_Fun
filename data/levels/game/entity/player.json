@@ -1,22 +1,19 @@
 {
 	"name": "Hello World",
 	"type": "experiment",
-	"components": [
-		{
-			"type": "Model",
+	"components": {
+		"Model": {
 			"model_type": "3d",
 			"model": "player.obj",
 			"should_cull": true
 		},
-		{
-			"type": "Transform",
+		"Transform": {
 			"position": [1.0, 0.26, 0.0],
 			"rotation": [0.0, 0.0, 0.0],
 			"scale": [1.0, 1.0, 1.0]
 		},
-		{
-			"type": "Sprite",
+		"Sprite": {
 			"texture": "player.png"
 		}
-	]
+	}
 }

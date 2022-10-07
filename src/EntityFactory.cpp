@@ -22,24 +22,13 @@ namespace OpenGLFun {
 		// Load components
 		if (jsonObj.HasMember("components")) {
 			// "components" must be an array
-			if (!jsonObj["components"].IsArray())
-				throw JsonReadException(filename, "Components", "JSON array");
+			if (!jsonObj["components"].IsObject())
+				throw JsonReadException(filename, "components", "JSON object");
 
-			const rapidjson::Value& compArr = jsonObj["components"];
-			for (rapidjson::SizeType i = 0; i < compArr.Size(); i++) {
-				// not exactly parsed or is of basic C++ type, so called it compJson
-				const rapidjson::Value& compJson = compArr[i];
+			for (auto& compJson : jsonObj["components"].GetObject()) {
+				std::cout << "getting idk:" << compJson.name.GetString() << '\n';
 
-				// Component must be an object
-				if (!compJson.IsObject())
-					throw JsonReadException(filename, std::string("components[") + std::to_string(i) + "]", "JSON object");
-
-				// "type" member must be a string
-				if (!compJson.HasMember("type") || !compJson["type"].IsString())
-					throw JsonReadException(filename, std::string("components[") + std::to_string(i) + "]", "type", "string");
-				//throw SimpleException(std::string("Component") + std::to_string(i) + "'s type must be a string, in " + filepath);
-
-				std::string compType = compJson["type"].GetString();
+				std::string compType = compJson.name.GetString();
 				// Could not find the component type, so throw exception!
 				if (COMPONENT_MANAGER->mComponentCreatorsMap.find(compType) == COMPONENT_MANAGER->mComponentCreatorsMap.end()) {
 					throw SimpleException(std::string("Could not find component type \"") + compType + "\" for " + filename);
@@ -49,13 +38,13 @@ namespace OpenGLFun {
 				try {
 					component = COMPONENT_MANAGER->mComponentCreatorsMap.find(compType)->second->Create();
 					component->mOwner = entityId; // assign entity id, cannot forget!!!
-					component->Deserialize(compJson); // after creating an instance of a component, serialise it!!!
+					component->Deserialize(compJson.value.GetObject()); // after creating an instance of a component, serialise it!!!
 					COMPONENT_MANAGER->AddComponent(component);
 				}
 				catch (std::exception const& e) { // catch all parse errors, so that we can include the filename in the error too!
 					if (component != nullptr)
 						delete component;
-					throw SimpleException(std::string("Failed to parse ") + filename + ", here's the parse error for components[" + std::to_string(i) + "]: " + e.what());
+					throw SimpleException(std::string("Failed to parse ") + filename + ", here's the parse error: " + e.what());
 				}
 			}
 		}
