@@ -107,7 +107,7 @@ namespace OpenGLFun {
 				ENTITY_FACTORY.get()->CreateEntityFromFile(entry.path().string());
 			}
 			catch (std::exception& e) {
-				std::cout << "Failed to parse " << entry.path().string() << ", here's the error:\n\t" << e.what() << '\n';
+				throw SimpleException(std::string("Failed to parse ") + entry.path().string() + ", here's the error:\n\t" + e.what() + '\n');
 			}
 		}
 
