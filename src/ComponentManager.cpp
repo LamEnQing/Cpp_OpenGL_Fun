@@ -13,7 +13,7 @@ namespace OpenGLFun {
 		mComponentCreatorsMap.insert({ "Camera", new ComponentCreator<Camera>() });
 		mComponentCreatorsMap.insert({ "Color", new ComponentCreator<Color>() });
 		mComponentCreatorsMap.insert({ "Model", new ComponentCreator<ModelComponent>() });
-		//mComponentCreatorsMap.insert({ "Sprite", new ComponentCreator<Sprite>() });
+		mComponentCreatorsMap.insert({ "Sprite", new ComponentCreator<Sprite>() });
 		mComponentCreatorsMap.insert({ "Transform", new ComponentCreator<Transform>() });
 	}
 
