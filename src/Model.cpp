@@ -1,6 +1,8 @@
 #include "pch.h"
-
 #include "Model.h"
+
+#include "BasicShape.h"
+#include "Serializer.h"
 #include "WindowSystem.h"
 
 namespace OpenGLFun {
@@ -8,6 +10,8 @@ namespace OpenGLFun {
 		{ "triangles", GL_TRIANGLES },
 		{ "lines", GL_LINE_STRIP }
 	};
+
+	Model::Model() {}
 
 	Model& Model::Init(std::vector<std::shared_ptr<IShape>>& shapes) {
 		_vertexCount = 0;
@@ -217,7 +221,7 @@ namespace OpenGLFun {
 		return *this;
 	}
 
-	void Model::Deserialize(rapidjson::Value const& jsonObj) {
+	void Model::DeserializeJson(rapidjson::Value const& jsonObj) {
 		if (!jsonObj.HasMember("draw_mode") || !jsonObj["draw_mode"].IsString())
 			throw JsonReadException("Model", "draw_mode", "string");
 
@@ -247,6 +251,86 @@ namespace OpenGLFun {
 			shapes.emplace_back(shape);
 		}
 
+		Init(shapes);
+	}
+
+	void Model::DeserializeObj(std::string const& filepath) {
+		std::ifstream fs;
+		fs.open(filepath, std::ifstream::in);
+
+		if (!fs.is_open())
+			throw SimpleException(std::string("Failed to open ") + filepath);
+
+		std::vector<std::shared_ptr<IShape>> shapes;
+		BasicShape* shape = new BasicShape();
+
+		std::vector<Vertex> vertices;
+		std::vector<IShape::ElementIndex> vertexIndices;
+		std::vector<Vec2f> textureCoordinates;
+
+		std::string line;
+		char c; // to read starting character, so that we can read the number values after it
+		std::stringstream ss;
+
+		std::cout << "\nDeserialising obj " << filepath << "\n----------------------------\n";
+		while (!std::getline(fs, line).eof()) {
+			if (Serializer::DoesFilenameStartWith(line, "o "))
+				std::cout << line << '\n';
+
+			if (Serializer::DoesFilenameStartWith(line, "v ")) {
+				ss.clear(); // must clear stream, so as to not "corrupt" the reading
+				ss << line;
+
+				float x, y, z;
+				ss >> c >> x >> y >> z; // read v, then the next 3 float values
+
+				vertices.push_back(Vertex().Pos(x, y, z).Color(0.7f, 0.0f, 0.7f));
+				std::cout << "v " << x << ' ' << y << ' ' << z << '\n';
+			}
+
+			if (Serializer::DoesFilenameStartWith(line, "vt ")) {
+				std::cout << line << '\n';
+				ss.clear();
+				ss << line; // line would be "vt u v"
+
+				float u, v;
+				ss >> c >> c >> u >> v;
+
+				textureCoordinates.push_back(Vec2f(u, v));
+				std::cout << "vt " << u << ' ' << v << '\n';
+			}
+
+			if (Serializer::DoesFilenameStartWith(line, "f ")) { // read a face, which should be a trianglular face, hence 3 vertices only
+				std::cout << line << '\n';
+				ss.clear();
+				ss << line; // line would be "f vIdx/vtexIdx/vNormIdx"
+
+				IShape::ElementIndex v1, vt1, vn1, v2, vt2, vn2, v3, vt3, vn3;
+				ss >> c >> v1 >> c >> vt1 >> c >> vn1; // need to read '/', so c is put between the integers
+				ss >> v2 >> c >> vt2 >> c >> vn2;
+				ss >> v3 >> c >> vt3 >> c >> vn3;
+
+				// the read indices start from 1, but in code, indices start from 0, hence got to shift down by 1
+				v1--;
+				v2--;
+				v3--;
+				vt1--;
+				vt2--;
+				vt3--;
+
+				vertexIndices.insert(vertexIndices.end(), { v1, v2, v3 });
+
+				vertices[v1].UV(textureCoordinates[vt1].x, textureCoordinates[vt1].y);
+				vertices[v2].UV(textureCoordinates[vt2].x, textureCoordinates[vt2].y);
+				vertices[v3].UV(textureCoordinates[vt3].x, textureCoordinates[vt3].y);
+			}
+		}
+		shape->Vertices(vertices);
+		shape->Indices(vertexIndices);
+		shapes.emplace_back(shape);
+		std::cout << "Shapes:" << shapes.size() << '\n' << std::endl;
+
+		fs.close();
 		Init(shapes);
 	}
 }

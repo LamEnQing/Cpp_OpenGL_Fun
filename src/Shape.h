@@ -9,10 +9,14 @@ namespace OpenGLFun {
 		using ElementIndex = unsigned int;
 
 		IShape();
+		IShape(std::vector<Vertex> vertices, std::vector<ElementIndex> indices);
 		virtual ~IShape();
 
 		const std::vector<Vertex>& Vertices() const;
 		std::vector<ElementIndex>& Indices();
+
+		IShape* Vertices(std::vector<Vertex>& vertices);
+		IShape* Indices(std::vector<ElementIndex>& indices);
 
 		virtual void Deserialize(rapidjson::Value const& jsonObj) = 0;
 	protected:

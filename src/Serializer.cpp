@@ -33,5 +33,14 @@ namespace OpenGLFun {
 			}
 			return true;
 		}
+
+		bool DoesFilenameStartWith(std::string const& filename, std::string startStr) {
+			if (startStr.size() > filename.size()) return false;
+
+			for (size_t i = 0; i < startStr.size(); i++)
+				if (filename[i] != startStr[i]) return false;
+
+			return true;
+		}
 	}
 }

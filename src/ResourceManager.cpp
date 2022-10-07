@@ -71,31 +71,51 @@ namespace OpenGLFun {
 			return _modelsDataMap.at(modelFilepath).get();
 		}
 
-		std::string json_from_file = Serializer::GetFileContents((modelDirPath + modelFilepath).c_str());
-
-		rapidjson::Document document;
-		if (document.Parse(json_from_file.c_str()).HasParseError()) {
-			// I put filepath into std::string, so that I can append new strings or char pointers via add operator
-			throw SimpleException(modelDirPath + modelFilepath + " has an incorrect JSON format");
+		if (!(Serializer::DoesFilenameEndWith(modelFilepath, ".json") || Serializer::DoesFilenameEndWith(modelFilepath, ".obj"))) {
+			throw SimpleException(modelDirPath + modelFilepath + " must either be in JSON or Wavefront (.obj) format");
 		}
 
-		// the root must be a JSON object
-		if (!document.IsObject())
-			throw SimpleException(modelDirPath + modelFilepath + " must start with a JSON object");
+		if (Serializer::DoesFilenameEndWith(modelFilepath, ".json")) {
+			std::string json_from_file = Serializer::GetFileContents((modelDirPath + modelFilepath).c_str());
 
-		std::cout << "Loading model " << modelFilepath << '\n';
-		Model* model = new Model();
+			rapidjson::Document document;
+			if (document.Parse(json_from_file.c_str()).HasParseError()) {
+				// I put filepath into std::string, so that I can append new strings or char pointers via add operator
+				throw SimpleException(modelDirPath + modelFilepath + " has an incorrect JSON format");
+			}
 
-		try {
-			model->Deserialize(document.GetObject());
-		}
-		catch (std::exception const& e) { // catch all parse errors, so that we can include the filename in the error too!
-			if (model != nullptr)
+			// the root must be a JSON object
+			if (!document.IsObject())
+				throw SimpleException(modelDirPath + modelFilepath + " must start with a JSON object");
+
+			std::cout << "Loading model " << modelFilepath << '\n';
+			Model* model = new Model();
+
+			try {
+				model->DeserializeJson(document.GetObject());
+			}
+			catch (std::exception const& e) { // catch all parse errors, so that we can include the filename in the error too!
 				delete model;
-			throw SimpleException(std::string("Failed to parse ") + modelDirPath + modelFilepath + ", here's the parse error:\n\t" + e.what());
+				throw SimpleException(std::string("Failed to parse ") + modelDirPath + modelFilepath + ", here's the parse error:\n\t" + e.what());
+			}
+
+			_modelsDataMap.insert({ modelFilepath, std::shared_ptr<Model>(model) });
+		}
+		else { // Obj deserialization
+			Model* model = new Model();
+			std::cout << "Loading model " << modelFilepath << '\n';
+
+			try {
+				model->DeserializeObj(modelDirPath + modelFilepath);
+			}
+			catch (std::exception const& e) {
+				delete model;
+				throw SimpleException(std::string("Failed to parse ") + modelDirPath + modelFilepath + ", here's the parse error:\n\t" + e.what());
+			}
+
+			_modelsDataMap.insert({ modelFilepath, std::shared_ptr<Model>(model) });
 		}
 
-		_modelsDataMap.insert({ modelFilepath, std::shared_ptr<Model>(model) });
 
 		// texture variable will be out of scope, so instead we return the texture from the map
 		return _modelsDataMap.at(modelFilepath).get();

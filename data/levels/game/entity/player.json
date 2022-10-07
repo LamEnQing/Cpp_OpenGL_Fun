@@ -6,6 +6,7 @@
 			"type": "Model",
 			"model_type": 1,
 			"model": "player.json",
+			"model": "player.obj",
 			"should_cull": true
 		},
 		{

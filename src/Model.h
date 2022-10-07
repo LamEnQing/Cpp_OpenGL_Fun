@@ -7,6 +7,8 @@
 
 namespace OpenGLFun {
 	struct Model {
+		Model();
+
 		Model& Init(std::vector<std::shared_ptr<IShape>>& shapes);
 
 		Model& Init(std::vector<Vertex>& vertices);
@@ -20,7 +22,9 @@ namespace OpenGLFun {
 		Model& SetCull(const bool& cull);
 		Model& SetBlend(const bool& blend);
 
-		void Deserialize(rapidjson::Value const& jsonObj);
+		void DeserializeJson(rapidjson::Value const& jsonObj);
+
+		void DeserializeObj(std::string const& filepath);
 
 		private:
 			unsigned int _vbo{ 0 }, _vao{ 0 }, _ebo{ 0 };

@@ -2,6 +2,7 @@
 
 namespace OpenGLFun {
 	BasicShape::BasicShape() : IShape() {}
+	BasicShape::BasicShape(std::vector<Vertex> vertices, std::vector<ElementIndex> indices) : IShape(vertices, indices) {}
 	BasicShape::~BasicShape() {}
 
 	void BasicShape::Deserialize(rapidjson::Value const& jsonObj) {
