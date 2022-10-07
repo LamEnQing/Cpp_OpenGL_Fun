@@ -25,7 +25,7 @@ namespace OpenGLFun {
 	// these variables are extern
 	const std::string LEVEL_PAUSE_ID = "pause_screen";
 
-	LevelManager::LevelManager() : _currentLevel(0), _levels{} {
+	LevelManager::LevelManager() : mCurrentLevel{}, _levels{} {
 		/*for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR)) {
 			std::cout << "Discovered:" << entry.path().string() << '\n';
 			try {
@@ -79,11 +79,17 @@ namespace OpenGLFun {
 	}
 
 	void LevelManager::Unload() {
+		_levels.clear();
+	}
+
+	void LevelManager::ReloadLevel() {
 		RESOURCE_MANAGER->UnloadTextures();
 		RESOURCE_MANAGER->UnloadModels();
 
 		COMPONENT_MANAGER->Clear();
 		ENTITY_MANAGER->Clear();
+
+		LoadLevel(mCurrentLevel);
 	}
 
 	void LevelManager::LoadLevel(std::string const& levelId) {

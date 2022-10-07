@@ -6,7 +6,8 @@
 
 namespace OpenGLFun {
 	static bool WAS_LEVEL_LOADED = false;
-	static std::string LEVEL_STARTUP{};
+	static std::string WINDOW_TITLE{};
+
 	WindowSystem* WINDOW_SYSTEM;
 
 	WindowSystem::WindowSystem() : ISystem(), mWindow(nullptr), _windowWidth(0), _windowHeight(0) {
@@ -32,6 +33,7 @@ namespace OpenGLFun {
 
 		_windowWidth = document["window_width"].GetInt();
 		_windowHeight = document["window_height"].GetInt();
+		WINDOW_TITLE = document["window_title"].GetString();
 
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -39,7 +41,7 @@ namespace OpenGLFun {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-		mWindow = glfwCreateWindow(GetWindowWidth(), GetWindowHeight(), document["window_title"].GetString(), NULL, NULL);
+		mWindow = glfwCreateWindow(GetWindowWidth(), GetWindowHeight(), WINDOW_TITLE.c_str(), NULL, NULL);
 		if (mWindow == nullptr) {
 			throw SimpleException("Failed to create GLFW window");
 		}
@@ -56,7 +58,7 @@ namespace OpenGLFun {
 
 		if (!document.HasMember("level_on_startup") || !document["level_on_startup"].IsString())
 			throw JsonReadException(configFilepath, "level_on_startup", "string");
-		LEVEL_STARTUP = document["level_on_startup"].GetString();
+		LEVEL_MANAGER->mCurrentLevel = document["level_on_startup"].GetString();
 	}
 
 	WindowSystem::~WindowSystem() {
@@ -65,7 +67,7 @@ namespace OpenGLFun {
 
 	void WindowSystem::Update(float const&) {
 		if (!WAS_LEVEL_LOADED) {
-			LEVEL_MANAGER->LoadLevel(LEVEL_STARTUP);
+			LEVEL_MANAGER->LoadLevel(LEVEL_MANAGER->mCurrentLevel);
 			WAS_LEVEL_LOADED = true;
 			INPUT_SYSTEM->LockMouse();
 		}
