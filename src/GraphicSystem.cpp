@@ -75,7 +75,7 @@ namespace OpenGLFun {
 	}
 
 	void GraphicSystem::Update(float const&) {
-		glClearColor(12.0f/255.0f, 20.0f / 255.0f, 69.0f / 255.0f, 1.0f);
+		glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (ENGINE->mInDebugMode) {
@@ -112,6 +112,7 @@ namespace OpenGLFun {
 
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 				if (modelComp->mModelType == ModelType::TwoD) continue;
+				if (modelComp->mModelFilepath.empty()) continue;
 
 				model = glm::mat4(1.0f);
 				Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
@@ -121,10 +122,10 @@ namespace OpenGLFun {
 					texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
 				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
 					tintColor = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
-
-				if (modelComp->mModelFilepath.empty()) continue;
 				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
+				model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
 				model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
+
 				RESOURCE_MANAGER->GetModel(modelComp->mModelFilepath)
 					->SetCull(modelComp->mShouldCull)
 					.Draw3D(_3DShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId, tintColor);
