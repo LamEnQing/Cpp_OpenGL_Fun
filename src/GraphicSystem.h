@@ -15,7 +15,7 @@ namespace OpenGLFun {
 		void CreateGLTexture(Texture* texture);
 		void DeleteGLTexture(unsigned int& texture);
 	private:
-		ShaderProgram _mainShaderProgram;
+		ShaderProgram _3DShaderProgram;
 		ShaderProgram _2DShaderProgram;
 
 		OpenGLFun::Model _2DShapeModel;

@@ -19,25 +19,24 @@
 namespace OpenGLFun {
 	GraphicSystem* GRAPHICS_SYSTEM = nullptr;;
 
-	GraphicSystem::GraphicSystem() : ISystem(), _mainShaderProgram() {
+	GraphicSystem::GraphicSystem() : ISystem(), _3DShaderProgram() {
 		if (GRAPHICS_SYSTEM != nullptr)
 			throw SimpleException("Graphics system already created!");
 
 		Shader vertexShader{}, fragmentShader{};
-		if (!vertexShader.Compile(ShaderType::Vertex, "assets/shaders/basic.vert")) {
+		if (!vertexShader.Compile(ShaderType::Vertex, "assets/shaders/3d.vert")) {
 			vertexShader.Destroy();
 
-			throw SimpleException("Failed to compile basic.vert.\n");
+			throw SimpleException("Failed to compile 3d.vert.\n");
 		}
-		if (!fragmentShader.Compile(ShaderType::Fragment, "assets/shaders/basic.frag")) {
+		if (!fragmentShader.Compile(ShaderType::Fragment, "assets/shaders/3d.frag")) {
 			fragmentShader.Destroy();
 
-			throw SimpleException("Failed to compile basic.frag.\n");
+			throw SimpleException("Failed to compile 3d.frag.\n");
 		}
-
-		if (!_mainShaderProgram.CompileAndLink(vertexShader, fragmentShader)) {
-			_mainShaderProgram.Destroy();
-			throw SimpleException("Failed to compile main shader program.\n");
+		if (!_3DShaderProgram.CompileAndLink(vertexShader, fragmentShader)) {
+			_3DShaderProgram.Destroy();
+			throw SimpleException("Failed to compile 3D shader program.\n");
 		}
 
 		if (!vertexShader.Compile(ShaderType::Vertex, "assets/shaders/2d.vert")) {
@@ -45,10 +44,10 @@ namespace OpenGLFun {
 
 			throw SimpleException("Failed to compile 2d.vert.\n");
 		}
-		if (!fragmentShader.Compile(ShaderType::Fragment, "assets/shaders/basic.frag")) {
+		if (!fragmentShader.Compile(ShaderType::Fragment, "assets/shaders/2d.frag")) {
 			fragmentShader.Destroy();
 
-			throw SimpleException("Failed to compile basic.frag.\n");
+			throw SimpleException("Failed to compile 2d.frag.\n");
 		}
 
 		if (!_2DShaderProgram.CompileAndLink(vertexShader, fragmentShader)) {
@@ -72,11 +71,11 @@ namespace OpenGLFun {
 	}
 
 	GraphicSystem::~GraphicSystem() {
-		_mainShaderProgram.Destroy();
+		_3DShaderProgram.Destroy();
 	}
 
 	void GraphicSystem::Update(float const&) {
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClearColor(12.0f/255.0f, 20.0f / 255.0f, 69.0f / 255.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (ENGINE->mInDebugMode) {
@@ -86,7 +85,7 @@ namespace OpenGLFun {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // reset to default view
 		}
 
-		_mainShaderProgram.use();
+		_3DShaderProgram.use();
 
 		if (ENGINE->mPlayerId != -1 && COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
 			glEnable(GL_DEPTH_TEST);
