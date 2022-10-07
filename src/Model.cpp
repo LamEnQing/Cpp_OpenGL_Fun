@@ -29,36 +29,6 @@ namespace OpenGLFun {
 		return Init(vertices, indices);
 	}
 
-	Model& Model::Init(std::vector<Vertex>& vertices) {
-		_vertexCount = static_cast<int>(vertices.size());
-
-		glGenVertexArrays(1, &_vao);
-		glGenBuffers(1, &_vbo);
-
-		glBindVertexArray(_vao);
-		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices.front(), GL_STATIC_DRAW);
-		/*
-			First param: Since vertex shader set location to 0, we set attribute to 0
-			Second param: Size of vertex attribute, since it's vec3, there's only 3 values
-			Third param: Set the type of data, vec3 is in float, so GL_FLOAT
-			Fourth param: Do we want the data to be normalised? We don't want, so set to false
-			Fifth param: Called "stride", it's how many space between consecutive vertex attributes. Since it's only position and rgb, that is 6 float values per vertex, we set to 3 * float's bytes
-			Sixth param: The offset for the position data, since vertices only contain position values, no need to offset
-		*/
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0); // assign to location = 0, or the position variable in the vertex shader
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vertex::mPos))); // assign to location = 1, or the color variable in the vertex shader, also set the offset, offset of Pos
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vertex::mPos) + sizeof(Vertex::mColor))); // assign to location = 2, or the texture variable in the vertex shader, also set the offset, offset of Pos + Color
-		glEnableVertexAttribArray(2);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO
-		glBindVertexArray(0); // unbind VAO
-
-		return *this;
-	}
-
 	Model& Model::Init(std::vector<Vertex>& vertices, std::vector<IShape::ElementIndex>& indices) {
 		_vertexCount = static_cast<int>(vertices.size());
 		_indexCount = static_cast<int>(indices.size());
@@ -261,12 +231,10 @@ namespace OpenGLFun {
 		if (!fs.is_open())
 			throw SimpleException(std::string("Failed to open ") + filepath);
 
-		std::vector<std::shared_ptr<IShape>> shapes;
-		BasicShape* shape = new BasicShape();
-
-		std::vector<Vertex> vertices;
+		std::vector<Vec3f> vertexCoordinates;
 		std::vector<IShape::ElementIndex> vertexIndices;
 		std::vector<Vec2f> textureCoordinates;
+		std::vector<Vertex> vertices;
 
 		std::string line;
 		char c; // to read starting character, so that we can read the number values after it
@@ -284,7 +252,7 @@ namespace OpenGLFun {
 				float x, y, z;
 				ss >> c >> x >> y >> z; // read v, then the next 3 float values
 
-				vertices.push_back(Vertex().Pos(x, y, z).Color(0.7f, 0.0f, 0.7f));
+				vertexCoordinates.push_back(Vec3f(x, y, z));
 				std::cout << "v " << x << ' ' << y << ' ' << z << '\n';
 			}
 
@@ -297,7 +265,7 @@ namespace OpenGLFun {
 				ss >> c >> c >> u >> v;
 
 				textureCoordinates.push_back(Vec2f(u, v));
-				std::cout << "vt " << u << ' ' << v << '\n';
+				std::cout << "myvt " << u << ' ' << v << '\n';
 			}
 
 			if (Serializer::DoesFilenameStartWith(line, "f ")) { // read a face, which should be a trianglular face, hence 3 vertices only
@@ -318,19 +286,18 @@ namespace OpenGLFun {
 				vt2--;
 				vt3--;
 
-				vertexIndices.insert(vertexIndices.end(), { v1, v2, v3 });
+				// push index 3 times
+				for (int i = 0; i < 3; i++)
+					vertexIndices.push_back(static_cast<IShape::ElementIndex>(vertexIndices.size()));
 
-				vertices[v1].UV(textureCoordinates[vt1].x, textureCoordinates[vt1].y);
-				vertices[v2].UV(textureCoordinates[vt2].x, textureCoordinates[vt2].y);
-				vertices[v3].UV(textureCoordinates[vt3].x, textureCoordinates[vt3].y);
+				vertices.push_back(Vertex().Pos(vertexCoordinates[v1]).UV(textureCoordinates[vt1]));
+				vertices.push_back(Vertex().Pos(vertexCoordinates[v2]).UV(textureCoordinates[vt2]));
+				vertices.push_back(Vertex().Pos(vertexCoordinates[v3]).UV(textureCoordinates[vt3]));
 			}
 		}
-		shape->Vertices(vertices);
-		shape->Indices(vertexIndices);
-		shapes.emplace_back(shape);
-		std::cout << "Shapes:" << shapes.size() << '\n' << std::endl;
+		std::cout << "Vertex count:" << vertices.size() << std::endl;
 
 		fs.close();
-		Init(shapes);
+		Init(vertices, vertexIndices);
 	}
 }

@@ -1,6 +1,24 @@
 #include "Vertex.h"
 
 namespace OpenGLFun {
+	Vertex& Vertex::Pos(Vec3f vec) {
+		this->mPos = { vec.x, vec.y, vec.z };
+
+		return *this;
+	}
+
+	Vertex& Vertex::Color(Vec4f vec) {
+		this->mColor = { vec.x, vec.y, vec.z, vec.w };
+
+		return *this;
+	}
+
+	Vertex& Vertex::UV(Vec2f vec) {
+		this->mUV = { vec.x, vec.y };
+
+		return *this;
+	}
+
 	Vertex& Vertex::Pos(float x, float y, float z) {
 		this->mPos = { x, y, z };
 
