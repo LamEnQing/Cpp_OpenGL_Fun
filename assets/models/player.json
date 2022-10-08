@@ -1,7 +1,27 @@
 [
 	{
-		"part_name": "nothing",
-		"mesh": "player.obj",
-		"offset": [0, 0, 0]
+		"part_name": "head",
+		"mesh": "player_head.obj",
+		"offset": [0, 1.2, 0]
+	},
+	{
+		"part_name": "body",
+		"mesh": "player_body.obj"
+	},
+	{
+		"part_name": "arm_left",
+		"mesh": "player_arm_left.obj"
+	},
+	{
+		"part_name": "arm_right",
+		"mesh": "player_arm_right.obj"
+	},
+	{
+		"part_name": "leg_left",
+		"mesh": "player_leg_left.obj"
+	},
+	{
+		"part_name": "leg_right",
+		"mesh": "player_leg_right.obj"
 	}
 ]
