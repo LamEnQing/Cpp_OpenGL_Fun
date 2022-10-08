@@ -8,7 +8,7 @@
 namespace OpenGLFun {
 	ShapeManager* SHAPE_MANAGER = nullptr;
 
-	ResourceManager::ResourceManager() : _texturesDataMap{}, _meshesDataMap{}, _modelsDataMap{} {
+	ResourceManager::ResourceManager() : _texturesDataMap{}, _modelsDataMap{} {
 		if (RESOURCE_MANAGER != nullptr)
 			throw SimpleException("Resource manager has already been created!");
 
@@ -21,7 +21,6 @@ namespace OpenGLFun {
 	ResourceManager::~ResourceManager() {
 		delete SHAPE_MANAGER;
 		UnloadTextures();
-		UnloadMesh();
 		UnloadModels();
 	}
 
@@ -67,12 +66,8 @@ namespace OpenGLFun {
 		_texturesDataMap.clear();
 	}
 
-	std::shared_ptr<Mesh> ResourceManager::LoadMesh(std::string meshFilepath) {
+	Mesh* ResourceManager::LoadMesh(std::string meshFilepath) {
 		std::string meshDirPath = std::string("assets/models/meshes/");
-		if (_meshesDataMap.find(meshFilepath) != _meshesDataMap.end()) {
-			std::cout << meshFilepath + " was already loaded, getting you an existing model instead!\n";
-			return _meshesDataMap.at(meshFilepath);
-		}
 
 		if (!(Serializer::DoesFilenameEndWith(meshFilepath, ".json") || Serializer::DoesFilenameEndWith(meshFilepath, ".obj"))) {
 			throw SimpleException(meshDirPath + meshFilepath + " must either be in JSON or Wavefront (.obj) format");
@@ -102,7 +97,7 @@ namespace OpenGLFun {
 				throw SimpleException(std::string("Failed to parse ") + meshDirPath + meshFilepath + ", here's the parse error:\n\t" + e.what());
 			}
 
-			_meshesDataMap.insert({ meshFilepath, std::shared_ptr<Mesh>(mesh) });
+			return mesh;
 		}
 		else { // Obj deserialization
 			Mesh* mesh = new Mesh();
@@ -116,27 +111,8 @@ namespace OpenGLFun {
 				throw SimpleException(std::string("Failed to parse ") + meshDirPath + meshFilepath + ", here's the parse error:\n\t" + e.what());
 			}
 
-			_meshesDataMap.insert({ meshFilepath, std::shared_ptr<Mesh>(mesh) });
+			return mesh;
 		}
-
-
-		// texture variable will be out of scope, so instead we return the texture from the map
-		return _meshesDataMap.at(meshFilepath);
-	}
-
-	std::shared_ptr<Mesh> ResourceManager::GetMesh(std::string meshFilepath) {
-		if (_meshesDataMap.find(meshFilepath) == _meshesDataMap.end()) {
-			throw SimpleException(std::string("Could not find ") + meshFilepath + " in mesh database");
-		}
-
-		return _meshesDataMap.at(meshFilepath);
-	}
-
-	void ResourceManager::UnloadMesh() {
-		for (auto meshIt = _meshesDataMap.rbegin(); meshIt != _meshesDataMap.rend(); meshIt++) {
-			meshIt->second->Destroy();
-		}
-		_meshesDataMap.clear();
 	}
 
 	Model* ResourceManager::LoadModel(std::string modelFilepath) {
@@ -177,8 +153,22 @@ namespace OpenGLFun {
 
 				if (!meshJson.HasMember("mesh") || !meshJson["mesh"].IsString())
 					throw JsonReadException(modelDirPath + modelFilepath, std::string("for index ") + std::to_string(i), "mesh", "string");
+				 
+				Vec3f offsetVec = Vec3f(0.0f);
+				if (meshJson.HasMember("offset")) {
+					if (!meshJson["offset"].IsArray())
+						throw JsonReadException(modelDirPath + modelFilepath, std::string("for index ") + std::to_string(i), "offset", "array of 3 elements");
 
-				model->AddMesh(meshJson["part_name"].GetString(), LoadMesh(meshJson["mesh"].GetString()));
+					const rapidjson::Value& offsetArr = meshJson["offset"];
+					for (int i = 0; i < 3; i++) {
+						if (!offsetArr[i].IsNumber())
+							throw JsonReadException(modelDirPath + modelFilepath, std::string("for index ") + std::to_string(i), std::string("offset[") + std::to_string(i) + "]", "number");
+
+						offsetVec[i] = offsetArr[i].GetFloat();
+					}
+				}
+
+				model->AddMesh(meshJson["part_name"].GetString(), std::shared_ptr<Mesh>(LoadMesh(meshJson["mesh"].GetString())->SetOffset(offsetVec)));
 			}
 		}
 		catch (std::exception const& e) { // catch all parse errors, so that we can include the filename in the error too!

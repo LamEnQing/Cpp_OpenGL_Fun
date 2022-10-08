@@ -68,7 +68,7 @@ namespace OpenGLFun {
 			0, 1, 2,
 			2, 3, 0
 		};
-		mesh->Init(vertices, indices).SetCull(false).SetBlend(true);
+		mesh->Init(vertices, indices)->SetCull(false)->SetBlend(true);
 		_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
 	}
 

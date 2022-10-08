@@ -7,9 +7,9 @@ namespace OpenGLFun {
 		{ "lines", GL_LINE_STRIP }
 	};
 
-	Mesh::Mesh() {}
+	Mesh::Mesh() : _offset(Vec3f(0.0f)) {}
 
-	Mesh& Mesh::Init(std::vector<std::shared_ptr<IShape>>& shapes) {
+	Mesh* Mesh::Init(std::vector<std::shared_ptr<IShape>>& shapes) {
 		_vertexCount = 0;
 		std::vector<Vertex> vertices;
 		std::vector<IShape::ElementIndex> indices;
@@ -25,7 +25,7 @@ namespace OpenGLFun {
 		return Init(vertices, indices);
 	}
 
-	Mesh& Mesh::Init(std::vector<Vertex>& vertices, std::vector<IShape::ElementIndex>& indices) {
+	Mesh* Mesh::Init(std::vector<Vertex>& vertices, std::vector<IShape::ElementIndex>& indices) {
 		_vertexCount = static_cast<int>(vertices.size());
 		_indexCount = static_cast<int>(indices.size());
 
@@ -60,22 +60,22 @@ namespace OpenGLFun {
 		glBindVertexArray(0); // unbind VAO
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // unbind EBO
 
-		return *this;
+		return this;
 	}
 
-	Mesh& Mesh::Destroy() {
+	Mesh* Mesh::Destroy() {
 		glDeleteVertexArrays(1, &_vao);
 		glDeleteBuffers(1, &_vbo);
-		return *this;
+		return this;
 	}
 
-	Mesh& Mesh::Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor) {
+	Mesh* Mesh::Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor) {
 		unsigned int transformLoc = glGetUniformLocation(shaderProgram, "uTransformation");
 		unsigned int tintColorLoc = glGetUniformLocation(shaderProgram, "uTintColor");
 		unsigned int texDimLoc = glGetUniformLocation(shaderProgram, "uTexDimensions");
 		unsigned int texCoordLoc = glGetUniformLocation(shaderProgram, "uTexCoord");
 
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformMtx));
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(glm::translate(transformMtx, glm::vec3(_offset.x, _offset.y, 0.0f))));
 
 		glm::vec4 tintVec{ tintColor[0], tintColor[1], tintColor[2], tintColor[3] };
 		glUniform4fv(tintColorLoc, 1, glm::value_ptr(tintVec));
@@ -117,16 +117,16 @@ namespace OpenGLFun {
 			glDisable(GL_CULL_FACE);
 		glDisable(GL_TEXTURE_2D);
 
-		return *this;
+		return this;
 	}
 
-	Mesh& Mesh::Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor) {
+	Mesh* Mesh::Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor) {
 		unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
 		unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
 		unsigned int projLoc = glGetUniformLocation(shaderProgram, "proj");
 		unsigned int tintColorLoc = glGetUniformLocation(shaderProgram, "tintColor");
 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMtx));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(glm::translate(modelMtx, vec3f_to_vec3(_offset))));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMtx));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projMtx));
 
@@ -168,23 +168,28 @@ namespace OpenGLFun {
 
 		glDisable(GL_TEXTURE_2D);
 
-		return *this;
+		return this;
 	}
 
-	Mesh& Mesh::SetDrawMode(const int& mode) {
+	Mesh* Mesh::SetDrawMode(const int& mode) {
 		this->_drawMode = mode;
 
-		return *this;
+		return this;
 	}
 
-	Mesh& Mesh::SetCull(const bool& cull) {
+	Mesh* Mesh::SetCull(const bool& cull) {
 		this->_shouldCull = cull;
-		return *this;
+		return this;
 	}
 
-	Mesh& Mesh::SetBlend(const bool& blend) {
+	Mesh* Mesh::SetBlend(const bool& blend) {
 		this->_shouldBlend = blend;
-		return *this;
+		return this;
+	}
+
+	Mesh* Mesh::SetOffset(Vec3f& vec) {
+		this->_offset = vec;
+		return this;
 	}
 
 	void Mesh::DeserializeJson(rapidjson::Value const& jsonObj) {

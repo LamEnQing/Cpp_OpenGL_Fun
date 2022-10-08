@@ -7,17 +7,18 @@ namespace OpenGLFun {
 	public:
 		Mesh();
 
-		Mesh& Init(std::vector<std::shared_ptr<IShape>>& shapes);
+		Mesh* Init(std::vector<std::shared_ptr<IShape>>& shapes);
 
-		Mesh& Init(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
-		Mesh& Destroy();
+		Mesh* Init(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+		Mesh* Destroy();
 
-		Mesh& Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor);
-		Mesh& Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor);
+		Mesh* Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor);
+		Mesh* Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor);
 
-		Mesh& SetDrawMode(const int& mode);
-		Mesh& SetCull(const bool& cull);
-		Mesh& SetBlend(const bool& blend);
+		Mesh* SetDrawMode(const int& mode);
+		Mesh* SetCull(const bool& cull);
+		Mesh* SetBlend(const bool& blend);
+		Mesh* SetOffset(Vec3f& vec);
 
 		void DeserializeJson(rapidjson::Value const& jsonObj);
 
@@ -29,5 +30,7 @@ namespace OpenGLFun {
 		int _drawMode{ GL_TRIANGLES };
 		bool _shouldCull{ true };
 		bool _shouldBlend{ false };
+
+		Vec3f _offset; // move the origin of this mesh
 	};
 }
