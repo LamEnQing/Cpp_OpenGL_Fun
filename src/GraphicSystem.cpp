@@ -239,8 +239,6 @@ namespace OpenGLFun {
 	}
 
 	void GraphicSystem::CreateGLTexture(Texture* texture) {
-		std::cout << "Creating texture:" << texture->imgWidth << ' ' << texture->imgHeight << '\n';
-		std::cout << "Img channels:" << texture->imgChannels << '\n';
 		unsigned int texId;
 
 		glGenTextures(1, &texId); // create an id for the texture

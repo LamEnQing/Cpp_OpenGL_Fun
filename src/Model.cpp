@@ -240,11 +240,7 @@ namespace OpenGLFun {
 		char c; // to read starting character, so that we can read the number values after it
 		std::stringstream ss;
 
-		std::cout << "\nDeserialising obj " << filepath << "\n----------------------------\n";
 		while (!std::getline(fs, line).eof()) {
-			if (Serializer::DoesFilenameStartWith(line, "o "))
-				std::cout << line << '\n';
-
 			if (Serializer::DoesFilenameStartWith(line, "v ")) {
 				ss.clear(); // must clear stream, so as to not "corrupt" the reading
 				ss << line;
@@ -253,11 +249,9 @@ namespace OpenGLFun {
 				ss >> c >> x >> y >> z; // read v, then the next 3 float values
 
 				vertexCoordinates.push_back(Vec3f(x, y, z));
-				std::cout << "v " << x << ' ' << y << ' ' << z << '\n';
 			}
 
 			if (Serializer::DoesFilenameStartWith(line, "vt ")) {
-				std::cout << line << '\n';
 				ss.clear();
 				ss << line; // line would be "vt u v"
 
@@ -265,11 +259,9 @@ namespace OpenGLFun {
 				ss >> c >> c >> u >> v;
 
 				textureCoordinates.push_back(Vec2f(u, v));
-				std::cout << "myvt " << u << ' ' << v << '\n';
 			}
 
 			if (Serializer::DoesFilenameStartWith(line, "f ")) { // read a face, which should be a trianglular face, hence 3 vertices only
-				std::cout << line << '\n';
 				ss.clear();
 				ss << line; // line would be "f vIdx/vtexIdx/vNormIdx"
 
@@ -295,7 +287,6 @@ namespace OpenGLFun {
 				vertices.push_back(Vertex().Pos(vertexCoordinates[v3]).UV(textureCoordinates[vt3]));
 			}
 		}
-		std::cout << "Vertex count:" << vertices.size() << std::endl;
 
 		fs.close();
 		Init(vertices, vertexIndices);

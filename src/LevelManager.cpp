@@ -25,17 +25,7 @@ namespace OpenGLFun {
 	// these variables are extern
 	const std::string LEVEL_PAUSE_ID = "pause_screen";
 
-	LevelManager::LevelManager() : mCurrentLevel{}, _levels{} {
-		/*for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR)) {
-			std::cout << "Discovered:" << entry.path().string() << '\n';
-			try {
-				ENTITY_FACTORY.get()->CreateEntityFromFile(entry.path().string().c_str());
-			}
-			catch (std::exception& e) {
-				std::cout << "Failed to parse " << entry.path().string() << ", here's the error: " << e.what() << '\n';
-			}
-		}*/
-	}
+	LevelManager::LevelManager() : mCurrentLevel{}, _levels{} {}
 
 	LevelManager::~LevelManager() {}
 
@@ -51,30 +41,6 @@ namespace OpenGLFun {
 
 			std::cout << "Found level " << _levels.back() << '\n';
 		}
-
-		//throw SimpleException("Finished adding levels.");
-
-		/*for (const auto& entry : std::filesystem::directory_iterator("data/pause_screen")) {
-			if (!Serializer::DoesFilenameEndWith(entry.path().string(), ".json")) {
-				continue;
-			}
-
-			std::cout << "Discovered:" << entry.path().string() << '\n';
-			try {
-				mPauseScreenObjs.push_back(ENTITY_FACTORY.get()->CreateEntityFromFile(entry.path().string().c_str()));
-			}
-			catch (std::exception& e) {
-				std::cout << "Failed to parse " << entry.path().string() << ", here's the error:\n\t" << e.what() << '\n';
-			}
-		}*/
-
-		/*engine->mPlayerId = ENTITY_MANAGER->SpawnEntity();
-
-		Camera* camera = new Camera(engine->mPlayerId, { 0.f, 1.f, 0.f }, { 1.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
-		COMPONENT_MANAGER->AddComponent(camera);
-
-		Transform* transform = new Transform(engine->mPlayerId, { -3, 0, 0 }, {}, {});
-		COMPONENT_MANAGER->AddComponent(transform);*/
 		std::cout << '\n';
 	}
 
@@ -93,7 +59,7 @@ namespace OpenGLFun {
 	}
 
 	void LevelManager::LoadLevel(std::string const& levelId) {
-		std::cout << "Loading a level, " + levelId + "\n";
+		std::cout << "\nLoading a level, " + levelId + "\n";
 		std::cout << "----------------------------------------------------------------------\n";
 
 		if (std::find(_levels.begin(), _levels.end(), levelId) == _levels.end())

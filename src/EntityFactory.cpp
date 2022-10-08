@@ -26,8 +26,6 @@ namespace OpenGLFun {
 				throw JsonReadException(filename, "components", "JSON object");
 
 			for (auto& compJson : jsonObj["components"].GetObject()) {
-				std::cout << "getting idk:" << compJson.name.GetString() << '\n';
-
 				std::string compType = compJson.name.GetString();
 				// Could not find the component type, so throw exception!
 				if (COMPONENT_MANAGER->mComponentCreatorsMap.find(compType) == COMPONENT_MANAGER->mComponentCreatorsMap.end()) {
