@@ -1,0 +1,44 @@
+{
+	"draw_mode": "lines",
+	"shapes": [
+		{
+			"type": "basic",
+			"color": [ 0, 0, 1.0 ],
+			"vertices": [
+				{
+					"position": [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					"position": [ 0.0, 0.0, 1.0 ]
+				}
+			],
+			"indices": [0, 1]
+		},
+		{
+			"type": "basic",
+			"color": [ 0, 1.0, 0.0 ],
+			"vertices": [
+				{
+					"position": [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					"position": [ 0.0, 1.0, 0.0 ]
+				}
+			],
+			"indices": [0, 1]
+		},
+		{
+			"type": "basic",
+			"color": [ 1.0, 0, 0.0 ],
+			"vertices": [
+				{
+					"position": [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					"position": [ 1.0, 0.0, 0.0 ]
+				}
+			],
+			"indices": [0, 1]
+		}
+	]
+}

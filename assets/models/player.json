@@ -1,18 +1,7 @@
-{
-	"draw_mode": "triangles",
-	"shapes": [
-		{
-			"type": "cuboid",
-			"colors": {
-				"bottom_face": [ 0, 0, 1.0 ],
-				"top_face": [ 0, 1.0, 1.0 ],
-				"positive_z_face": [ 0, 1.0, 0 ],
-				"negative_z_face": [ 1.0, 1.0, 0 ],
-				"negative_x_face": [ 0.3, 0, 1.0 ],
-				"positive_x_face": [ 1.0, 0, 0 ]
-			},
-			"size": [ 0.2, 0.7, 0.2 ],
-			"offset": [ -0.1, 0.0, 0.0 ]
-		}
-	]
-}
+[
+	{
+		"part_name": "nothing",
+		"mesh": "player.obj",
+		"offset": [0, 0, 0]
+	}
+]

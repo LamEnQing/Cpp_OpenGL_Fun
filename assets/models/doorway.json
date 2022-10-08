@@ -1,7 +1,7 @@
 [
 	{
 		"part_name": "nothing",
-		"mesh": "axis.json",
+		"mesh": "doorway.obj",
 		"offset": [0, 0, 0]
 	}
 ]

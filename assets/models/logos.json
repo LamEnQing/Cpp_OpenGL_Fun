@@ -1,7 +1,7 @@
 [
 	{
 		"part_name": "nothing",
-		"mesh": "axis.json",
+		"mesh": "logos.obj",
 		"offset": [0, 0, 0]
 	}
 ]

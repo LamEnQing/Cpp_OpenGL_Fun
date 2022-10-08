@@ -55,6 +55,7 @@ namespace OpenGLFun {
 			throw SimpleException("Failed to compile 2D shader program.\n");
 		}
 
+		Mesh* mesh = new Mesh();
 		Vertex vertex;
 		std::vector<unsigned int> indices;
 		std::vector<Vertex> vertices = {
@@ -67,7 +68,8 @@ namespace OpenGLFun {
 			0, 1, 2,
 			2, 3, 0
 		};
-		_2DShapeModel.Init(vertices, indices).SetCull(false).SetBlend(true);
+		mesh->Init(vertices, indices).SetCull(false).SetBlend(true);
+		_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
 	}
 
 	GraphicSystem::~GraphicSystem() {

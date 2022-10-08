@@ -4,7 +4,7 @@
 	"components": {
 		"Model": {
 			"model_type": "3d",
-			"model": "player.obj",
+			"model": "player.json",
 			"should_cull": true
 		},
 		"Transform": {

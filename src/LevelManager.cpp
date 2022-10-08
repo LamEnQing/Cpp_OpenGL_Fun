@@ -87,8 +87,14 @@ namespace OpenGLFun {
 			}
 			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model)) {
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
-				if (!modelComp->mModelFilepath.empty())
-					RESOURCE_MANAGER->LoadModel(modelComp->mModelFilepath);
+				if (!modelComp->mModelFilepath.empty()) {
+					try {
+						RESOURCE_MANAGER->LoadModel(modelComp->mModelFilepath);
+					}
+					catch (std::exception& e) {
+						throw SimpleException(std::string("Encountered an error reading a Model component:\n\t") + e.what());
+					}
+				}
 			}
 		}
 		RESOURCE_MANAGER->LoadTexture("no_texture.png");

@@ -4,11 +4,11 @@
 	"components": {
 		"Model": {
 			"model_type": "3d",
-			"model": "doorway.json",
+			"model": "logos.json",
 			"should_cull": true
 		},
 		"Transform": {
-			"position": [2.0, 0.26, 0.0],
+			"position": [0.0, 0.26, 0.0],
 			"rotation": [0.0, 180.0, 0.0],
 			"scale": [1.0, 1.0, 1.0]
 		}
