@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AnimationSystem.cpp" />
     <ClCompile Include="src\BasicShape.cpp" />
     <ClCompile Include="src\ComponentManager.cpp" />
     <ClCompile Include="src\CuboidShape.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="src\WindowSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AnimationSystem.h" />
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\Color.h" />
     <ClInclude Include="src\Component.h" />

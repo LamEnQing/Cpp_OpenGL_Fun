@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include <filesystem>
 
+#include "AnimationSystem.h"
 #include "ComponentManager.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
@@ -27,6 +28,7 @@ namespace OpenGLFun {
 
 		_systems.push_back(std::unique_ptr<ISystem>(new WindowSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new InputSystem()));
+		_systems.push_back(std::unique_ptr<ISystem>(new AnimationSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new GraphicSystem()));
 	}
 

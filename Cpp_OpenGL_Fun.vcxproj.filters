@@ -113,6 +113,9 @@
     <ClCompile Include="src\Mesh.cpp">
       <Filter>system\graphics\model</Filter>
     </ClCompile>
+    <ClCompile Include="src\AnimationSystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entity.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="src\Mesh.h">
       <Filter>system\graphics\model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AnimationSystem.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

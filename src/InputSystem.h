@@ -12,6 +12,7 @@ namespace OpenGLFun {
 		float mMouseSensitivity;
 
 		InputSystem();
+		~InputSystem();
 		virtual void Update(float const&) override;
 
 		int IsKeyHeld(int key);
