@@ -34,6 +34,8 @@ namespace OpenGLFun {
 		};
 	}
 
+	InputSystem::~InputSystem() {}
+
 	void InputSystem::Update(float const& deltaTime) {
 		_deltaTime = deltaTime;
 
