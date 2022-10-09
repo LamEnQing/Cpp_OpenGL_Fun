@@ -10,8 +10,9 @@ namespace OpenGLFun {
 		Vec3f mLookAtPrev;
 		Vec3f mLookAt; // where is the camera looking at?
 		Vec3f mCamUp; // up direction of the camera, to orient the camera
+		Vec3f mCamRotation;
 
-		Camera() : IComponent(), mCamOffset{}, mLookAtPrev{}, mLookAt{}, mCamUp{} {
+		Camera() : IComponent(), mCamOffset{}, mLookAtPrev{}, mLookAt{}, mCamUp{}, mCamRotation{} {
 			mCompType = ComponentType::Camera;
 		}
 

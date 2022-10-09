@@ -98,10 +98,6 @@ namespace OpenGLFun {
 			//printf("Pos: %.2f, %.2f, %.2f\n", playerTransform->pos.x, playerTransform->pos.y, playerTransform->pos.z);
 			playerTransform->mPositionOld = playerTransform->mPosition;
 		}
-		if (playerTransform->mRotationOld != playerTransform->mRotation) {
-			//printf("X Head Rot: %.2f\n", playerTransform->headXRot);
-			playerTransform->mRotationOld = playerTransform->mRotation;
-		}
 	}
 
 	int InputSystem::IsKeyHeld(int key) {
@@ -144,26 +140,28 @@ namespace OpenGLFun {
 			Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(ENGINE->mPlayerId, ComponentType::Camera);
 			Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(ENGINE->mPlayerId, ComponentType::Transform);
 
-			/*std::cout << "Player Rotation Old:" << playerTransform->mRotationOld << '\n';
-			std::cout << "Player Rotation:" << playerTransform->mRotation << '\n';*/
+			/*std::cout << "Player Rotation Old:" << playerCamera->mCamRotationOld << '\n';
+			std::cout << "Player Rotation:" << playerCamera->mCamRotation << '\n';*/
 
-			playerTransform->mRotationOld.x = playerTransform->mRotation.x;
-			playerTransform->mRotationOld.y = playerTransform->mRotation.y;
+			playerTransform->mRotationOld = playerTransform->mRotation;
 
-			playerTransform->mRotation.x += mouseOffset.x;
-			playerTransform->mRotation.y += mouseOffset.y;
+			playerCamera->mCamRotation.x += mouseOffset.x;
+			playerCamera->mCamRotation.y += mouseOffset.y;
 
-			if (playerTransform->mRotation.y > 89.0f)
-				playerTransform->mRotation.y = 89.0f;
-			else if (playerTransform->mRotation.y < -89.0f)
-				playerTransform->mRotation.y = -89.0f;
+			if (playerCamera->mCamRotation.y > 89.0f)
+				playerCamera->mCamRotation.y = 89.0f;
+			else if (playerCamera->mCamRotation.y < -89.0f)
+				playerCamera->mCamRotation.y = -89.0f;
 
 			Vec3f dir(1.0f);
-			dir.x = cos(glm::radians(playerTransform->mRotation.x)) * cos(glm::radians(playerTransform->mRotation.y));
-			dir.y = sin(glm::radians(playerTransform->mRotation.y));
-			dir.z = sin(glm::radians(playerTransform->mRotation.x)) * cos(glm::radians(playerTransform->mRotation.y));
+			dir.x = cos(glm::radians(playerCamera->mCamRotation.x)) * cos(glm::radians(playerCamera->mCamRotation.y));
+			dir.y = sin(glm::radians(playerCamera->mCamRotation.y));
+			dir.z = sin(glm::radians(playerCamera->mCamRotation.x)) * cos(glm::radians(playerCamera->mCamRotation.y));
+
 			playerCamera->mLookAtPrev = playerCamera->mLookAt;
 			playerCamera->mLookAt = OpenGLFun::normalize(dir);
+
+			playerTransform->mRotation.y = -playerCamera->mCamRotation.x;
 		}
 	}
 
