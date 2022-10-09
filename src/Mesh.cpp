@@ -7,7 +7,7 @@ namespace OpenGLFun {
 		{ "lines", GL_LINE_STRIP }
 	};
 
-	Mesh::Mesh() : _offset(Vec3f(0.0f)) {}
+	Mesh::Mesh() : _offset(Vec3f(0.0f)), _rotation(0.0f) {}
 
 	Mesh* Mesh::Init(std::vector<std::shared_ptr<IShape>>& shapes) {
 		_vertexCount = 0;
@@ -126,7 +126,12 @@ namespace OpenGLFun {
 		unsigned int projLoc = glGetUniformLocation(shaderProgram, "proj");
 		unsigned int tintColorLoc = glGetUniformLocation(shaderProgram, "tintColor");
 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(glm::translate(modelMtx, vec3f_to_vec3(_offset))));
+		glm::mat4 finalModelMtx(1.0f);
+		finalModelMtx = glm::translate(modelMtx, vec3f_to_vec3(_offset));
+		finalModelMtx = glm::rotate(finalModelMtx, glm::radians(_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		finalModelMtx = glm::rotate(finalModelMtx, glm::radians(_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		//finalModelMtx = glm::rotate(finalModelMtx, glm::radians(_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(finalModelMtx));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMtx));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projMtx));
 
@@ -190,6 +195,15 @@ namespace OpenGLFun {
 	Mesh* Mesh::SetOffset(Vec3f& vec) {
 		this->_offset = vec;
 		return this;
+	}
+
+	Mesh* Mesh::SetRotation(Vec3f& vec) {
+		this->_rotation = vec;
+		return this;
+	}
+
+	Vec3f const& Mesh::GetRotation() const {
+		return this->_rotation;
 	}
 
 	void Mesh::DeserializeJson(rapidjson::Value const& jsonObj) {

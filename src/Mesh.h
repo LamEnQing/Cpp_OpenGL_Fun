@@ -20,6 +20,9 @@ namespace OpenGLFun {
 		Mesh* SetBlend(const bool& blend);
 		Mesh* SetOffset(Vec3f& vec);
 
+		Mesh* SetRotation(Vec3f& vec);
+		Vec3f const& GetRotation() const;
+
 		void DeserializeJson(rapidjson::Value const& jsonObj);
 
 		void DeserializeObj(std::string const& filepath);
@@ -32,5 +35,6 @@ namespace OpenGLFun {
 		bool _shouldBlend{ false };
 
 		Vec3f _offset; // move the origin of this mesh
+		Vec3f _rotation; // rotate the mesh
 	};
 }
