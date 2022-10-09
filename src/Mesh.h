@@ -6,11 +6,11 @@ namespace OpenGLFun {
 	class Mesh {
 	public:
 		Mesh();
+		~Mesh();
 
 		Mesh* Init(std::vector<std::shared_ptr<IShape>>& shapes);
 
 		Mesh* Init(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
-		Mesh* Destroy();
 
 		Mesh* Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor);
 		Mesh* Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor);
@@ -27,7 +27,7 @@ namespace OpenGLFun {
 
 		void DeserializeObj(std::string const& filepath);
 	private:
-		unsigned int _vbo{ 0 }, _vao{ 0 }, _ebo{ 0 };
+		unsigned int _vbo{ UINT32_MAX }, _vao{ UINT32_MAX }, _ebo{ UINT32_MAX };
 		int _vertexCount{ 0 }, _indexCount{ 0 };
 
 		int _drawMode{ GL_TRIANGLES };

@@ -9,6 +9,15 @@ namespace OpenGLFun {
 
 	Mesh::Mesh() : _offset(Vec3f(0.0f)), _rotation(0.0f) {}
 
+	Mesh::~Mesh() {
+		if (_vao != UINT32_MAX)
+			glDeleteVertexArrays(1, &_vao);
+		if (_vbo != UINT32_MAX)
+			glDeleteBuffers(1, &_vbo);
+		if (_ebo != UINT32_MAX)
+			glDeleteBuffers(1, &_ebo);
+	}
+
 	Mesh* Mesh::Init(std::vector<std::shared_ptr<IShape>>& shapes) {
 		_vertexCount = 0;
 		std::vector<Vertex> vertices;
@@ -60,12 +69,6 @@ namespace OpenGLFun {
 		glBindVertexArray(0); // unbind VAO
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // unbind EBO
 
-		return this;
-	}
-
-	Mesh* Mesh::Destroy() {
-		glDeleteVertexArrays(1, &_vao);
-		glDeleteBuffers(1, &_vbo);
 		return this;
 	}
 
