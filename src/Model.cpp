@@ -14,6 +14,17 @@ namespace OpenGLFun {
 		return *this;
 	}
 
+	Mesh* Model::GetMesh(std::string meshName) {
+		if (_meshes.find(meshName) == _meshes.end())
+			return nullptr;
+
+		return _meshes.at(meshName).get();
+	}
+
+	std::map<std::string, std::shared_ptr<Mesh>>& Model::GetMeshMap() {
+		return _meshes;
+	}
+
 	Model& Model::Destroy() {
 		_meshes.clear();
 

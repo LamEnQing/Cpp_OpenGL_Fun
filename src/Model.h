@@ -8,6 +8,9 @@ namespace OpenGLFun {
 		Model();
 
 		Model& AddMesh(std::string meshName, std::shared_ptr<Mesh> mesh);
+		Mesh* GetMesh(std::string meshName);
+		std::map<std::string, std::shared_ptr<Mesh>>& GetMeshMap();
+
 		Model& Destroy();
 
 		Model& Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor);
