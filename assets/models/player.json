@@ -6,22 +6,27 @@
 	},
 	{
 		"part_name": "body",
-		"mesh": "player_body.obj"
+		"mesh": "player_body.obj",
+		"offset": [0, 1.2, 0]
 	},
 	{
 		"part_name": "arm_left",
-		"mesh": "player_arm_left.obj"
+		"mesh": "player_arm_left.obj",
+		"offset": [0, 1.05, -0.3]
 	},
 	{
 		"part_name": "arm_right",
-		"mesh": "player_arm_right.obj"
+		"mesh": "player_arm_right.obj",
+		"offset": [0, 1.05, 0.3]
 	},
 	{
 		"part_name": "leg_left",
-		"mesh": "player_leg_left.obj"
+		"mesh": "player_leg_left.obj",
+		"offset": [0, 0.5, -0.1]
 	},
 	{
 		"part_name": "leg_right",
-		"mesh": "player_leg_right.obj"
+		"mesh": "player_leg_right.obj",
+		"offset": [0, 0.5, 0.1]
 	}
 ]
