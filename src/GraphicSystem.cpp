@@ -114,7 +114,6 @@ namespace OpenGLFun {
 
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 				if (modelComp->mModelType == ModelType::TwoD) continue;
-				if (modelComp->mModelFilepath.empty()) continue;
 
 				model = glm::mat4(1.0f);
 				Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
@@ -128,7 +127,7 @@ namespace OpenGLFun {
 				model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
 				model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
 
-				RESOURCE_MANAGER->GetModel(modelComp->mModelFilepath)
+				RESOURCE_MANAGER->GetModel(entityId)
 					->SetCull(modelComp->mShouldCull)
 					.Draw3D(_3DShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId, tintColor);
 

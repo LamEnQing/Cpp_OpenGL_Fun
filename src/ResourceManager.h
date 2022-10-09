@@ -1,5 +1,7 @@
 #pragma once
 #include "pch.h"
+
+#include "EntityManager.h"
 #include "Model.h"
 #include "Texture.h"
 
@@ -16,12 +18,12 @@ namespace OpenGLFun {
 
 		Mesh* LoadMesh(std::string modelFilepath);
 
-		Model* LoadModel(std::string modelFilepath);
+		Model* LoadModel(EntityId const& entityId, std::string modelFilepath);
 		void UnloadModels();
-		Model* GetModel(std::string modelFilepath);
+		Model* GetModel(EntityId const& entityId);
 	private:
 		std::map<std::string, std::shared_ptr<Texture>> _texturesDataMap;
-		std::map<std::string, std::shared_ptr<Model>> _modelsDataMap;
+		std::map<EntityId, std::shared_ptr<Model>> _modelsDataMap;
 	};
 
 	extern ResourceManager* RESOURCE_MANAGER;

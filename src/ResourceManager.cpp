@@ -115,12 +115,8 @@ namespace OpenGLFun {
 		}
 	}
 
-	Model* ResourceManager::LoadModel(std::string modelFilepath) {
+	Model* ResourceManager::LoadModel(EntityId const& entityId, std::string modelFilepath) {
 		std::string modelDirPath = std::string("assets/models/");
-		if (_modelsDataMap.find(modelFilepath) != _modelsDataMap.end()) {
-			std::cout << modelFilepath + " was already loaded, getting you an existing model instead!\n";
-			return _modelsDataMap.at(modelFilepath).get();
-		}
 
 		if (!Serializer::DoesFilenameEndWith(modelFilepath, ".json")) {
 			throw SimpleException(modelDirPath + modelFilepath + " must be in JSON format");
@@ -176,18 +172,18 @@ namespace OpenGLFun {
 			throw SimpleException(std::string("Failed to parse ") + modelDirPath + modelFilepath + ", here's the parse error:\n\t" + e.what());
 		}
 
-		_modelsDataMap.insert({ modelFilepath, std::shared_ptr<Model>(model) });
+		_modelsDataMap.insert({ entityId, std::shared_ptr<Model>(model) });
 
 		// texture variable will be out of scope, so instead we return the texture from the map
-		return _modelsDataMap.at(modelFilepath).get();
+		return _modelsDataMap.at(entityId).get();
 	}
 
-	Model* ResourceManager::GetModel(std::string modelFilepath) {
-		if (_modelsDataMap.find(modelFilepath) == _modelsDataMap.end()) {
-			throw SimpleException(std::string("Could not find ") + modelFilepath + " in model database");
+	Model* ResourceManager::GetModel(EntityId const& entityId) {
+		if (_modelsDataMap.find(entityId) == _modelsDataMap.end()) {
+			throw SimpleException(std::string("Could not find entity ") + std::to_string(entityId) + "'s model in model database");
 		}
 
-		return _modelsDataMap.at(modelFilepath).get();
+		return _modelsDataMap.at(entityId).get();
 	}
 
 	void ResourceManager::UnloadModels() {

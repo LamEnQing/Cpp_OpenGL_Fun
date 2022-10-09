@@ -89,7 +89,7 @@ namespace OpenGLFun {
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 				if (!modelComp->mModelFilepath.empty()) {
 					try {
-						RESOURCE_MANAGER->LoadModel(modelComp->mModelFilepath);
+						RESOURCE_MANAGER->LoadModel(entityId, modelComp->mModelFilepath);
 					}
 					catch (std::exception& e) {
 						throw SimpleException(std::string("Encountered an error reading a Model component:\n\t") + e.what());

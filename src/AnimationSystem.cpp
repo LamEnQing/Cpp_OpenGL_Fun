@@ -1,6 +1,7 @@
 #include "AnimationSystem.h"
 
 #include "ComponentManager.h"
+#include "Engine.h"
 #include "EntityManager.h"
 #include "ModelComponent.h"
 #include "ResourceManager.h"
@@ -12,15 +13,15 @@ namespace OpenGLFun {
 
 	void AnimationSystem::Update(float const& deltaTime) {
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
-			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
+			std::cout << "entityId:" << entityId << ',' << (entityId == ENGINE->mPlayerId) << std::endl;
+			if (entityId == ENGINE->mPlayerId || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
 				continue;
 
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			if (modelComp->mModelType == ModelType::TwoD) continue;
-			if (modelComp->mModelFilepath.empty()) continue;
 
 			Transform* transform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
-			Model* model = RESOURCE_MANAGER->GetModel(modelComp->mModelFilepath);
+			Model* model = RESOURCE_MANAGER->GetModel(entityId);
 
 			for (auto meshesIt = model->GetMeshMap().begin(); meshesIt != model->GetMeshMap().end(); meshesIt++) {
 				std::string const& meshName = meshesIt->first;
