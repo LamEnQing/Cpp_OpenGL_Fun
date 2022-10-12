@@ -95,10 +95,10 @@ namespace OpenGLFun {
 			Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(ENGINE->mPlayerId, ComponentType::Camera);
 			Transform* playerPos = COMPONENT_MANAGER->GetComponent<Transform>(ENGINE->mPlayerId, ComponentType::Transform);
 
-			// camera pos, target pos, up direction1
+			// camera pos, target pos, up direction
 			Vec3f lookAtLerp = playerCamera->mLookAt;
-			Vec3f eye = playerPos->mPosition + playerCamera->mCamOffset;
-			Vec3f center = playerPos->mPosition + playerCamera->mCamOffset + lookAtLerp;
+			Vec3f eye = playerPos->mPosition + Vec3f(playerCamera->mCamOffset.x, playerCamera->mEyeHeight, playerCamera->mCamOffset.y);
+			Vec3f center = eye + lookAtLerp;
 
 			glm::mat4 view = glm::lookAt(glm::vec3(eye.x, eye.y, eye.z), glm::vec3(center.x, center.y, center.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
 			glm::mat4 model;

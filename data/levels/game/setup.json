@@ -3,7 +3,8 @@
 	"camera_entity": {
 		"components": {
 			"Camera": {
-				"offset": [0, 1, 0],
+				"eye_height": 1,
+				"xz_offset": [0, 0],
 				"look_at": [1, 0, 0],
 				"up_direction": [0, 1, 0]
 			},
