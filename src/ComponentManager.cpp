@@ -78,4 +78,8 @@ namespace OpenGLFun {
 
 		return false;
 	}
+
+	std::vector<IComponent*>& ComponentManager::GetEntityComponents(EntityId const& id) {
+		return _mapEntityComponents.at(id);
+	}
 }

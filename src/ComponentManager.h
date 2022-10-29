@@ -18,6 +18,7 @@ namespace OpenGLFun {
 		void RemoveComponent(EntityId const&, ComponentType const&);
 		void RemoveComponents(EntityId const&);
 
+		std::vector<IComponent*>& GetEntityComponents(EntityId const&);
 		template<typename T>
 		T* GetComponent(EntityId const&, ComponentType const&);
 

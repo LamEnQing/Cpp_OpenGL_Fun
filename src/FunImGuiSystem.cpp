@@ -5,6 +5,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "pch.h"
+#include "Engine.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
 #include "LevelManager.h"
@@ -14,9 +15,11 @@
 namespace OpenGLFun {
 	FunImGuiSystem* FUN_IMGUI_SYSTEM = nullptr;
 	int selectedEntity = -1;
+	int selectedAddComponent = 0;
 	int selectedLevel = -1;
 
 	void DrawEntityList();
+	void DrawEntityProperty();
 	void DrawGameScene();
 	void DrawLoadLevelPopup();
 
@@ -50,6 +53,7 @@ namespace OpenGLFun {
 
 	void FunImGuiSystem::Reset() {
 		selectedEntity = -1;
+		selectedAddComponent = 0;
 		selectedLevel = -1;
 	}
 
@@ -79,6 +83,7 @@ namespace OpenGLFun {
 			}
 
 			DrawEntityList();
+			DrawEntityProperty();
 			DrawGameScene();
 
 			DrawLoadLevelPopup();
@@ -86,6 +91,7 @@ namespace OpenGLFun {
 			ImGui::ShowDemoWindow(NULL);
 
 			ImGui::Render();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -118,6 +124,42 @@ namespace OpenGLFun {
 		ImGui::End();
 	}
 
+	void DrawEntityProperty() {
+		ImGui::Begin("Entity Property");
+		if (selectedEntity == -1) {
+			ImGui::Text("Select an entity!");
+		}
+		else {
+			static const char* items[]{ "Button", "Color", "Model", "Sprite", "Transform" };
+			ImGui::SetNextItemWidth(ImGui::CalcTextSize(items[selectedAddComponent], NULL, true).x + 30.0f);
+			if (ImGui::BeginCombo("##Add Component Combo", items[selectedAddComponent])) {
+				for (size_t i = 0; i < IM_ARRAYSIZE(items); i++) {
+					if (ImGui::Selectable(items[i], selectedAddComponent == i))
+						selectedAddComponent = i;
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::SameLine();
+			ImGui::Button("Add Component");
+
+			static std::map<ComponentType, const char*> componentTypeNames{
+				{ ComponentType::Button, "Button" },
+				{ ComponentType::Camera, "Camera" },
+				{ ComponentType::Color, "Color" },
+				{ ComponentType::Model, "Model" },
+				{ ComponentType::Sprite, "Sprite" },
+				{ ComponentType::Transform, "Transform" }
+			};
+			for (IComponent* comp : COMPONENT_MANAGER->GetEntityComponents(selectedEntity)) {
+				if (componentTypeNames.find(comp->mCompType) == componentTypeNames.end()) continue;
+
+				if (ImGui::CollapsingHeader(componentTypeNames.at(comp->mCompType), ImGuiTreeNodeFlags_DefaultOpen)) {
+				}
+			}
+		}
+		ImGui::End();
+	}
+
 	void DrawGameScene() {
 		auto oldPadding = ImGui::GetStyle().WindowPadding;
 		ImGui::GetStyle().WindowPadding = {};
@@ -141,8 +183,15 @@ namespace OpenGLFun {
 
 		// Draw Play Button
 		ImGui::SetCursorPos({ (windowWidth - buttonSize.x)*0.5f , imgSize.y }); // sets image position
+		bool shouldEndDisable = false;
+		if (!ENGINE->mIsPaused) {
+			ImGui::BeginDisabled();
+			shouldEndDisable = true;
+		}
 		if (ImGui::Button("Play", buttonSize))
 			INPUT_SYSTEM->UnpauseGame();
+		if (!ENGINE->mIsPaused && shouldEndDisable)
+			ImGui::EndDisabled();
 
 		ImGui::End();
 		ImGui::GetStyle().WindowPadding = oldPadding;

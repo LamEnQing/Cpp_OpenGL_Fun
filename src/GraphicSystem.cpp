@@ -95,6 +95,8 @@ namespace OpenGLFun {
 		if (frameBufferError != GL_FRAMEBUFFER_COMPLETE)
 			throw SimpleException(std::string("Framebuffer is not complete, error status:") + std::to_string(frameBufferError));
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		SetViewport(0, 0, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight());
 	}
 
 	GraphicSystem::~GraphicSystem() {
@@ -102,9 +104,6 @@ namespace OpenGLFun {
 	}
 
 	void GraphicSystem::Update(float const&) {
-		glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		glViewport(_viewportX, _viewportY, _viewportWidth, _viewportHeight);
 		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
 
