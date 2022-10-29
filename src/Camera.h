@@ -66,5 +66,9 @@ namespace OpenGLFun {
 				mCamUp[i] = upDirArr[i].GetFloat();
 			}
 		}
+
+		void DrawImGuiComponent() {
+
+		}
 	};
 }

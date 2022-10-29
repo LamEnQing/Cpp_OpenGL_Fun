@@ -154,6 +154,7 @@ namespace OpenGLFun {
 				if (componentTypeNames.find(comp->mCompType) == componentTypeNames.end()) continue;
 
 				if (ImGui::CollapsingHeader(componentTypeNames.at(comp->mCompType), ImGuiTreeNodeFlags_DefaultOpen)) {
+					comp->DrawImGuiComponent();
 				}
 			}
 		}

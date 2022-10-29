@@ -49,5 +49,9 @@ namespace OpenGLFun {
 				throw SimpleException("Component of type Model's 'model' must be a string");
 			mModelFilepath = jsonObj["model"].GetString();
 		}
+
+		void DrawImGuiComponent() {
+
+		}
 	};
 }

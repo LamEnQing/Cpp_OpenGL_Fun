@@ -34,5 +34,9 @@ namespace OpenGLFun {
 				mRgba[i] = value; // vec4 is double, even though in json, the values are integer
 			}
 		}
+
+		void DrawImGuiComponent() {
+
+		}
 	};
 }

@@ -64,5 +64,9 @@ namespace OpenGLFun {
 				}
 			}
 		}
+
+		void DrawImGuiComponent() {
+
+		}
 	};
 }

@@ -10,7 +10,7 @@ namespace OpenGLFun {
 		Color,
 		Model,
 		Sprite,
-		Transform,
+		Transform
 	};
 
 	class IComponent {
@@ -21,5 +21,6 @@ namespace OpenGLFun {
 		IComponent() : mOwner(-1), mCompType(ComponentType::Camera) {}
 		virtual ~IComponent() {};
 		virtual void Deserialize(rapidjson::Value const& jsonObj) = 0;
+		virtual void DrawImGuiComponent() = 0;
 	};
 }
