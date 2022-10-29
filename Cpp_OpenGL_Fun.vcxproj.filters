@@ -137,6 +137,9 @@
     <ClCompile Include="src\ComponentManager.cpp">
       <Filter>managers</Filter>
     </ClCompile>
+    <ClCompile Include="src\FunImGuiSystem.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Component.h">
@@ -225,6 +228,9 @@
       <Filter>system\graphics\model</Filter>
     </ClInclude>
     <ClInclude Include="src\AnimationSystem.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FunImGuiSystem.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="src\ResourceManager.h">

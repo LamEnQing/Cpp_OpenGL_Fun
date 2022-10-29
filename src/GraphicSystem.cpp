@@ -238,9 +238,6 @@ namespace OpenGLFun {
 			}*/
 			glEnable(GL_DEPTH_TEST);
 		}
-
-		glfwSwapBuffers(WINDOW_SYSTEM->mWindow);
-		glfwSwapInterval(0);
 	}
 
 	void GraphicSystem::CreateGLTexture(Texture* texture) {

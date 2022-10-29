@@ -3,6 +3,7 @@
 
 #include "AnimationSystem.h"
 #include "ComponentManager.h"
+#include "FunImGuiSystem.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
 #include "LevelManager.h"
@@ -30,6 +31,7 @@ namespace OpenGLFun {
 		_systems.push_back(std::unique_ptr<ISystem>(new InputSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new AnimationSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new GraphicSystem()));
+		_systems.push_back(std::unique_ptr<ISystem>(new FunImGuiSystem()));
 	}
 
 	Engine::~Engine() {
@@ -51,6 +53,9 @@ namespace OpenGLFun {
 
 			for (std::unique_ptr<ISystem>& system : _systems)
 				system->Update(deltaTime);
+
+			glfwSwapBuffers(WINDOW_SYSTEM->mWindow);
+			glfwSwapInterval(0);
 
 			// this adds a time buffer, to ensure it runs at 60 fps
 			do {
