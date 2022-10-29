@@ -58,6 +58,11 @@ namespace OpenGLFun {
 			ImGui::Text("Texture");
 			ImGui::SameLine();
 
+			auto findResult = std::find(texturesList.begin(), texturesList.end(), mTextureFilepath);
+
+			if (findResult != texturesList.end())
+				_selectedTexture = findResult - texturesList.begin();
+
 			if (ImGui::BeginCombo("##texture list", texturesList[_selectedTexture].c_str())) {
 				for (int i = 0; i < texturesList.size(); i++) {
 					std::string& texture = texturesList[i];
@@ -66,6 +71,8 @@ namespace OpenGLFun {
 						_selectedTexture = i;
 						mTextureFilepath = texture;
 					}
+					else if (mTextureFilepath == texture)
+						_selectedTexture = i;
 				}
 				ImGui::EndCombo();
 			}
