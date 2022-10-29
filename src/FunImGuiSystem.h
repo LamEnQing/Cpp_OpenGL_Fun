@@ -10,6 +10,9 @@ namespace OpenGLFun {
 		FunImGuiSystem();
 		~FunImGuiSystem() override;
 		void Update(float const&) override;
+
+		// Resets variables in the system
+		void Reset();
 	private:
 		bool _showLevelSelect;
 	};

@@ -13,6 +13,8 @@
 
 namespace OpenGLFun {
 	FunImGuiSystem* FUN_IMGUI_SYSTEM = nullptr;
+	int selectedEntity = -1;
+	int selectedLevel = -1;
 
 	void DrawEntityList();
 	void DrawGameScene();
@@ -44,6 +46,11 @@ namespace OpenGLFun {
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
+	}
+
+	void FunImGuiSystem::Reset() {
+		selectedEntity = -1;
+		selectedLevel = -1;
 	}
 
 	void FunImGuiSystem::Update(float const& deltaTime) {
@@ -93,7 +100,6 @@ namespace OpenGLFun {
 
 	void DrawEntityList() {
 		ImGui::Begin("Entity List");
-		static int selectedEntity = -1;
 		static std::string listElementName{};
 		ImGui::BeginListBox("##entity List", { -FLT_MIN, 8 * ImGui::GetTextLineHeightWithSpacing() });
 
@@ -143,7 +149,6 @@ namespace OpenGLFun {
 	}
 
 	void DrawLoadLevelPopup() {
-		static int selectedLevel = -1;
 		if (ImGui::BeginPopupModal("Load Level", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 			ImGui::Text("Select the level to load");
 

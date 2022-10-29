@@ -43,8 +43,10 @@ namespace OpenGLFun {
 
 		if (IsKeyTriggered(GLFW_KEY_F4)) {
 			FUN_IMGUI_SYSTEM->mShowDemoWindow = !FUN_IMGUI_SYSTEM->mShowDemoWindow;
-			if (FUN_IMGUI_SYSTEM->mShowDemoWindow)
+			if (FUN_IMGUI_SYSTEM->mShowDemoWindow) {
 				PauseGame();
+				FUN_IMGUI_SYSTEM->Reset();
+			}
 			else {
 				GRAPHICS_SYSTEM->SetViewport(0, 0, WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
 				UnpauseGame();
