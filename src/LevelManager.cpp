@@ -30,8 +30,8 @@ namespace OpenGLFun {
 	LevelManager::~LevelManager() {}
 
 	void LevelManager::Load() {
-		std::cout << "Level Manager Loading\n";
-		std::cout << "----------------------------------------------------------------------\n";
+		std::cout << "Level Manager Loading" << std::endl;
+		std::cout << "----------------------------------------------------------------------" << std::endl;
 
 		// scan levels, and add level folder names to vector
 		for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR)) {
@@ -41,7 +41,7 @@ namespace OpenGLFun {
 
 			std::cout << "Found level " << _levels.back() << '\n';
 		}
-		std::cout << '\n';
+		std::cout << std::endl;
 	}
 
 	void LevelManager::Unload() {
@@ -59,8 +59,8 @@ namespace OpenGLFun {
 	}
 
 	void LevelManager::LoadLevel(std::string const& levelId) {
-		std::cout << "\nLoading a level, " + levelId + "\n";
-		std::cout << "----------------------------------------------------------------------\n";
+		std::cout << "\nLoading a level, " << levelId << std::endl;
+		std::cout << "----------------------------------------------------------------------" << std::endl;
 
 		if (std::find(_levels.begin(), _levels.end(), levelId) == _levels.end())
 			throw SimpleException(std::string("Could not find level '") + levelId + "'");
@@ -77,8 +77,8 @@ namespace OpenGLFun {
 			}
 		}
 
-		std::cout << "\nLoading Resources\n";
-		std::cout << "--------------------------\n";
+		std::cout << std::endl << "Loading Resources" << std::endl;
+		std::cout << "--------------------------" << std::endl;
 
 		// Load textures
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
@@ -98,7 +98,7 @@ namespace OpenGLFun {
 			}
 		}
 		RESOURCE_MANAGER->LoadTexture("no_texture.png");
-		std::cout << '\n';
+		std::cout << std::endl;
 
 		LoadLevelSetup(levelId);
 	}
@@ -132,5 +132,19 @@ namespace OpenGLFun {
 		}
 
 		ENGINE->mPlayerId = ENTITY_FACTORY->DeserializeEntity(filepath, document["camera_entity"].GetObject(), false);
+		if (COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Model)) {
+			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(ENGINE->mPlayerId, ComponentType::Model);
+			if (!modelComp->mModelFilepath.empty()) {
+				try {
+					RESOURCE_MANAGER->LoadModel(ENGINE->mPlayerId, modelComp->mModelFilepath);
+				}
+				catch (std::exception& e) {
+					throw SimpleException(std::string("Encountered an error reading a Model component:\n\t") + e.what());
+				}
+			}
+		}
+		if (COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Sprite)) {
+			RESOURCE_MANAGER->LoadTexture(COMPONENT_MANAGER->GetComponent<Sprite>(ENGINE->mPlayerId, ComponentType::Sprite)->mTextureFilepath);
+		}
 	}
 }

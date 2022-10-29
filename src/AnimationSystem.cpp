@@ -1,5 +1,6 @@
 #include "AnimationSystem.h"
 
+#include "Camera.h"
 #include "ComponentManager.h"
 #include "Engine.h"
 #include "EntityManager.h"
@@ -12,9 +13,9 @@ namespace OpenGLFun {
 	AnimationSystem::~AnimationSystem() {}
 
 	void AnimationSystem::Update(float const& deltaTime) {
+
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
-			std::cout << "entityId:" << entityId << ',' << (entityId == ENGINE->mPlayerId) << std::endl;
-			if (entityId == ENGINE->mPlayerId || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
+			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
 				continue;
 
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
@@ -25,7 +26,7 @@ namespace OpenGLFun {
 
 			for (auto meshesIt = model->GetMeshMap().begin(); meshesIt != model->GetMeshMap().end(); meshesIt++) {
 				std::string const& meshName = meshesIt->first;
-				if (meshName.find("leg") != std::string::npos && meshName.find("left") != std::string::npos) {
+				if (meshName == "leg_left" && entityId != ENGINE->mPlayerId) {
 					Mesh* mesh = meshesIt->second.get();
 
 					Vec3f rotation = mesh->GetRotation();
@@ -35,6 +36,15 @@ namespace OpenGLFun {
 						rotation.z = rotation.z - 360;
 
 					mesh->SetRotation(rotation);
+				}
+
+				if (entityId == ENGINE->mPlayerId && meshName == "head" && COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Camera)) {
+					//std::cout << "Rotating head" << std::endl;
+					Camera* camera = COMPONENT_MANAGER->GetComponent<Camera>(entityId, ComponentType::Camera);
+
+					// camRotation x value rotates about the y-axis
+					Vec3f headRot(0.0f, glm::clamp(-camera->mCamRotation.x, -45.0f, 45.0f), camera->mCamRotation.y);
+					meshesIt->second->SetRotation(headRot);
 				}
 			}
 		}
