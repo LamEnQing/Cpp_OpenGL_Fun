@@ -4,6 +4,7 @@
 #include "ComponentManager.h"
 #include "Engine.h"
 #include "EntityManager.h"
+#include "FunImGuiSystem.h"
 #include "ModelComponent.h"
 #include "ResourceManager.h"
 #include "Transform.h"
@@ -13,6 +14,7 @@ namespace OpenGLFun {
 	AnimationSystem::~AnimationSystem() {}
 
 	void AnimationSystem::Update(float const& deltaTime) {
+		if(FUN_IMGUI_SYSTEM->mShowDemoWindow || ENGINE->mIsPaused) return;
 
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
 			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))

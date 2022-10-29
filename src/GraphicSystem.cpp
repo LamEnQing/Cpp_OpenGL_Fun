@@ -61,10 +61,10 @@ namespace OpenGLFun {
 		Vertex vertex;
 		std::vector<unsigned int> indices;
 		std::vector<Vertex> vertices = {
-			vertex.Pos(-0.5f, 0.5f, 0.0f).Color(1.0f, 1.0f, 1.0f).UV(0.0f, 0.0f), // top left
-			vertex.Pos(-0.5f, -0.5f, 0.0f).UV(0.0f, 1.0f), // bottom left
-			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 1.0f), // bottom right
-			vertex.Pos(0.5f, 0.5f, 0.0f).UV(1.0f, 0.0f), // top right
+			vertex.Pos(-0.5f, 0.5f, 0.0f).Color(1.0f, 1.0f, 1.0f).UV(0.0f, 1.0f), // top left
+			vertex.Pos(-0.5f, -0.5f, 0.0f).UV(0.0f, 0.0f), // bottom left
+			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 0.0f), // bottom right
+			vertex.Pos(0.5f, 0.5f, 0.0f).UV(1.0f, 1.0f), // top right
 		};
 		indices = {
 			0, 1, 2,
@@ -72,6 +72,29 @@ namespace OpenGLFun {
 		};
 		mesh->Init(vertices, indices)->SetCull(false)->SetBlend(true);
 		_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
+
+		// ==== FrameBuffer ====
+		glGenFramebuffers(1, &_frameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+		// Create texture to attach to framebuffer
+		glGenTextures(1, &mFrameBufferTex);
+		glBindTexture(GL_TEXTURE_2D, mFrameBufferTex);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mFrameBufferTex, 0);
+
+		// ==== RenderBuffer ====
+		glGenRenderbuffers(1, &_renderBuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight());
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _renderBuffer);
+		auto frameBufferError = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (frameBufferError != GL_FRAMEBUFFER_COMPLETE)
+			throw SimpleException(std::string("Framebuffer is not complete, error status:") + std::to_string(frameBufferError));
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	GraphicSystem::~GraphicSystem() {
@@ -79,6 +102,12 @@ namespace OpenGLFun {
 	}
 
 	void GraphicSystem::Update(float const&) {
+		glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glViewport(_viewportX, _viewportY, _viewportWidth, _viewportHeight);
+		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+
 		glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -240,6 +269,17 @@ namespace OpenGLFun {
 			}*/
 			glEnable(GL_DEPTH_TEST);
 		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		glDisable(GL_DEPTH_TEST);
+		_2DShaderProgram.use();
+		glm::mat4 transformMtx(1.0f);
+		transformMtx = glm::scale(transformMtx, { 2.0f, 2.0f, 0.0f });
+		_2DShapeModel
+			.SetCull(true)
+			.SetBlend(true)
+			.Draw2D(_2DShaderProgram.mProgramId, transformMtx, mFrameBufferTex, { 1.0f, 1.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 
 	void GraphicSystem::SetViewport(int posX, int posY, int width, int height) {

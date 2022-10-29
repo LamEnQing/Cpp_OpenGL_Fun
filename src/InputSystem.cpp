@@ -1,5 +1,7 @@
 #include "ComponentManager.h"
 #include "Engine.h"
+#include "FunImGuiSystem.h"
+#include "GraphicSystem.h"
 #include "LevelManager.h"
 #include "InputSystem.h"
 #include "Transform.h"
@@ -38,6 +40,16 @@ namespace OpenGLFun {
 
 	void InputSystem::Update(float const& deltaTime) {
 		_deltaTime = deltaTime;
+
+		if (IsKeyTriggered(GLFW_KEY_F4)) {
+			FUN_IMGUI_SYSTEM->mShowDemoWindow = !FUN_IMGUI_SYSTEM->mShowDemoWindow;
+			if (FUN_IMGUI_SYSTEM->mShowDemoWindow)
+				PauseGame();
+			else {
+				GRAPHICS_SYSTEM->SetViewport(0, 0, WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+				UnpauseGame();
+			}
+		}
 
 		for (int& key : _availableKeys) {
 			if (_keyTriggerStateMap.find(key) == _keyTriggerStateMap.end()) { // could not find, means key does not exist in the map
@@ -192,6 +204,8 @@ namespace OpenGLFun {
 	}
 
 	void KeyCallback(GLFWwindow* window, int key, int, int action, int) {
+		if (ENGINE->mIsPaused && FUN_IMGUI_SYSTEM->mShowDemoWindow) return;
+
 		if (action == GLFW_PRESS) {
 			if (key == GLFW_KEY_ESCAPE) {
 				if (!ENGINE->mIsPaused) {

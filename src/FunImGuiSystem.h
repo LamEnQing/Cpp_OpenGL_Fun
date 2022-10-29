@@ -10,6 +10,8 @@ namespace OpenGLFun {
 		FunImGuiSystem();
 		~FunImGuiSystem() override;
 		void Update(float const&) override;
+	private:
+		bool _showLevelSelect;
 	};
 
 	extern FunImGuiSystem* FUN_IMGUI_SYSTEM;

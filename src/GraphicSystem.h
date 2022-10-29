@@ -8,6 +8,8 @@
 namespace OpenGLFun {
 	class GraphicSystem : public ISystem {
 	public:
+		unsigned int mFrameBufferTex;
+
 		GraphicSystem();
 		virtual ~GraphicSystem() override;
 		virtual void Update(float const&) override;
@@ -18,6 +20,9 @@ namespace OpenGLFun {
 	private:
 		ShaderProgram _3DShaderProgram;
 		ShaderProgram _2DShaderProgram;
+
+		unsigned int _frameBuffer;
+		unsigned int _renderBuffer;
 
 		// Viewport
 		int _viewportX, _viewportY, _viewportWidth, _viewportHeight;
