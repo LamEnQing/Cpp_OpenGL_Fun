@@ -45,7 +45,8 @@ namespace OpenGLFun {
 
 		LEVEL_MANAGER->Load();
 		LEVEL_MANAGER->LoadLevel(LEVEL_MANAGER->mCurrentLevel);
-		INPUT_SYSTEM->LockMouse();
+		if (mShouldMouseBeLocked)
+			INPUT_SYSTEM->LockMouse();
 
 		float totalFrameTime = 0.0f;
 		int frameCount = 0;

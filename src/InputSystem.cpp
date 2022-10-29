@@ -145,7 +145,8 @@ namespace OpenGLFun {
 
 	void InputSystem::PauseGame() {
 		ENGINE->mIsPaused = true;
-		INPUT_SYSTEM->UnlockMouse();
+		if (ENGINE->mShouldMouseBeLocked)
+			INPUT_SYSTEM->UnlockMouse();
 		std::cout << "Game paused\n";
 	}
 
