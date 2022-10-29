@@ -14,7 +14,7 @@ namespace OpenGLFun {
 	AnimationSystem::~AnimationSystem() {}
 
 	void AnimationSystem::Update(float const& deltaTime) {
-		if((FUN_IMGUI_SYSTEM->mShowDemoWindow && ENGINE->mIsPaused) || ENGINE->mIsPaused) return;
+		if((FUN_IMGUI_SYSTEM->mShowEditor && ENGINE->mIsPaused) || ENGINE->mIsPaused) return;
 
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
 			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))

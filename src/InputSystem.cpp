@@ -42,8 +42,8 @@ namespace OpenGLFun {
 		_deltaTime = deltaTime;
 
 		if (IsKeyTriggered(GLFW_KEY_F4)) {
-			FUN_IMGUI_SYSTEM->mShowDemoWindow = !FUN_IMGUI_SYSTEM->mShowDemoWindow;
-			if (FUN_IMGUI_SYSTEM->mShowDemoWindow) {
+			FUN_IMGUI_SYSTEM->mShowEditor = !FUN_IMGUI_SYSTEM->mShowEditor;
+			if (FUN_IMGUI_SYSTEM->mShowEditor) {
 				PauseGame();
 				FUN_IMGUI_SYSTEM->Reset();
 			}
@@ -207,7 +207,7 @@ namespace OpenGLFun {
 	}
 
 	void KeyCallback(GLFWwindow* window, int key, int, int action, int) {
-		if (ENGINE->mIsPaused && FUN_IMGUI_SYSTEM->mShowDemoWindow) return;
+		if (ENGINE->mIsPaused && FUN_IMGUI_SYSTEM->mShowEditor) return;
 
 		if (action == GLFW_PRESS) {
 			if (key == GLFW_KEY_ESCAPE) {
