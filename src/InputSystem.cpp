@@ -53,8 +53,7 @@ namespace OpenGLFun {
 		}
 
 		if (IsKeyTriggered(GLFW_KEY_F3)) {
-			LEVEL_MANAGER.get()->ReloadLevel();
-			return;
+			LEVEL_MANAGER->mShouldReloadLevel = true;
 		}
 
 		if (IsKeyTriggered(GLFW_KEY_F2)) {

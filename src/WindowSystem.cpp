@@ -5,7 +5,6 @@
 #include "InputSystem.h"
 
 namespace OpenGLFun {
-	static bool WAS_LEVEL_LOADED = false;
 	static std::string WINDOW_TITLE{};
 
 	WindowSystem* WINDOW_SYSTEM;
@@ -52,10 +51,6 @@ namespace OpenGLFun {
 			throw SimpleException("Failed to initialize GLAD");
 		}
 
-		glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
-
-		LEVEL_MANAGER->Load();
-
 		if (!document.HasMember("level_on_startup") || !document["level_on_startup"].IsString())
 			throw JsonReadException(configFilepath, "level_on_startup", "string");
 		LEVEL_MANAGER->mCurrentLevel = document["level_on_startup"].GetString();
@@ -66,11 +61,6 @@ namespace OpenGLFun {
 	}
 
 	void WindowSystem::Update(float const&) {
-		if (!WAS_LEVEL_LOADED) {
-			LEVEL_MANAGER->LoadLevel(LEVEL_MANAGER->mCurrentLevel);
-			WAS_LEVEL_LOADED = true;
-			INPUT_SYSTEM->LockMouse();
-		}
 		glfwPollEvents();
 	}
 

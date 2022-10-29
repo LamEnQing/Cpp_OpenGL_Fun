@@ -25,7 +25,7 @@ namespace OpenGLFun {
 	// these variables are extern
 	const std::string LEVEL_PAUSE_ID = "pause_screen";
 
-	LevelManager::LevelManager() : mCurrentLevel{}, _levels{} {}
+	LevelManager::LevelManager() : mShouldReloadLevel{false}, mCurrentLevel{}, mLevels{} {}
 
 	LevelManager::~LevelManager() {}
 
@@ -37,15 +37,15 @@ namespace OpenGLFun {
 		for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR)) {
 			if (!entry.is_directory()) continue;
 
-			_levels.push_back(entry.path().filename().string());
+			mLevels.push_back(entry.path().filename().string());
 
-			std::cout << "Found level " << _levels.back() << '\n';
+			std::cout << "Found level " << mLevels.back() << '\n';
 		}
 		std::cout << std::endl;
 	}
 
 	void LevelManager::Unload() {
-		_levels.clear();
+		mLevels.clear();
 	}
 
 	void LevelManager::ReloadLevel() {
@@ -62,7 +62,7 @@ namespace OpenGLFun {
 		std::cout << "\nLoading a level, " << levelId << std::endl;
 		std::cout << "----------------------------------------------------------------------" << std::endl;
 
-		if (std::find(_levels.begin(), _levels.end(), levelId) == _levels.end())
+		if (std::find(mLevels.begin(), mLevels.end(), levelId) == mLevels.end())
 			throw SimpleException(std::string("Could not find level '") + levelId + "'");
 
 		for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR + "\\" + levelId + ENTITY_SUBDIR)) {
@@ -104,7 +104,7 @@ namespace OpenGLFun {
 	}
 
 	int LevelManager::MaxLevel() const {
-		return static_cast<int>(_levels.size());
+		return static_cast<int>(mLevels.size());
 	}
 
 	// Load setup for that level, should be called after level data has been loaded

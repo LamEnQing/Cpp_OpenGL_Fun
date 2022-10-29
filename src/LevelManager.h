@@ -5,8 +5,9 @@
 namespace OpenGLFun {
 	class LevelManager {
 	public:
-		//std::map<std::string, EntityId> mLoadedLevelEntities;
-		std::string mCurrentLevel;
+		bool mShouldReloadLevel; // should reload level or not
+		std::string mCurrentLevel; // current level's name
+		std::vector<std::string> mLevels; // all level JSONs detected
 
 		LevelManager();
 		~LevelManager();
@@ -22,7 +23,6 @@ namespace OpenGLFun {
 
 		int MaxLevel() const;
 	private:
-		std::vector<std::string> _levels;
 	};
 
 	extern std::unique_ptr<LevelManager> LEVEL_MANAGER;

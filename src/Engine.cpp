@@ -26,12 +26,6 @@ namespace OpenGLFun {
 		RESOURCE_MANAGER = new ResourceManager();
 		ENTITY_FACTORY.reset(new EntityFactory());
 		LEVEL_MANAGER.reset(new LevelManager());
-
-		_systems.push_back(std::unique_ptr<ISystem>(new WindowSystem()));
-		_systems.push_back(std::unique_ptr<ISystem>(new InputSystem()));
-		_systems.push_back(std::unique_ptr<ISystem>(new AnimationSystem()));
-		_systems.push_back(std::unique_ptr<ISystem>(new GraphicSystem()));
-		_systems.push_back(std::unique_ptr<ISystem>(new FunImGuiSystem()));
 	}
 
 	Engine::~Engine() {
@@ -43,6 +37,14 @@ namespace OpenGLFun {
 	}
 
 	void Engine::GameLoop(void) {
+		_systems.push_back(std::unique_ptr<ISystem>(new WindowSystem()));
+		_systems.push_back(std::unique_ptr<ISystem>(new InputSystem()));
+		_systems.push_back(std::unique_ptr<ISystem>(new AnimationSystem()));
+		_systems.push_back(std::unique_ptr<ISystem>(new GraphicSystem()));
+		_systems.push_back(std::unique_ptr<ISystem>(new FunImGuiSystem()));
+
+		LEVEL_MANAGER->Load();
+		LEVEL_MANAGER->LoadLevel(LEVEL_MANAGER->mCurrentLevel);
 		INPUT_SYSTEM->LockMouse();
 
 		float totalFrameTime = 0.0f;
@@ -58,6 +60,11 @@ namespace OpenGLFun {
 
 			glfwSwapBuffers(WINDOW_SYSTEM->mWindow);
 			glfwSwapInterval(0);
+
+			if (LEVEL_MANAGER->mShouldReloadLevel) {
+				LEVEL_MANAGER->mShouldReloadLevel = false;
+				LEVEL_MANAGER->ReloadLevel();
+			}
 
 			// this adds a time buffer, to ensure it runs at 60 fps
 			do {
