@@ -156,11 +156,11 @@ namespace OpenGLFun {
 						throw JsonReadException(modelDirPath + modelFilepath, std::string("for index ") + std::to_string(i), "offset", "array of 3 elements");
 
 					const rapidjson::Value& offsetArr = meshJson["offset"];
-					for (int i = 0; i < 3; i++) {
-						if (!offsetArr[i].IsNumber())
-							throw JsonReadException(modelDirPath + modelFilepath, std::string("for index ") + std::to_string(i), std::string("offset[") + std::to_string(i) + "]", "number");
+					for (int j = 0; j < 3; j++) {
+						if (!offsetArr[j].IsNumber())
+							throw JsonReadException(modelDirPath + modelFilepath, std::string("for index ") + std::to_string(j), std::string("offset[") + std::to_string(j) + "]", "number");
 
-						offsetVec[i] = offsetArr[i].GetFloat();
+						offsetVec[j] = offsetArr[j].GetFloat();
 					}
 				}
 

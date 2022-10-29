@@ -133,7 +133,7 @@ namespace OpenGLFun {
 		finalModelMtx = glm::translate(modelMtx, vec3f_to_vec3(_offset));
 		finalModelMtx = glm::rotate(finalModelMtx, glm::radians(_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 		finalModelMtx = glm::rotate(finalModelMtx, glm::radians(_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-		//finalModelMtx = glm::rotate(finalModelMtx, glm::radians(_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		finalModelMtx = glm::rotate(finalModelMtx, glm::radians(_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(finalModelMtx));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMtx));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projMtx));

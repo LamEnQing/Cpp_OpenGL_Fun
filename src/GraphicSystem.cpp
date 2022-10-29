@@ -93,14 +93,18 @@ namespace OpenGLFun {
 			glEnable(GL_DEPTH_TEST);
 
 			Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(ENGINE->mPlayerId, ComponentType::Camera);
-			Transform* playerPos = COMPONENT_MANAGER->GetComponent<Transform>(ENGINE->mPlayerId, ComponentType::Transform);
+			Transform* playerTransforms = COMPONENT_MANAGER->GetComponent<Transform>(ENGINE->mPlayerId, ComponentType::Transform);
+
+			// Calculate camera offset, by applying rotation to the cam offset. Note: mCamRotation.x rotates about the y-axis
+			float xRot = glm::radians(playerCamera->mCamRotation.x);
+			Vec2f camOffsetRotated = Vec2f(playerCamera->mCamOffset.x * cos(xRot) - playerCamera->mCamOffset.y * sin(xRot), playerCamera->mCamOffset.x * sin(xRot) + playerCamera->mCamOffset.y * cos(xRot));
 
 			// camera pos, target pos, up direction
 			Vec3f lookAtLerp = playerCamera->mLookAt;
-			Vec3f eye = playerPos->mPosition + Vec3f(playerCamera->mCamOffset.x, playerCamera->mEyeHeight, playerCamera->mCamOffset.y);
-			Vec3f center = eye + lookAtLerp;
+			Vec3f camPos = playerTransforms->mPosition + Vec3f(camOffsetRotated.x, playerCamera->mEyeHeight - lookAtLerp.y, camOffsetRotated.y);
+			Vec3f target = playerTransforms->mPosition + Vec3f(0.0f, playerCamera->mEyeHeight, 0.0f) + lookAtLerp;
 
-			glm::mat4 view = glm::lookAt(glm::vec3(eye.x, eye.y, eye.z), glm::vec3(center.x, center.y, center.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
+			glm::mat4 view = glm::lookAt(glm::vec3(camPos.x, camPos.y, camPos.z), glm::vec3(target.x, target.y, target.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
 			glm::mat4 model;
 			glm::mat4 proj = glm::mat4(1.0f);
 			Vec4f tintColor(1.0f);

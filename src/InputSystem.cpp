@@ -88,11 +88,11 @@ namespace OpenGLFun {
 
 		if (IsKeyHeld(GLFW_KEY_SPACE)) {
 			playerTransform->mPositionOld = playerTransform->mPosition;
-			playerTransform->mPosition += playerCamera->mCamUp * playerSpeed;
+			playerTransform->mPosition.y += playerSpeed;
 		}
 		else if (IsKeyHeld(GLFW_KEY_LEFT_CONTROL)) {
 			playerTransform->mPositionOld = playerTransform->mPosition;
-			playerTransform->mPosition -= playerCamera->mCamUp * playerSpeed;
+			playerTransform->mPosition.y -= playerSpeed;
 		}
 
 		if (playerTransform->mPositionOld != playerTransform->mPosition) {
@@ -160,6 +160,11 @@ namespace OpenGLFun {
 				playerCamera->mCamRotation.y = 89.0f;
 			else if (playerCamera->mCamRotation.y < -89.0f)
 				playerCamera->mCamRotation.y = -89.0f;
+
+			if (playerCamera->mCamRotation.x > 180.0f)
+				playerCamera->mCamRotation.x = playerCamera->mCamRotation.x - 360.0f;
+			else if (playerCamera->mCamRotation.x < -180.0f)
+				playerCamera->mCamRotation.x = 360.0f - playerCamera->mCamRotation.x;
 
 			Vec3f dir(1.0f);
 			dir.x = cos(glm::radians(playerCamera->mCamRotation.x)) * cos(glm::radians(playerCamera->mCamRotation.y));

@@ -6,7 +6,7 @@ namespace OpenGLFun {
 	class AnimationSystem : public ISystem {
 	public:
 		AnimationSystem();
-		~AnimationSystem();
+		~AnimationSystem() override;
 		virtual void Update(float const&) override;
 	};
 }
