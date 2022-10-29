@@ -1,0 +1,7 @@
+[
+	{
+		"part_name": "square",
+		"mesh": "square_2d.json",
+		"offset": [0, 0, 0]
+	}
+]

@@ -119,6 +119,9 @@ namespace OpenGLFun {
 
 		_3DShaderProgram.use();
 
+		glm::mat4 model;
+		Vec4f tintColor(1.0f);
+		// 3D Drawing
 		if (ENGINE->mPlayerId != -1 && COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
 			glEnable(GL_DEPTH_TEST);
 
@@ -135,9 +138,7 @@ namespace OpenGLFun {
 			Vec3f target = playerTransforms->mPosition + Vec3f(0.0f, playerCamera->mEyeHeight, 0.0f) + lookAtLerp;
 
 			glm::mat4 view = glm::lookAt(glm::vec3(camPos.x, camPos.y, camPos.z), glm::vec3(target.x, target.y, target.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
-			glm::mat4 model;
 			glm::mat4 proj = glm::mat4(1.0f);
-			Vec4f tintColor(1.0f);
 
 			// fov, width/height ratio, near, far
 			proj = glm::perspective(glm::radians(45.0f), static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / WINDOW_SYSTEM->GetWindowHeight(), 0.1f, 50.0f);
@@ -164,48 +165,75 @@ namespace OpenGLFun {
 				RESOURCE_MANAGER->GetModel(entityId)
 					->SetCull(modelComp->mShouldCull)
 					.Draw3D(_3DShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId, tintColor);
-
-				/*if (modelComp->mModelType == ModelComponent::Type::Cube) {
-					// SRT
-					// rotation is zyx. That is when we apply in math, it's reversed order
-					model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
-					model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
-
-					/*glm::mat4 mtxRotX = {
-						1, 0, 0, 0,
-						0, glm::cos(glm::radians(45.0f)), -glm::sin(glm::radians(45.0f)), 0,
-						0, glm::sin(glm::radians(45.0f)), glm::cos(glm::radians(45.0f)), 0,
-						0, 0, 0, 1
-					};
-					glm::mat4 mtxRotY = {
-						glm::cos(glm::radians(45.0f)), 0, -glm::sin(glm::radians(45.0f)), 0,
-						0, 1, 0, 0,
-						glm::sin(glm::radians(45.0f)), 0, glm::cos(glm::radians(45.0f)), 0,
-						0, 0, 0, 1
-					};
-					glm::mat4 mtxRotZ = {
-						glm::cos(glm::radians(45.0f)), -glm::sin(glm::radians(45.0f)), 0, 0,
-						glm::sin(glm::radians(45.0f)), glm::cos(glm::radians(45.0f)), 0, 0,
-						0, 0, 1, 0,
-						0, 0, 0, 1
-					};
-					model = glm::transpose(mtxRotZ * mtxRotY * mtxRotX) * model;
-					std::cout << "I believe this is identity:" << glm::to_string(glm::mat4(1.0f)) << '\n';
-					std::cout << glm::to_string(glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f))) << '\n';*
-					/*model = glm::rotate(model, glm::radians(entityTransform->mRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-					model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-					model = glm::rotate(model, glm::radians(entityTransform->mRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));*
-					_rainbowCubeModel.Draw3D(_mainShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId);
-				}*/
 			}
+			glDisable(GL_DEPTH_TEST);
 		}
 
+		// 2D Drawing
+		glm::vec3 sample_vec3;
+		_2DShaderProgram.use();
+		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
+			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
+				continue;
+
+			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
+			if (modelComp->mModelType == ModelType::ThreeD) continue;
+
+			model = glm::mat4(1.0f);
+			Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
+			Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
+
+			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
+				texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
+			tintColor = {1.0f, 1.0f, 1.0f, 1.0f};
+			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
+				tintColor = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
+
+			Vec2f uvDimensions = { 1.0f, 1.0f }, uvOffsetPos = { 0.0f, 0.0f };
+			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
+				Sprite* spriteComp = COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite);
+				if (spriteComp->mUVDimensions[0] != 0)
+					uvDimensions = { static_cast<float>(spriteComp->mUVDimensions[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVDimensions[1]) / texture->imgHeight };
+				uvOffsetPos = { static_cast<float>(spriteComp->mUVPosition[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVPosition[1]) / texture->imgHeight };
+			}
+
+			sample_vec3 = vec3f_to_vec3(entityTransform->mPosition);
+			sample_vec3[0] /= static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f;
+			sample_vec3[1] /= static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f;
+			model = glm::translate(glm::mat4(1.0f), sample_vec3);
+			//model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
+
+			sample_vec3 = vec3f_to_vec3(entityTransform->mScale);
+			sample_vec3[0] /= WINDOW_SYSTEM->GetWindowWidth();
+			sample_vec3[1] /= WINDOW_SYSTEM->GetWindowHeight();
+			sample_vec3[2] = 0.0f;
+			sample_vec3 *= 2.0f;
+			model = glm::scale(model, sample_vec3);
+
+			RESOURCE_MANAGER->GetModel(entityId)
+				->SetCull(modelComp->mShouldCull)
+				.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, tintColor);
+		}
+		glm::mat4 transformMtx(1.0f);
+		/*_2DShapeModel
+			.SetCull(true)
+			.SetBlend(true)
+			.Draw2D(_2DShaderProgram.mProgramId, transformMtx, RESOURCE_MANAGER->GetTexture("no_texture.png")->mGLTextureId, { 1.0f, 1.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });*/
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Draw Scene image
+		_2DShaderProgram.use();
+		transformMtx = glm::mat4(1.0f);
+		transformMtx = glm::scale(transformMtx, { 2.0f, 2.0f, 0.0f });
+		_2DShapeModel
+			.SetCull(true)
+			.SetBlend(true)
+			.Draw2D(_2DShaderProgram.mProgramId, transformMtx, mFrameBufferTex, { 1.0f, 1.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+
 		if (ENGINE->mIsPaused) {
-			glm::vec3 sample_vec3;
 			glm::mat4 model;
 			_2DShaderProgram.use();
 
-			glDisable(GL_DEPTH_TEST);
 			/*for (EntityId const& entityId : LEVEL_MANAGER->mPauseScreenObjs) {
 				if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
 					continue;
@@ -266,19 +294,7 @@ namespace OpenGLFun {
 					.SetBlend(modelComp->mEnableBlend)
 					.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, color);
 			}*/
-			glEnable(GL_DEPTH_TEST);
 		}
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		glDisable(GL_DEPTH_TEST);
-		_2DShaderProgram.use();
-		glm::mat4 transformMtx(1.0f);
-		transformMtx = glm::scale(transformMtx, { 2.0f, 2.0f, 0.0f });
-		_2DShapeModel
-			.SetCull(true)
-			.SetBlend(true)
-			.Draw2D(_2DShaderProgram.mProgramId, transformMtx, mFrameBufferTex, { 1.0f, 1.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 
 	void GraphicSystem::SetViewport(int posX, int posY, int width, int height) {
