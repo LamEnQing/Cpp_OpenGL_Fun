@@ -11,6 +11,7 @@
 #include "LevelManager.h"
 #include "ResourceManager.h"
 #include "WindowSystem.h"
+#include "Sprite.h"
 
 namespace OpenGLFun {
 	FunImGuiSystem* FUN_IMGUI_SYSTEM = nullptr;
@@ -22,6 +23,7 @@ namespace OpenGLFun {
 	void DrawEntityProperty();
 	void DrawGameScene();
 	void DrawLoadLevelPopup();
+	void DrawWarningPopup(const char* id, const char* message);
 
 	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, _showLevelSelect{ false } {
 		if (FUN_IMGUI_SYSTEM != nullptr)
@@ -125,23 +127,14 @@ namespace OpenGLFun {
 	}
 
 	void DrawEntityProperty() {
+		bool shouldDisplayWarning = false;
+
 		ImGui::Begin("Entity Property", NULL, ImGuiWindowFlags_HorizontalScrollbar);
 		if (selectedEntity == -1) {
 			ImGui::Text("Select an entity!");
 		}
 		else {
 			static const char* items[]{ "Button", "Color", "Model", "Sprite", "Transform" };
-			ImGui::SetNextItemWidth(ImGui::CalcTextSize(items[selectedAddComponent], NULL, true).x + 30.0f);
-			if (ImGui::BeginCombo("##Add Component Combo", items[selectedAddComponent])) {
-				for (size_t i = 0; i < IM_ARRAYSIZE(items); i++) {
-					if (ImGui::Selectable(items[i], selectedAddComponent == i))
-						selectedAddComponent = i;
-				}
-				ImGui::EndCombo();
-			}
-			ImGui::SameLine();
-			ImGui::Button("Add Component");
-
 			static std::map<ComponentType, const char*> componentTypeNames{
 				{ ComponentType::Button, "Button" },
 				{ ComponentType::Camera, "Camera" },
@@ -150,20 +143,67 @@ namespace OpenGLFun {
 				{ ComponentType::Sprite, "Sprite" },
 				{ ComponentType::Transform, "Transform" }
 			};
+
+			ImGui::SetNextItemWidth(ImGui::CalcTextSize(items[selectedAddComponent], NULL, true).x + 30.0f);
+			if (ImGui::BeginCombo("##Add Component Combo", items[selectedAddComponent])) {
+				for (size_t i = 0; i < IM_ARRAYSIZE(items); i++) {
+					if (ImGui::Selectable(items[i], selectedAddComponent == i)) {
+						selectedAddComponent = i;
+					}
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Add Component")) {
+				auto findResult = std::find_if(componentTypeNames.begin(), componentTypeNames.end(), [&](const std::pair<ComponentType, const char*>& pair) {
+					return pair.second == items[selectedAddComponent];
+				});
+
+				IComponent* comp = nullptr;
+				try {
+					IComponent* comp = COMPONENT_MANAGER->mComponentCreatorsMap.at(findResult->first)->Create();
+					comp->mOwner = selectedEntity;
+					if (comp->mCompType == ComponentType::Sprite) {
+						dynamic_cast<Sprite*>(comp)->mTextureFilepath = "no_texture.png";
+					}
+					COMPONENT_MANAGER->AddComponent(comp);
+				}
+				catch (...) {
+					if (comp != nullptr)
+						delete comp;
+					shouldDisplayWarning = true;
+				}
+			}
+			
+			IComponent* deleteComp = nullptr;
 			for (IComponent* comp : COMPONENT_MANAGER->GetEntityComponents(selectedEntity)) {
 				if (componentTypeNames.find(comp->mCompType) == componentTypeNames.end()) continue;
 
-				if (ImGui::CollapsingHeader(componentTypeNames.at(comp->mCompType), ImGuiTreeNodeFlags_DefaultOpen)) {
+				bool canClose = true;
+				if (ImGui::CollapsingHeader(componentTypeNames.at(comp->mCompType), &canClose, ImGuiTreeNodeFlags_DefaultOpen)) {
 					comp->DrawImGuiComponent();
 				}
+
+				if (!canClose) {
+					deleteComp = comp;
+				}
+
+				std::cout << "can close:" << canClose << std::endl;
 			}
+
+			if (deleteComp != nullptr)
+				COMPONENT_MANAGER->RemoveComponent(deleteComp);
 		}
 		ImGui::End();
+
+		if (shouldDisplayWarning)
+			ImGui::OpenPopup("WARNING - Add Component");
+
+		DrawWarningPopup("WARNING - Add Component", "Cannot add another of the same component!");
 	}
 
 	void DrawGameScene() {
-		auto oldPadding = ImGui::GetStyle().WindowPadding;
-		ImGui::GetStyle().WindowPadding = {};
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::Begin("Game Scene", NULL);
 		ImVec2 buttonSize(40.0f, 30.0f);
 
@@ -195,7 +235,7 @@ namespace OpenGLFun {
 			ImGui::EndDisabled();
 
 		ImGui::End();
-		ImGui::GetStyle().WindowPadding = oldPadding;
+		ImGui::PopStyleVar();
 	}
 
 	void DrawLoadLevelPopup() {
@@ -223,6 +263,19 @@ namespace OpenGLFun {
 			ImGui::SameLine();
 			if (ImGui::Button("Cancel")) {
 				selectedLevel = -1;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
+	void DrawWarningPopup(const char* id, const char* message) {
+		if (ImGui::BeginPopupModal(id, NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+			ImGui::Text(message);
+			const ImVec2 label_size = ImGui::CalcTextSize("Ok", NULL, true);
+
+			if (ImGui::Button("Ok", {ImGui::GetContentRegionAvailWidth(), label_size.y + 4})) {
 				ImGui::CloseCurrentPopup();
 			}
 

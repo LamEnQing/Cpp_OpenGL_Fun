@@ -28,13 +28,13 @@ namespace OpenGLFun {
 			for (auto& compJson : jsonObj["components"].GetObject()) {
 				std::string compType = compJson.name.GetString();
 				// Could not find the component type, so throw exception!
-				if (COMPONENT_MANAGER->mComponentCreatorsMap.find(compType) == COMPONENT_MANAGER->mComponentCreatorsMap.end()) {
+				if (COMPONENT_MANAGER->mComponentTypeMap.find(compType) == COMPONENT_MANAGER->mComponentTypeMap.end()) {
 					throw SimpleException(std::string("Could not find component type \"") + compType + "\" for " + filename);
 				}
 
 				IComponent* component = nullptr;
 				try {
-					component = COMPONENT_MANAGER->mComponentCreatorsMap.find(compType)->second->Create();
+					component = COMPONENT_MANAGER->mComponentCreatorsMap.at(COMPONENT_MANAGER->mComponentTypeMap.at(compType))->Create();
 					component->mOwner = entityId; // assign entity id, cannot forget!!!
 					component->Deserialize(compJson.value.GetObject()); // after creating an instance of a component, serialise it!!!
 					COMPONENT_MANAGER->AddComponent(component);

@@ -9,12 +9,19 @@
 
 namespace OpenGLFun {
 	ComponentManager::ComponentManager() {
-		mComponentCreatorsMap.insert({ "Button", new ComponentCreator<Button>() });
-		mComponentCreatorsMap.insert({ "Camera", new ComponentCreator<Camera>() });
-		mComponentCreatorsMap.insert({ "Color", new ComponentCreator<Color>() });
-		mComponentCreatorsMap.insert({ "Model", new ComponentCreator<ModelComponent>() });
-		mComponentCreatorsMap.insert({ "Sprite", new ComponentCreator<Sprite>() });
-		mComponentCreatorsMap.insert({ "Transform", new ComponentCreator<Transform>() });
+		mComponentTypeMap.insert({ "Button", ComponentType::Button });
+		mComponentTypeMap.insert({ "Camera", ComponentType::Camera });
+		mComponentTypeMap.insert({ "Color", ComponentType::Color });
+		mComponentTypeMap.insert({ "Model", ComponentType::Model });
+		mComponentTypeMap.insert({ "Sprite", ComponentType::Sprite });
+		mComponentTypeMap.insert({ "Transform", ComponentType::Transform });
+
+		mComponentCreatorsMap.insert({ ComponentType::Button, new ComponentCreator<Button>() });
+		mComponentCreatorsMap.insert({ ComponentType::Camera, new ComponentCreator<Camera>() });
+		mComponentCreatorsMap.insert({ ComponentType::Color, new ComponentCreator<Color>() });
+		mComponentCreatorsMap.insert({ ComponentType::Model, new ComponentCreator<ModelComponent>() });
+		mComponentCreatorsMap.insert({ ComponentType::Sprite, new ComponentCreator<Sprite>() });
+		mComponentCreatorsMap.insert({ ComponentType::Transform, new ComponentCreator<Transform>() });
 	}
 
 	ComponentManager::~ComponentManager() {

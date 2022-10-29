@@ -7,7 +7,8 @@
 namespace OpenGLFun {
 	class ComponentManager {
 	public:
-		std::map<std::string, IComponentCreator*> mComponentCreatorsMap;
+		std::map<std::string, ComponentType> mComponentTypeMap; // find a component type by it's "registered" string
+		std::map<ComponentType, IComponentCreator*> mComponentCreatorsMap; // find a creator by it's component type
 
 		ComponentManager();
 		~ComponentManager();
