@@ -17,11 +17,13 @@
 #include "Sprite.h"
 
 namespace OpenGLFun {
-	GraphicSystem* GRAPHICS_SYSTEM = nullptr;;
+	GraphicSystem* GRAPHICS_SYSTEM = nullptr;
 
-	GraphicSystem::GraphicSystem() : ISystem(), _3DShaderProgram() {
+	GraphicSystem::GraphicSystem() : ISystem(), _3DShaderProgram(), _viewportX{ 0 }, _viewportY{ 0 }, _viewportWidth{ WINDOW_SYSTEM->mFrameWidth }, _viewportHeight{ WINDOW_SYSTEM->mFrameHeight } {
 		if (GRAPHICS_SYSTEM != nullptr)
 			throw SimpleException("Graphics system already created!");
+
+		GRAPHICS_SYSTEM = this;
 
 		Shader vertexShader{}, fragmentShader{};
 		if (!vertexShader.Compile(ShaderType::Vertex, "assets/shaders/3d.vert")) {
@@ -238,6 +240,13 @@ namespace OpenGLFun {
 			}*/
 			glEnable(GL_DEPTH_TEST);
 		}
+	}
+
+	void GraphicSystem::SetViewport(int posX, int posY, int width, int height) {
+		_viewportX = posX;
+		_viewportY = posY;
+		_viewportWidth = width;
+		_viewportHeight = height;
 	}
 
 	void GraphicSystem::CreateGLTexture(Texture* texture) {
