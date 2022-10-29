@@ -43,6 +43,8 @@ namespace OpenGLFun {
 	}
 
 	void Engine::GameLoop(void) {
+		INPUT_SYSTEM->LockMouse();
+
 		float totalFrameTime = 0.0f;
 		int frameCount = 0;
 

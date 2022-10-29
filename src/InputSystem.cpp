@@ -130,6 +130,20 @@ namespace OpenGLFun {
 		glfwSetInputMode(WINDOW_SYSTEM->mWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
+	void InputSystem::PauseGame() {
+		ENGINE->mIsPaused = true;
+		INPUT_SYSTEM->UnlockMouse();
+		std::cout << "Game paused\n";
+	}
+
+	void InputSystem::UnpauseGame() {
+		if (ENGINE->mShouldMouseBeLocked) {
+			INPUT_SYSTEM->LockMouse();
+		}
+		ENGINE->mIsPaused = false;
+		std::cout << "Game unpaused\n";
+	}
+
 	void MousePosCallback(GLFWwindow*, double xPosIn, double yPosIn) {
 		INPUT_SYSTEM->mMousePos = { xPosIn, yPosIn };
 
@@ -182,16 +196,10 @@ namespace OpenGLFun {
 		if (action == GLFW_PRESS) {
 			if (key == GLFW_KEY_ESCAPE) {
 				if (!ENGINE->mIsPaused) {
-					ENGINE->mIsPaused = true;
-					INPUT_SYSTEM->UnlockMouse();
-					std::cout << "Game paused\n";
+					INPUT_SYSTEM->PauseGame();
 				}
 				else {
-					if (ENGINE->mShouldMouseBeLocked) {
-						INPUT_SYSTEM->LockMouse();
-					}
-					ENGINE->mIsPaused = false;
-					std::cout << "Game unpaused\n";
+					INPUT_SYSTEM->UnpauseGame();
 				}
 			}
 		}

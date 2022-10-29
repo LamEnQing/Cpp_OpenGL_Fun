@@ -21,6 +21,8 @@ namespace OpenGLFun {
 
 		void LockMouse();
 		void UnlockMouse();
+		void PauseGame();
+		void UnpauseGame();
 	private:
 		std::vector<int> _availableKeys;
 		std::map<int, bool> _keyTriggerStateMap;
