@@ -192,14 +192,12 @@
     <ClInclude Include="src\EntityFactory.h" />
     <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Exceptions.h" />
     <ClInclude Include="src\GraphicSystem.h" />
     <ClInclude Include="src\InputSystem.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\ResourceManager.h" />
     <ClInclude Include="src\Serializer.h" />
     <ClInclude Include="src\Shader.h" />

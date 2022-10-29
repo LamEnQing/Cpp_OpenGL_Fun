@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="entity">
-      <UniqueIdentifier>{45156bae-e9f0-4086-a85c-8d301b771158}</UniqueIdentifier>
-    </Filter>
     <Filter Include="component">
       <UniqueIdentifier>{b5688012-18e0-4d9b-94aa-1a832c3c6f5f}</UniqueIdentifier>
     </Filter>
@@ -31,20 +28,17 @@
     <Filter Include="serializer">
       <UniqueIdentifier>{0672bc3c-d621-442e-a619-b6ee38099f89}</UniqueIdentifier>
     </Filter>
-    <Filter Include="level_manager">
-      <UniqueIdentifier>{d32f1bbb-43fc-43ea-9fd7-ac08983e0d3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="system\graphics\texture">
       <UniqueIdentifier>{349d97e8-42db-4c30-9351-402d182619f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resource_manager">
-      <UniqueIdentifier>{a4eb2ee6-0550-4aa6-abb2-86ee49d5e59e}</UniqueIdentifier>
     </Filter>
     <Filter Include="math">
       <UniqueIdentifier>{376b98e1-1468-4e6e-a190-9e870a6eb60e}</UniqueIdentifier>
     </Filter>
     <Filter Include="system\graphics\model\shapes">
       <UniqueIdentifier>{65238a22-c437-404e-8154-fe51131ebd39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="managers">
+      <UniqueIdentifier>{05a7a11d-6e77-46fa-ad4b-eed85a258ab0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -71,9 +65,6 @@
       <Filter>system\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\ComponentManager.cpp">
-      <Filter>component</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -82,15 +73,6 @@
     </ClCompile>
     <ClCompile Include="src\Serializer.cpp">
       <Filter>serializer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LevelManager.cpp">
-      <Filter>level_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EntityManager.cpp">
-      <Filter>entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ResourceManager.cpp">
-      <Filter>resource_manager</Filter>
     </ClCompile>
     <ClCompile Include="src\Vec3f.cpp">
       <Filter>math</Filter>
@@ -116,19 +98,22 @@
     <ClCompile Include="src\AnimationSystem.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="src\ResourceManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ComponentManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Entity.h">
-      <Filter>entity</Filter>
-    </ClInclude>
     <ClInclude Include="src\Component.h">
       <Filter>component</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ComponentManager.h">
-      <Filter>component</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Player.h">
-      <Filter>entity</Filter>
     </ClInclude>
     <ClInclude Include="src\InputSystem.h">
       <Filter>system</Filter>
@@ -176,9 +161,6 @@
     <ClInclude Include="src\Serializer.h">
       <Filter>serializer</Filter>
     </ClInclude>
-    <ClInclude Include="src\LevelManager.h">
-      <Filter>level_manager</Filter>
-    </ClInclude>
     <ClInclude Include="src\Color.h">
       <Filter>component\components</Filter>
     </ClInclude>
@@ -193,12 +175,6 @@
     </ClInclude>
     <ClInclude Include="src\Sprite.h">
       <Filter>component\components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntityManager.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ResourceManager.h">
-      <Filter>resource_manager</Filter>
     </ClInclude>
     <ClInclude Include="src\Vec2f.h">
       <Filter>math</Filter>
@@ -223,6 +199,18 @@
     </ClInclude>
     <ClInclude Include="src\AnimationSystem.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResourceManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LevelManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ComponentManager.h">
+      <Filter>managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

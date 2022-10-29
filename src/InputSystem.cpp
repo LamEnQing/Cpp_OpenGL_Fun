@@ -13,7 +13,7 @@ namespace OpenGLFun {
 	void MousePosCallback(GLFWwindow* window, double xPosIn, double yPosIn);
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-	InputSystem::InputSystem() : ISystem(), mIsMouseLocked(true), mMouseSensitivity(1.0f), mMousePosOld{ 0.0f }, mMousePos{ 0.0f } {
+	InputSystem::InputSystem() : ISystem(), mMouseSensitivity(1.0f), mMousePosOld(0.0f), mMousePos(0.0f), mMousePosUnlocked(0.0f) {
 		if (INPUT_SYSTEM != nullptr)
 			throw SimpleException("InputSystem already created!");
 
@@ -40,23 +40,24 @@ namespace OpenGLFun {
 		_deltaTime = deltaTime;
 
 		for (int& key : _availableKeys) {
-			if (INPUT_SYSTEM->_keyTriggerStateMap.find(key) == INPUT_SYSTEM->_keyTriggerStateMap.end()) { // could not find, means key does not exist in the map
+			if (_keyTriggerStateMap.find(key) == _keyTriggerStateMap.end()) { // could not find, means key does not exist in the map
 				if (IsKeyHeld(key))
-					INPUT_SYSTEM->_keyTriggerStateMap.insert({ key, true });
+					_keyTriggerStateMap.insert({ key, true });
 			}
 			else {
 				if (IsKeyHeld(key))
-					INPUT_SYSTEM->_keyTriggerStateMap.at(key) = false;
+					_keyTriggerStateMap.at(key) = false;
 				else
-					INPUT_SYSTEM->_keyTriggerStateMap.erase(key);
+					_keyTriggerStateMap.erase(key);
 			}
 		}
 
-		if (IsKeyTriggered(GLFW_KEY_F3) == GLFW_PRESS) {
+		if (IsKeyTriggered(GLFW_KEY_F3)) {
 			LEVEL_MANAGER.get()->ReloadLevel();
+			return;
 		}
 
-		if (IsKeyTriggered(GLFW_KEY_F2) == GLFW_PRESS) {
+		if (IsKeyTriggered(GLFW_KEY_F2)) {
 			ENGINE->mInDebugMode = !ENGINE->mInDebugMode;
 		}
 
@@ -115,11 +116,18 @@ namespace OpenGLFun {
 	}
 
 	void InputSystem::LockMouse() {
-		if (!ENGINE->mShouldMouseBeLocked) return;
-		INPUT_SYSTEM->mIsMouseLocked = true;
+		double saveMouseX, saveMouseY;
+		glfwGetCursorPos(WINDOW_SYSTEM->mWindow, &saveMouseX, &saveMouseY);
+		mMousePosUnlocked = { saveMouseX, saveMouseY };
+
 		glfwSetInputMode(WINDOW_SYSTEM->mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		glfwSetCursorPos(WINDOW_SYSTEM->mWindow, static_cast<double>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0, static_cast<double>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0);
-		INPUT_SYSTEM->mMousePosOld = { static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f, static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f };
+		mMousePosOld = { static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f, static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f };
+	}
+	
+	void InputSystem::UnlockMouse() {
+		glfwSetCursorPos(WINDOW_SYSTEM->mWindow, static_cast<double>(mMousePosUnlocked.x), static_cast<double>(mMousePosUnlocked.y));
+		glfwSetInputMode(WINDOW_SYSTEM->mWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
 	void MousePosCallback(GLFWwindow*, double xPosIn, double yPosIn) {
@@ -169,9 +177,8 @@ namespace OpenGLFun {
 		if (action == GLFW_PRESS) {
 			if (key == GLFW_KEY_ESCAPE) {
 				if (!ENGINE->mIsPaused) {
-					INPUT_SYSTEM->mIsMouseLocked = false;
 					ENGINE->mIsPaused = true;
-					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+					INPUT_SYSTEM->UnlockMouse();
 					std::cout << "Game paused\n";
 				}
 				else {
