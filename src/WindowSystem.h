@@ -6,6 +6,8 @@ namespace OpenGLFun {
 	class WindowSystem : public ISystem {
 	public:
 		GLFWwindow* mWindow;
+		int mFrameWidth;
+		int mFrameHeight;
 
 		WindowSystem();
 		~WindowSystem();

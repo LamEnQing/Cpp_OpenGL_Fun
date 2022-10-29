@@ -9,7 +9,7 @@ namespace OpenGLFun {
 
 	WindowSystem* WINDOW_SYSTEM;
 
-	WindowSystem::WindowSystem() : ISystem(), mWindow(nullptr), _windowWidth(0), _windowHeight(0) {
+	WindowSystem::WindowSystem() : ISystem(), mWindow(nullptr), _windowWidth(0), _windowHeight(0), mFrameWidth(0), mFrameHeight(0) {
 		if (WINDOW_SYSTEM != nullptr)
 			throw SimpleException("WindowSystem already created!");
 		WINDOW_SYSTEM = this;
@@ -62,6 +62,8 @@ namespace OpenGLFun {
 
 	void WindowSystem::Update(float const&) {
 		glfwPollEvents();
+
+		glfwGetFramebufferSize(mWindow, &mFrameWidth, &mFrameHeight);
 	}
 
 	int WindowSystem::GetWindowWidth() { return _windowWidth; }
