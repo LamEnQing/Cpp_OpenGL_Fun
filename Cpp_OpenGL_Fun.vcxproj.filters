@@ -37,6 +37,12 @@
     <Filter Include="system\graphics\model\shapes">
       <UniqueIdentifier>{65238a22-c437-404e-8154-fe51131ebd39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendors">
+      <UniqueIdentifier>{9fefa42c-4326-43fe-a374-a91887a8a88f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendors\imgui">
+      <UniqueIdentifier>{9b0cac1b-a4a5-4eb8-8dcc-9dd4542d0ad7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="managers">
       <UniqueIdentifier>{05a7a11d-6e77-46fa-ad4b-eed85a258ab0}</UniqueIdentifier>
     </Filter>
@@ -97,6 +103,27 @@
     </ClCompile>
     <ClCompile Include="src\AnimationSystem.cpp">
       <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendors\imgui\imgui.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendors\imgui\imgui_demo.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendors\imgui\imgui_draw.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendors\imgui\imgui_impl_glfw.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendors\imgui\imgui_impl_opengl3.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendors\imgui\imgui_tables.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendors\imgui\imgui_widgets.cpp">
+      <Filter>vendors\imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\ResourceManager.cpp">
       <Filter>managers</Filter>

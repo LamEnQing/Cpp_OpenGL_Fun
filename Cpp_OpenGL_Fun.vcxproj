@@ -175,6 +175,13 @@
     <ClCompile Include="src\Vec2f.cpp" />
     <ClCompile Include="src\Vec3f.cpp" />
     <ClCompile Include="src\Vec4f.cpp" />
+    <ClCompile Include="src\vendors\imgui\imgui.cpp" />
+    <ClCompile Include="src\vendors\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\vendors\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\vendors\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\vendors\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\vendors\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\vendors\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Vertex.cpp" />
     <ClCompile Include="src\WindowSystem.cpp" />
   </ItemGroup>
