@@ -1,4 +1,5 @@
 {
 	"should_mouse_lock": false,
+	"enable_editor": true,
 	"camera_entity": {}
 }
