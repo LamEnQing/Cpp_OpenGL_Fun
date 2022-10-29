@@ -1,9 +1,12 @@
 #pragma once
 #include "pch.h"
 #include "Component.h"
+#include "ResourceManager.h"
 
 namespace OpenGLFun {
 	class Sprite : public IComponent {
+	private:
+		int _selectedTexture = 0;
 	public:
 		std::string mTextureFilepath;
 		std::array<int, 2> mUVPosition;
@@ -48,7 +51,72 @@ namespace OpenGLFun {
 		}
 
 		void DrawImGuiComponent() {
+			std::vector<std::string> texturesList;
+			for (auto const& pair : RESOURCE_MANAGER->mTexturesDataMap)
+				texturesList.push_back(pair.first);
 
+			ImGui::Text("Texture");
+			ImGui::SameLine();
+
+			if (ImGui::BeginCombo("##texture list", texturesList[_selectedTexture].c_str())) {
+				for (int i = 0; i < texturesList.size(); i++) {
+					std::string& texture = texturesList[i];
+
+					if (ImGui::Selectable(texture.c_str(), _selectedTexture == i)) {
+						_selectedTexture = i;
+						mTextureFilepath = texture;
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			Texture* texturePtr = RESOURCE_MANAGER->GetTexture(mTextureFilepath);
+			static int uvPosX = 0; uvPosX = mUVPosition[0];
+			static int uvPosY = 0; uvPosY = mUVPosition[1];
+			static int uvDimX = 0; uvDimX = mUVDimensions[0];
+			static int uvDimY = 0; uvDimY = mUVDimensions[1];
+
+			//ImGui::PushStyleColor(ImGuiCol_Slider)
+			//ImGui::SliderInt("##uvPosXSlide", &uvPosX, 0, texturePtr->imgWidth, "%d", ImGuiSliderFlags_AlwaysClamp);
+
+			ImGui::PushItemWidth(30);
+			ImGui::Text("UV Position"); ImGui::SameLine();
+			ImGui::Text("X"); ImGui::SameLine();
+			ImGui::InputInt("##uv pos x", &uvPosX, -1); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine();
+			ImGui::InputInt("##uv pos y", &uvPosY, -1);
+
+			if (uvPosX < 0)
+				uvPosX = 0;
+			else if (uvPosX > texturePtr->imgWidth)
+				uvPosX = texturePtr->imgWidth;
+			mUVPosition[0] = uvPosX;
+
+			if (uvPosY < 0)
+				uvPosY = 0;
+			else if (uvPosY > texturePtr->imgHeight)
+				uvPosY = texturePtr->imgHeight;
+			mUVPosition[1] = uvPosY;
+
+			ImGui::Text("UV Dimensions"); ImGui::SameLine();
+			ImGui::Text("X"); ImGui::SameLine();
+			ImGui::InputInt("##uv dim x", &uvDimX, -1); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine();
+			ImGui::InputInt("##uv dim y", &uvDimY, -1);
+
+			if (uvDimX < 0)
+				uvDimX = 0;
+			else if (uvDimX > texturePtr->imgWidth)
+				uvDimX = texturePtr->imgWidth;
+			mUVDimensions[0] = uvDimX;
+
+			if (uvDimY < 0)
+				uvDimY = 0;
+			else if (uvDimY > texturePtr->imgHeight)
+				uvDimY = texturePtr->imgHeight;
+			mUVDimensions[1] = uvDimY;
+
+			ImGui::PopItemWidth();
 		}
 	};
 }

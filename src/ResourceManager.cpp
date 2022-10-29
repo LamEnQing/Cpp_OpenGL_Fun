@@ -8,7 +8,7 @@
 namespace OpenGLFun {
 	ShapeManager* SHAPE_MANAGER = nullptr;
 
-	ResourceManager::ResourceManager() : _texturesDataMap{}, _modelsDataMap{} {
+	ResourceManager::ResourceManager() : mTexturesDataMap{}, _modelsDataMap{} {
 		if (RESOURCE_MANAGER != nullptr)
 			throw SimpleException("Resource manager has already been created!");
 
@@ -27,9 +27,9 @@ namespace OpenGLFun {
 	Texture* ResourceManager::LoadTexture(std::string textureFilepath) {
 		std::string texturesDirPath = std::string("assets/textures/");
 
-		if (_texturesDataMap.find(textureFilepath) != _texturesDataMap.end()) {
+		if (mTexturesDataMap.find(textureFilepath) != mTexturesDataMap.end()) {
 			std::cout << textureFilepath + " was already loaded, getting you the existing texture instead!\n";
-			return _texturesDataMap.at(textureFilepath).get();
+			return mTexturesDataMap.at(textureFilepath).get();
 		}
 
 		Texture* texture = new Texture();
@@ -42,28 +42,28 @@ namespace OpenGLFun {
 
 		std::cout << "Loading texture " << textureFilepath << '\n';
 
-		_texturesDataMap.insert({ textureFilepath, std::shared_ptr<Texture>(texture) });
+		mTexturesDataMap.insert({ textureFilepath, std::shared_ptr<Texture>(texture) });
 
 		GRAPHICS_SYSTEM->CreateGLTexture(texture);
 
 		// texture variable will be out of scope, so instead we return the texture from the map
-		return _texturesDataMap.at(textureFilepath).get();
+		return mTexturesDataMap.at(textureFilepath).get();
 	}
 
 	Texture* ResourceManager::GetTexture(std::string textureFilepath) {
-		if (_texturesDataMap.find(textureFilepath) == _texturesDataMap.end()) {
+		if (mTexturesDataMap.find(textureFilepath) == mTexturesDataMap.end()) {
 			throw SimpleException(std::string("Could not find ") + textureFilepath + " in texture database");
 		}
 
-		return _texturesDataMap.at(textureFilepath).get();
+		return mTexturesDataMap.at(textureFilepath).get();
 	}
 
 	void ResourceManager::UnloadTextures() {
-		for (auto textureIt = _texturesDataMap.rbegin(); textureIt != _texturesDataMap.rend(); textureIt++) {
+		for (auto textureIt = mTexturesDataMap.rbegin(); textureIt != mTexturesDataMap.rend(); textureIt++) {
 			delete textureIt->second->imgData; // need to remove this img data
 			GRAPHICS_SYSTEM->DeleteGLTexture(textureIt->second->mGLTextureId);
 		}
-		_texturesDataMap.clear();
+		mTexturesDataMap.clear();
 	}
 
 	Mesh* ResourceManager::LoadMesh(std::string meshFilepath) {

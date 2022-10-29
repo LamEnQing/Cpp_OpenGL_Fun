@@ -84,7 +84,12 @@ namespace OpenGLFun {
 		// Load textures
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
 			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
-				RESOURCE_MANAGER->LoadTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
+				Sprite* sprite = COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite);
+				Texture* tex = RESOURCE_MANAGER->LoadTexture(sprite->mTextureFilepath);
+				if (sprite->mUVDimensions[0] == 0)
+					sprite->mUVDimensions[0] = tex->imgWidth;
+				if (sprite->mUVDimensions[1] == 0)
+					sprite->mUVDimensions[1] = tex->imgHeight;
 			}
 			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model)) {
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);

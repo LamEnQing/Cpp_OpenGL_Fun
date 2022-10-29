@@ -192,8 +192,7 @@ namespace OpenGLFun {
 			Vec2f uvDimensions = { 1.0f, 1.0f }, uvOffsetPos = { 0.0f, 0.0f };
 			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
 				Sprite* spriteComp = COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite);
-				if (spriteComp->mUVDimensions[0] != 0)
-					uvDimensions = { static_cast<float>(spriteComp->mUVDimensions[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVDimensions[1]) / texture->imgHeight };
+				uvDimensions = { static_cast<float>(spriteComp->mUVDimensions[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVDimensions[1]) / texture->imgHeight };
 				uvOffsetPos = { static_cast<float>(spriteComp->mUVPosition[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVPosition[1]) / texture->imgHeight };
 			}
 

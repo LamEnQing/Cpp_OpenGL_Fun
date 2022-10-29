@@ -5,7 +5,7 @@
 namespace OpenGLFun {
 	class FunImGuiSystem : public ISystem {
 	public:
-		bool mShowDemoWindow;
+		bool mShowEditor;
 
 		FunImGuiSystem();
 		~FunImGuiSystem() override;

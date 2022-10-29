@@ -23,7 +23,7 @@ namespace OpenGLFun {
 	void DrawGameScene();
 	void DrawLoadLevelPopup();
 
-	FunImGuiSystem::FunImGuiSystem() : mShowDemoWindow{ false }, _showLevelSelect{ false } {
+	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, _showLevelSelect{ false } {
 		if (FUN_IMGUI_SYSTEM != nullptr)
 			throw SimpleException("FunImGuiSystem has already been created!");
 
@@ -41,7 +41,7 @@ namespace OpenGLFun {
 		ImGui::StyleColorsDark();
 		ImGui::GetStyle().Alpha = 1.0f;
 
-		ImGui_ImplGlfw_InitForOpenGL(WINDOW_SYSTEM->mWindow, false);
+		ImGui_ImplGlfw_InitForOpenGL(WINDOW_SYSTEM->mWindow, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
 	}
 
@@ -58,7 +58,7 @@ namespace OpenGLFun {
 	}
 
 	void FunImGuiSystem::Update(float const& deltaTime) {
-		if (mShowDemoWindow) {
+		if (mShowEditor) {
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
@@ -125,7 +125,7 @@ namespace OpenGLFun {
 	}
 
 	void DrawEntityProperty() {
-		ImGui::Begin("Entity Property");
+		ImGui::Begin("Entity Property", NULL, ImGuiWindowFlags_HorizontalScrollbar);
 		if (selectedEntity == -1) {
 			ImGui::Text("Select an entity!");
 		}
