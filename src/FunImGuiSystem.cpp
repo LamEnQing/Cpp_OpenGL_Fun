@@ -116,6 +116,7 @@ namespace OpenGLFun {
 
 	void DrawEntityList() {
 		ImGui::Begin("Entity List");
+
 		static std::string listElementName{};
 		ImGui::BeginListBox("##entity List", { -FLT_MIN, 8 * ImGui::GetTextLineHeightWithSpacing() });
 
@@ -242,7 +243,7 @@ namespace OpenGLFun {
 	}
 
 	void DrawLoadLevelPopup() {
-		if (ImGui::BeginPopupModal("Load Level", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		if (ImGui::BeginPopupModal("Load Level", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
 			ImGui::Text("Select the level to load");
 
 			if (ImGui::BeginListBox("##Level List", { -FLT_MIN, 4 * ImGui::GetTextLineHeightWithSpacing() })) {
@@ -274,7 +275,7 @@ namespace OpenGLFun {
 	}
 
 	void DrawWarningPopup(const char* id, const char* message) {
-		if (ImGui::BeginPopupModal(id, NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		if (ImGui::BeginPopupModal(id, NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
 			ImGui::Text(message);
 			const ImVec2 label_size = ImGui::CalcTextSize("Ok", NULL, true);
 
@@ -287,7 +288,7 @@ namespace OpenGLFun {
 	}
 
 	void DrawWarningDeleteCompPopup(const char* compType) {
-		if (ImGui::BeginPopupModal("Confirm Delete Component", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		if (ImGui::BeginPopupModal("Confirm Delete Component", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
 			ImGui::Text((std::string("Are you sure you want to delete component ") + compType + "?").c_str());
 			const ImVec2 label_size = ImGui::CalcTextSize("Ok", NULL, true);
 
