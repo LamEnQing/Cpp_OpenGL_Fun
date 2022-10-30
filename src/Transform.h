@@ -12,7 +12,7 @@ namespace OpenGLFun {
 		Vec3f mRotation;
 		Vec3f mScale;
 
-		Transform() : IComponent(), mPositionOld{}, mPosition{}, mRotationOld{}, mRotation{}, mScale{ 1.0f } {
+		Transform() : IComponent(), mPositionOld{}, mPosition{}, mRotationOld{}, mRotation{}, mScale(1.0f) {
 			mCompType = ComponentType::Transform;
 		}
 		Transform(EntityId const& owner, Vec3f pos, Vec3f rot, Vec3f scale) : Transform() {
@@ -66,7 +66,51 @@ namespace OpenGLFun {
 		}
 
 		void DrawImGuiComponent() {
+			static float posX = 0; posX = mPosition.x;
+			static float posY = 0; posY = mPosition.y;
+			static float posZ = 0; posZ = mPosition.z;
+			static float rotationX = 0; rotationX = mRotation.x;
+			static float rotationY = 0; rotationY = mRotation.y;
+			static float rotationZ = 0; rotationZ = mRotation.z;
+			static float scaleX = 0; scaleX = mScale.x;
+			static float scaleY = 0; scaleY = mScale.y;
+			static float scaleZ = 0; scaleZ = mScale.z;
 
+			ImGui::PushItemWidth(30);
+			ImGui::Text("Position"); ImGui::SameLine();
+			ImGui::Text("X"); ImGui::SameLine();
+			ImGui::InputFloat("##trans pos x", &posX, -1); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine();
+			ImGui::InputFloat("##trans pos y", &posY, -1); ImGui::SameLine();
+			ImGui::Text("Z"); ImGui::SameLine();
+			ImGui::InputFloat("##trans pos z", &posZ, -1);
+			mPosition.x = posX;
+			mPosition.y = posY;
+			mPosition.z = posZ;
+
+			ImGui::Text("Rotation"); ImGui::SameLine();
+			ImGui::Text("X"); ImGui::SameLine();
+			ImGui::InputFloat("##trans rotation x", &rotationX, -1); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine();
+			ImGui::InputFloat("##trans rotation y", &rotationY, -1); ImGui::SameLine();
+			ImGui::Text("Z"); ImGui::SameLine();
+			ImGui::InputFloat("##trans rotation z", &rotationZ, -1);
+			mRotation.x = rotationX;
+			mRotation.y = rotationY;
+			mRotation.z = rotationZ;
+
+			ImGui::Text("Scale"); ImGui::SameLine();
+			ImGui::Text("X"); ImGui::SameLine();
+			ImGui::InputFloat("##trans scale x", &scaleX, -1); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine();
+			ImGui::InputFloat("##trans scale y", &scaleY, -1); ImGui::SameLine();
+			ImGui::Text("Z"); ImGui::SameLine();
+			ImGui::InputFloat("##trans scale z", &scaleZ, -1);
+			mScale.x = scaleX;
+			mScale.y = scaleY;
+			mScale.z = scaleZ;
+
+			ImGui::PopItemWidth();
 		}
 	};
 }
