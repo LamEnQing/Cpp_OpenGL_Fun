@@ -12,7 +12,7 @@ namespace OpenGLFun {
 		std::array<int, 2> mUVPosition;
 		std::array<int, 2> mUVDimensions;
 
-		Sprite() : IComponent(), mTextureFilepath(""), mUVPosition{ 0, 0 }, mUVDimensions{ 0, 0 } {
+		Sprite() : IComponent(), mTextureFilepath("no_texture.png"), mUVPosition{ 0, 0 }, mUVDimensions{ 0, 0 } {
 			mCompType = ComponentType::Sprite;
 		}
 		~Sprite() override {}
@@ -82,9 +82,6 @@ namespace OpenGLFun {
 			static int uvPosY = 0; uvPosY = mUVPosition[1];
 			static int uvDimX = 0; uvDimX = mUVDimensions[0];
 			static int uvDimY = 0; uvDimY = mUVDimensions[1];
-
-			//ImGui::PushStyleColor(ImGuiCol_Slider)
-			//ImGui::SliderInt("##uvPosXSlide", &uvPosX, 0, texturePtr->imgWidth, "%d", ImGuiSliderFlags_AlwaysClamp);
 
 			ImGui::PushItemWidth(30);
 			ImGui::Text("UV Position"); ImGui::SameLine();

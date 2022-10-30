@@ -88,7 +88,12 @@ namespace OpenGLFun {
 			}
 
 			DrawEntityList();
-			DrawEntityProperty();
+			try {
+				DrawEntityProperty();
+			}
+			catch (std::exception& e) {
+				std::cout << "Crashed for DrawEntityProperty:" << e.what() << std::endl;
+			}
 			DrawGameScene();
 
 			DrawLoadLevelPopup();
@@ -167,9 +172,6 @@ namespace OpenGLFun {
 				try {
 					IComponent* comp = COMPONENT_MANAGER->mComponentCreatorsMap.at(findResult->first)->Create();
 					comp->mOwner = selectedEntity;
-					if (comp->mCompType == ComponentType::Sprite) {
-						dynamic_cast<Sprite*>(comp)->mTextureFilepath = "no_texture.png";
-					}
 					COMPONENT_MANAGER->AddComponent(comp);
 				}
 				catch (...) {
