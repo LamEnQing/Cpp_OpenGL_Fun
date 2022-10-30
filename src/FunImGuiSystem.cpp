@@ -132,6 +132,11 @@ namespace OpenGLFun {
 		}
 
 		ImGui::EndListBox();
+
+		if (ImGui::Button("Add Entity", { ImGui::GetContentRegionAvailWidth(), ImGui::CalcTextSize("Add Entity", NULL, true).y + 4})) {
+			ENTITY_MANAGER->SpawnEntity();
+		}
+
 		ImGui::End();
 	}
 
