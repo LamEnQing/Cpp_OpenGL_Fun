@@ -3,7 +3,7 @@
 
 namespace OpenGLFun {
 	using EntityId = int;
-	const EntityId MAX_ENTITIES = 50;
+	const EntityId MAX_ENTITIES = 1000;
 
 	class EntityManager {
 	public:
