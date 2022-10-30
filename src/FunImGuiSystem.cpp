@@ -19,11 +19,14 @@ namespace OpenGLFun {
 	int selectedAddComponent = 0;
 	int selectedLevel = -1;
 
+	IComponent* deleteComp = nullptr; // the component to be deleted
+
 	void DrawEntityList();
 	void DrawEntityProperty();
 	void DrawGameScene();
 	void DrawLoadLevelPopup();
 	void DrawWarningPopup(const char* id, const char* message);
+	void DrawWarningDeleteCompPopup(const char* compType);
 
 	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, _showLevelSelect{ false } {
 		if (FUN_IMGUI_SYSTEM != nullptr)
@@ -127,6 +130,15 @@ namespace OpenGLFun {
 	}
 
 	void DrawEntityProperty() {
+		static std::map<ComponentType, const char*> componentTypeNames{
+			{ ComponentType::Button, "Button" },
+			{ ComponentType::Camera, "Camera" },
+			{ ComponentType::Color, "Color" },
+			{ ComponentType::Model, "Model" },
+			{ ComponentType::Sprite, "Sprite" },
+			{ ComponentType::Transform, "Transform" }
+		};
+
 		bool shouldDisplayWarning = false;
 
 		ImGui::Begin("Entity Property", NULL, ImGuiWindowFlags_HorizontalScrollbar);
@@ -135,14 +147,6 @@ namespace OpenGLFun {
 		}
 		else {
 			static const char* items[]{ "Button", "Color", "Model", "Sprite", "Transform" };
-			static std::map<ComponentType, const char*> componentTypeNames{
-				{ ComponentType::Button, "Button" },
-				{ ComponentType::Camera, "Camera" },
-				{ ComponentType::Color, "Color" },
-				{ ComponentType::Model, "Model" },
-				{ ComponentType::Sprite, "Sprite" },
-				{ ComponentType::Transform, "Transform" }
-			};
 
 			ImGui::SetNextItemWidth(ImGui::CalcTextSize(items[selectedAddComponent], NULL, true).x + 30.0f);
 			if (ImGui::BeginCombo("##Add Component Combo", items[selectedAddComponent])) {
@@ -175,7 +179,6 @@ namespace OpenGLFun {
 				}
 			}
 			
-			IComponent* deleteComp = nullptr;
 			for (IComponent* comp : COMPONENT_MANAGER->GetEntityComponents(selectedEntity)) {
 				if (componentTypeNames.find(comp->mCompType) == componentTypeNames.end()) continue;
 
@@ -187,19 +190,17 @@ namespace OpenGLFun {
 				if (!canClose) {
 					deleteComp = comp;
 				}
-
-				std::cout << "can close:" << canClose << std::endl;
 			}
-
-			if (deleteComp != nullptr)
-				COMPONENT_MANAGER->RemoveComponent(deleteComp);
 		}
 		ImGui::End();
 
 		if (shouldDisplayWarning)
 			ImGui::OpenPopup("WARNING - Add Component");
-
 		DrawWarningPopup("WARNING - Add Component", "Cannot add another of the same component!");
+
+		if (deleteComp != nullptr)
+			ImGui::OpenPopup("Confirm Delete Component");
+		DrawWarningDeleteCompPopup(deleteComp != nullptr ? componentTypeNames.at(deleteComp->mCompType) : "");
 	}
 
 	void DrawGameScene() {
@@ -276,6 +277,23 @@ namespace OpenGLFun {
 			const ImVec2 label_size = ImGui::CalcTextSize("Ok", NULL, true);
 
 			if (ImGui::Button("Ok", {ImGui::GetContentRegionAvailWidth(), label_size.y + 4})) {
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
+	void DrawWarningDeleteCompPopup(const char* compType) {
+		if (ImGui::BeginPopupModal("Confirm Delete Component", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+			ImGui::Text((std::string("Are you sure you want to delete component ") + compType + "?").c_str());
+			const ImVec2 label_size = ImGui::CalcTextSize("Ok", NULL, true);
+
+			if (ImGui::Button("Ok", { ImGui::GetContentRegionAvailWidth(), label_size.y + 4 })) {
+				if (deleteComp != nullptr) {
+					COMPONENT_MANAGER->RemoveComponent(deleteComp);
+					deleteComp = nullptr;
+				}
 				ImGui::CloseCurrentPopup();
 			}
 
