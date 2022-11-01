@@ -9,17 +9,16 @@ namespace OpenGLFun {
 
 	EntityManager::~EntityManager() {}
 
-	std::vector<EntityId> const& EntityManager::GetEntities() const {
+	std::set<EntityId> const& EntityManager::GetEntities() const {
 		return _livingEntities;
 	}
 
 	void EntityManager::Clear() {
-		std::vector<EntityId> copyLiving = _livingEntities;
-		for (EntityId const& entityId : copyLiving)
+		for (EntityId const& entityId : _livingEntities)
 			MarkEntityDead(entityId);
-		copyLiving.clear();
 
 		RemoveDeadEntities();
+		_livingEntities.clear();
 	}
 
 	EntityId EntityManager::SpawnEntity() {
@@ -29,7 +28,7 @@ namespace OpenGLFun {
 		EntityId id = _availableEntities.front(); // get id from the queue
 		_availableEntities.pop(); // removes the id from the queue
 
-		_livingEntities.push_back(id);
+		_livingEntities.insert(id);
 
 		return id;
 	}
@@ -41,16 +40,16 @@ namespace OpenGLFun {
 
 		std::cout << "Marked " << std::to_string(id) << " for removal\n";
 
-		// Remove entity from living entities
-		_livingEntities.erase(std::remove(_livingEntities.begin(), _livingEntities.end(), id), _livingEntities.end());
-
 		// Entity is queued to be removed
-		_deadEntities.push_back(id);
+		_deadEntities.insert(id);
 	}
 
 	void EntityManager::RemoveDeadEntities() {
-		for (EntityId& id : _deadEntities) {
+		for (EntityId const& id : _deadEntities) {
 			COMPONENT_MANAGER->RemoveComponents(id);
+
+			// Remove entity from living entities
+			_livingEntities.erase(id);
 
 			// Return id to availableEntities
 			_availableEntities.push(id);
@@ -58,5 +57,13 @@ namespace OpenGLFun {
 
 		// After removing components, remove id from deadEntities
 		_deadEntities.clear();
+	}
+
+	void EntityManager::SetSignatureBit(EntityId const& id, ComponentType compType, bool hasComponent) {
+		_entitySignatures[id].set(static_cast<int>(compType), hasComponent);
+	}
+
+	bool EntityManager::HasComponent(EntityId const& id, ComponentType type) {
+		return _entitySignatures[id].test(static_cast<int>(type));
 	}
 }

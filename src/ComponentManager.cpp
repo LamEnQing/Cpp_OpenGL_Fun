@@ -50,6 +50,8 @@ namespace OpenGLFun {
 				throw SimpleException(std::string("Component type ") + std::to_string(static_cast<int>(component->mCompType)) + " added to Entity " + std::to_string(component->mOwner) +  " already");
 			_mapEntityComponents.at(component->mOwner).push_back(component);
 		}
+
+		ENTITY_MANAGER->SetSignatureBit(component->mOwner, component->mCompType, true);
 	}
 
 	void ComponentManager::RemoveComponent(IComponent* comp) {
@@ -59,6 +61,7 @@ namespace OpenGLFun {
 		std::vector<IComponent*>& entityComponents = _mapEntityComponents.at(comp->mOwner);
 		entityComponents.erase(std::remove(entityComponents.begin(), entityComponents.end(), comp), entityComponents.end());
 
+		ENTITY_MANAGER->SetSignatureBit(comp->mOwner, comp->mCompType, false);
 		delete comp;
 	}
 
