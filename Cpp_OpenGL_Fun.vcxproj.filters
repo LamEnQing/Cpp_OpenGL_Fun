@@ -140,6 +140,24 @@
     <ClCompile Include="src\FunImGuiSystem.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="src\ModelComponent.cpp">
+      <Filter>component\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Transform.cpp">
+      <Filter>component\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Button.cpp">
+      <Filter>component\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>component\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Color.cpp">
+      <Filter>component\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sprite.cpp">
+      <Filter>component\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Component.h">
