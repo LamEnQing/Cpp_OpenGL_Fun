@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Configuration.h"
 #include "EntityFactory.h"
 #include "EntityManager.h"
 #include "System.h"
@@ -7,6 +8,7 @@
 namespace OpenGLFun {
 	class Engine {
 		public:
+			Configuration mConfig;
 			EntityId mPlayerId;
 			bool mInDebugMode;
 			bool mIsPaused;

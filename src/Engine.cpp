@@ -37,11 +37,16 @@ namespace OpenGLFun {
 	}
 
 	void Engine::GameLoop(void) {
+		mConfig.LoadConfig();
+
 		_systems.push_back(std::unique_ptr<ISystem>(new WindowSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new InputSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new AnimationSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new GraphicSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new FunImGuiSystem()));
+
+		LEVEL_MANAGER->Unload();
+		mConfig.ReloadConfig(); // To load models
 
 		LEVEL_MANAGER->Load();
 		LEVEL_MANAGER->LoadLevel(LEVEL_MANAGER->mCurrentLevel);

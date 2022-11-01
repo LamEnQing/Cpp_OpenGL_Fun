@@ -140,6 +140,9 @@
     <ClCompile Include="src\FunImGuiSystem.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="src\Configuration.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
     <ClCompile Include="src\ModelComponent.cpp">
       <Filter>component\components</Filter>
     </ClCompile>
@@ -262,6 +265,9 @@
     </ClInclude>
     <ClInclude Include="src\ComponentManager.h">
       <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Configuration.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -56,6 +56,7 @@ namespace OpenGLFun {
 		COMPONENT_MANAGER->Clear();
 		ENTITY_MANAGER->Clear();
 
+		ENGINE->mConfig.ReloadConfig();
 		LoadLevel(mCurrentLevel);
 	}
 
