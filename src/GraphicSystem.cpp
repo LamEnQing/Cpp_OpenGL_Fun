@@ -162,7 +162,7 @@ namespace OpenGLFun {
 				model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
 				model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
 
-				RESOURCE_MANAGER->GetModel(entityId)
+				RESOURCE_MANAGER->Get3DModel(entityId)
 					->SetCull(modelComp->mShouldCull)
 					.Draw3D(_3DShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId, tintColor);
 			}
@@ -209,7 +209,7 @@ namespace OpenGLFun {
 			sample_vec3 *= 2.0f;
 			model = glm::scale(model, sample_vec3);
 
-			RESOURCE_MANAGER->GetModel(entityId)
+			RESOURCE_MANAGER->Get2DModel(modelComp->mModelFilepath)
 				->SetCull(modelComp->mShouldCull)
 				.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, tintColor);
 		}

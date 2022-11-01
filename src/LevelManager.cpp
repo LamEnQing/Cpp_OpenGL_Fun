@@ -96,7 +96,10 @@ namespace OpenGLFun {
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 				if (!modelComp->mModelFilepath.empty()) {
 					try {
-						RESOURCE_MANAGER->LoadModel(entityId, modelComp->mModelFilepath);
+						if (modelComp->mModelType == ModelType::TwoD)
+							RESOURCE_MANAGER->Load2DModel(modelComp->mModelFilepath);
+						else
+							RESOURCE_MANAGER->Load3DModel(entityId, modelComp->mModelFilepath);
 					}
 					catch (std::exception& e) {
 						throw SimpleException(std::string("Encountered an error reading a Model component:\n\t") + e.what());
@@ -149,7 +152,7 @@ namespace OpenGLFun {
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(ENGINE->mPlayerId, ComponentType::Model);
 			if (!modelComp->mModelFilepath.empty()) {
 				try {
-					RESOURCE_MANAGER->LoadModel(ENGINE->mPlayerId, modelComp->mModelFilepath);
+					RESOURCE_MANAGER->Load3DModel(ENGINE->mPlayerId, modelComp->mModelFilepath);
 				}
 				catch (std::exception& e) {
 					throw SimpleException(std::string("Encountered an error reading a Model component:\n\t") + e.what());

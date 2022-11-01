@@ -8,7 +8,9 @@
 namespace OpenGLFun {
 	ShapeManager* SHAPE_MANAGER = nullptr;
 
-	ResourceManager::ResourceManager() : mTexturesDataMap{}, _modelsDataMap{} {
+	Model* ParseModel(const std::string& modelFilepath);
+
+	ResourceManager::ResourceManager() : mTexturesDataMap{}, _3DModelsMap{} {
 		if (RESOURCE_MANAGER != nullptr)
 			throw SimpleException("Resource manager has already been created!");
 
@@ -115,7 +117,59 @@ namespace OpenGLFun {
 		}
 	}
 
-	Model* ResourceManager::LoadModel(EntityId const& entityId, std::string modelFilepath) {
+	Model* ResourceManager::Load2DModel(std::string modelFilepath) {
+		// If 2D map has the 2D model loaded, then no need load, just return instance
+		if (_2DModelsMap.find(modelFilepath) != _2DModelsMap.end()) {
+			std::cout << "2D model " << modelFilepath << " is already loaded" << std::endl;
+			return _2DModelsMap.at(modelFilepath).get();
+		}
+
+		std::cout << "Loading 2D model " << modelFilepath << std::endl;
+		Model* model = ParseModel(modelFilepath);
+
+		_2DModelsMap.insert({ modelFilepath, std::unique_ptr<Model>(model) });
+
+		return _2DModelsMap.at(modelFilepath).get();
+	}
+
+	std::shared_ptr<Model> ResourceManager::Load3DModel(EntityId const& entityId, std::string modelFilepath) {
+		std::cout << "Loading 3D model " << modelFilepath << " for " << entityId << std::endl;
+		Model* model = ParseModel(modelFilepath);
+
+		_3DModelsMap.insert({ entityId, std::shared_ptr<Model>(model) });
+
+		return _3DModelsMap.at(entityId);
+	}
+
+	Model* ResourceManager::Get2DModel(std::string const& modelFilepath) {
+		if (_2DModelsMap.find(modelFilepath) == _2DModelsMap.end()) {
+			throw SimpleException(std::string("Could not find 2D model ") + modelFilepath + " in model database");
+		}
+
+		return _2DModelsMap.at(modelFilepath).get();
+	}
+
+	std::shared_ptr<Model>& ResourceManager::Get3DModel(EntityId const& entityId) {
+		if (_3DModelsMap.find(entityId) == _3DModelsMap.end()) {
+			throw SimpleException(std::string("Could not find entity ") + std::to_string(entityId) + "'s 3D model in model database");
+		}
+
+		return _3DModelsMap.at(entityId);
+	}
+
+	void ResourceManager::UnloadModels() {
+		for (auto modelIt = _3DModelsMap.rbegin(); modelIt != _3DModelsMap.rend(); modelIt++) {
+			modelIt->second->Destroy();
+		}
+		_3DModelsMap.clear();
+
+		for (auto modelIt = _2DModelsMap.rbegin(); modelIt != _2DModelsMap.rend(); modelIt++) {
+			modelIt->second->Destroy();
+		}
+		_2DModelsMap.clear();
+	}
+
+	Model* ParseModel(const std::string& modelFilepath) {
 		std::string modelDirPath = std::string("assets/models/");
 
 		if (!Serializer::DoesFilenameEndWith(modelFilepath, ".json")) {
@@ -134,7 +188,7 @@ namespace OpenGLFun {
 		if (!document.IsArray() || document.Size() <= 0)
 			throw SimpleException(modelDirPath + modelFilepath + " must start with a JSON array containing at least 1 JSON object");
 
-		std::cout << "Loading model " << modelFilepath << '\n';
+		std::cout << "Parsing model " << modelFilepath << '\n';
 		Model* model = new Model();
 
 		try {
@@ -149,7 +203,7 @@ namespace OpenGLFun {
 
 				if (!meshJson.HasMember("mesh") || !meshJson["mesh"].IsString())
 					throw JsonReadException(modelDirPath + modelFilepath, std::string("for index ") + std::to_string(i), "mesh", "string");
-				 
+
 				Vec3f offsetVec = Vec3f(0.0f);
 				if (meshJson.HasMember("offset")) {
 					if (!meshJson["offset"].IsArray())
@@ -164,7 +218,7 @@ namespace OpenGLFun {
 					}
 				}
 
-				model->AddMesh(meshJson["part_name"].GetString(), std::shared_ptr<Mesh>(LoadMesh(meshJson["mesh"].GetString())->SetOffset(offsetVec)));
+				model->AddMesh(meshJson["part_name"].GetString(), std::shared_ptr<Mesh>(RESOURCE_MANAGER->LoadMesh(meshJson["mesh"].GetString())->SetOffset(offsetVec)));
 			}
 		}
 		catch (std::exception const& e) { // catch all parse errors, so that we can include the filename in the error too!
@@ -172,24 +226,6 @@ namespace OpenGLFun {
 			throw SimpleException(std::string("Failed to parse ") + modelDirPath + modelFilepath + ", here's the parse error:\n\t" + e.what());
 		}
 
-		_modelsDataMap.insert({ entityId, std::shared_ptr<Model>(model) });
-
-		// texture variable will be out of scope, so instead we return the texture from the map
-		return _modelsDataMap.at(entityId).get();
-	}
-
-	Model* ResourceManager::GetModel(EntityId const& entityId) {
-		if (_modelsDataMap.find(entityId) == _modelsDataMap.end()) {
-			throw SimpleException(std::string("Could not find entity ") + std::to_string(entityId) + "'s model in model database");
-		}
-
-		return _modelsDataMap.at(entityId).get();
-	}
-
-	void ResourceManager::UnloadModels() {
-		for (auto modelIt = _modelsDataMap.rbegin(); modelIt != _modelsDataMap.rend(); modelIt++) {
-			modelIt->second->Destroy();
-		}
-		_modelsDataMap.clear();
+		return model;
 	}
 }
