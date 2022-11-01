@@ -223,6 +223,7 @@
     <ClInclude Include="src\BasicShape.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Sprite.h" />
+    <ClInclude Include="src\Types.h" />
     <ClInclude Include="src\Vec2f.h" />
     <ClInclude Include="src\Vec3f.h" />
     <ClInclude Include="src\Vec4f.h" />

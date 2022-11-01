@@ -18,10 +18,12 @@
 #include <map>
 #include <memory>
 #include <queue>
+#include <set>
 #include <string>
 #include <sstream>
 #include <unordered_map>
 #include <vector>
 
 #include "Exceptions.h"
+#include "Types.h"
 #endif

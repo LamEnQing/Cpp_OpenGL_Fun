@@ -2,9 +2,6 @@
 #pragma once
 
 namespace OpenGLFun {
-	using EntityId = int;
-	const EntityId MAX_ENTITIES = 1000;
-
 	class EntityManager {
 	public:
 		EntityManager();

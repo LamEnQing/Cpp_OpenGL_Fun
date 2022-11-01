@@ -269,5 +269,8 @@
     <ClInclude Include="src\Configuration.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\Types.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
