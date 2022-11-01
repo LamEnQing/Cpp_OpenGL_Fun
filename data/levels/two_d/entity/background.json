@@ -3,14 +3,14 @@
 		"Transform": {
 			"position": [0.0, 0.0, 0.0],
 			"rotation": [0.0, 0.0, 0.0],
-			"scale": [200, 200, 1.0]
+			"scale": [1280, 720, 1.0]
 		},
 		"Model": {
 			"model_type": "2d",
 			"model": "square_2d.json"
 		},
 		"Sprite": {
-			"texture": "gold_block.png"
+			"texture": "background.jpg"
 		}
 	}
 }
