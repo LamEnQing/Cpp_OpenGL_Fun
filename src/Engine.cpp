@@ -70,6 +70,9 @@ namespace OpenGLFun {
 			if (LEVEL_MANAGER->mShouldReloadLevel) {
 				LEVEL_MANAGER->mShouldReloadLevel = false;
 				LEVEL_MANAGER->ReloadLevel();
+
+				if (FUN_IMGUI_SYSTEM->mShowEditor)
+					INPUT_SYSTEM->PauseGame();
 			}
 
 			// this adds a time buffer, to ensure it runs at 60 fps
