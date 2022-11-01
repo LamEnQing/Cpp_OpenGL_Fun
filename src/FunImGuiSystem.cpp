@@ -27,6 +27,7 @@ namespace OpenGLFun {
 	void DrawLoadLevelPopup();
 	void DrawWarningPopup(const char* id, const char* message);
 	void DrawWarningDeleteCompPopup(const char* compType);
+	void DrawWarningDeleteEntityPopup();
 
 	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, _showLevelSelect{ false } {
 		if (FUN_IMGUI_SYSTEM != nullptr)
@@ -133,7 +134,7 @@ namespace OpenGLFun {
 
 		ImGui::EndListBox();
 
-		if (ImGui::Button("Add Entity", { ImGui::GetContentRegionAvailWidth(), ImGui::CalcTextSize("Add Entity", NULL, true).y + 4})) {
+		if (ImGui::Button("Add Entity", { ImGui::GetContentRegionAvailWidth(), 0 })) {
 			ENTITY_MANAGER->SpawnEntity();
 		}
 
@@ -143,7 +144,7 @@ namespace OpenGLFun {
 	void DrawEntityProperty() {
 		static std::map<ComponentType, const char*> componentTypeNames{
 			{ ComponentType::Button, "Button" },
-			{ ComponentType::Camera, "Camera" },
+			//{ ComponentType::Camera, "Camera" },
 			{ ComponentType::Color, "Color" },
 			{ ComponentType::Model, "Model" },
 			{ ComponentType::Sprite, "Sprite" },
@@ -151,51 +152,27 @@ namespace OpenGLFun {
 		};
 
 		bool shouldDisplayWarning = false;
+		bool shouldDeleteEntity = false;
+		bool shouldDisplayAddComp = false;
 
 		ImGui::Begin("Entity Property", NULL, ImGuiWindowFlags_HorizontalScrollbar);
 		if (selectedEntity == -1) {
 			ImGui::Text("Select an entity!");
 		}
 		else {
-			static const char* items[]{ "Button", "Color", "Model", "Sprite", "Transform" };
-
-			ImGui::SetNextItemWidth(ImGui::CalcTextSize(items[selectedAddComponent], NULL, true).x + 30.0f);
-			if (ImGui::BeginCombo("##Add Component Combo", items[selectedAddComponent])) {
-				for (size_t i = 0; i < IM_ARRAYSIZE(items); i++) {
-					if (ImGui::Selectable(items[i], selectedAddComponent == i)) {
-						selectedAddComponent = i;
-					}
-				}
-				ImGui::EndCombo();
+			ImGui::PushStyleColor(ImGuiCol_Button, {0.7, 0.1, 0.1, 1.0});
+			if (ImGui::Button("Delete Entity", { ImGui::GetContentRegionAvailWidth(), 0 })) {
+				shouldDeleteEntity = true;
 			}
-			ImGui::SameLine();
-			if (ImGui::Button("Add Component")) {
-				auto findResult = std::find_if(componentTypeNames.begin(), componentTypeNames.end(), [&](const std::pair<ComponentType, const char*>& pair) {
-					return pair.second == items[selectedAddComponent];
-				});
+			ImGui::PopStyleColor();
 
-				IComponent* comp = nullptr;
-				try {
-					IComponent* comp = COMPONENT_MANAGER->mComponentCreatorsMap.at(findResult->first)->Create();
-					comp->mOwner = selectedEntity;
-					COMPONENT_MANAGER->AddComponent(comp);
-				}
-				catch (...) {
-					if (comp != nullptr)
-						delete comp;
-					shouldDisplayWarning = true;
-				}
+			if (ImGui::Button("Add Component")) {
+				shouldDisplayAddComp = true;
 			}
 			
 			for (IComponent* comp : COMPONENT_MANAGER->GetEntityComponents(selectedEntity)) {
-				if (componentTypeNames.find(comp->mCompType) == componentTypeNames.end()) continue;
-
-				bool canClose = true;
-				if (ImGui::CollapsingHeader(componentTypeNames.at(comp->mCompType), &canClose, ImGuiTreeNodeFlags_DefaultOpen)) {
-					comp->DrawImGuiComponent();
-				}
-
-				if (!canClose) {
+				if (comp->DrawImGuiComponent()) {
+					std::cout << "comp can close?" << std::endl;
 					deleteComp = comp;
 				}
 			}
@@ -209,6 +186,32 @@ namespace OpenGLFun {
 		if (deleteComp != nullptr)
 			ImGui::OpenPopup("Confirm Delete Component");
 		DrawWarningDeleteCompPopup(deleteComp != nullptr ? componentTypeNames.at(deleteComp->mCompType) : "");
+
+		if (shouldDeleteEntity)
+			ImGui::OpenPopup("Confirm Delete Entity");
+		DrawWarningDeleteEntityPopup();
+
+		if (shouldDisplayAddComp)
+			ImGui::OpenPopup("AddCompPopup");
+
+		if (ImGui::BeginPopup("AddCompPopup")) {
+			for (const auto& pair : componentTypeNames) {
+				if (ImGui::Selectable(pair.second)) {
+					IComponent* comp = nullptr;
+					try {
+						comp = COMPONENT_MANAGER->mComponentCreatorsMap.at(pair.first)->Create();
+						comp->mOwner = selectedEntity;
+						COMPONENT_MANAGER->AddComponent(comp);
+					}
+					catch (...) {
+						if (comp != nullptr)
+							delete comp;
+						shouldDisplayWarning = true;
+					}
+				}
+			}
+			ImGui::EndPopup();
+		}
 	}
 
 	void DrawGameScene() {
@@ -229,19 +232,12 @@ namespace OpenGLFun {
 			imgSize.y = calcWindowHeight;
 
 		ImGui::SetCursorPos({ (windowWidth - imgSize.x) * 0.5f , 0.0f }); // sets image position
-		ImGui::Image((ImTextureID)GRAPHICS_SYSTEM->mFrameBufferTex, imgSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
+		ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<intptr_t>(GRAPHICS_SYSTEM->mFrameBufferTex)), imgSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
 
 		// Draw Play Button
 		ImGui::SetCursorPos({ (windowWidth - buttonSize.x)*0.5f , imgSize.y }); // sets image position
-		bool shouldEndDisable = false;
-		if (!ENGINE->mIsPaused) {
-			ImGui::BeginDisabled();
-			shouldEndDisable = true;
-		}
 		if (ImGui::Button("Play", buttonSize))
 			INPUT_SYSTEM->UnpauseGame();
-		if (!ENGINE->mIsPaused && shouldEndDisable)
-			ImGui::EndDisabled();
 
 		ImGui::End();
 		ImGui::PopStyleVar();
@@ -282,9 +278,8 @@ namespace OpenGLFun {
 	void DrawWarningPopup(const char* id, const char* message) {
 		if (ImGui::BeginPopupModal(id, NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
 			ImGui::Text(message);
-			const ImVec2 label_size = ImGui::CalcTextSize("Ok", NULL, true);
 
-			if (ImGui::Button("Ok", {ImGui::GetContentRegionAvailWidth(), label_size.y + 4})) {
+			if (ImGui::Button("Ok", {ImGui::GetContentRegionAvailWidth(), 0})) {
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -295,13 +290,39 @@ namespace OpenGLFun {
 	void DrawWarningDeleteCompPopup(const char* compType) {
 		if (ImGui::BeginPopupModal("Confirm Delete Component", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
 			ImGui::Text((std::string("Are you sure you want to delete component ") + compType + "?").c_str());
-			const ImVec2 label_size = ImGui::CalcTextSize("Ok", NULL, true);
 
-			if (ImGui::Button("Ok", { ImGui::GetContentRegionAvailWidth(), label_size.y + 4 })) {
+			if (ImGui::Button("Confirm Delete")) {
 				if (deleteComp != nullptr) {
 					COMPONENT_MANAGER->RemoveComponent(deleteComp);
 					deleteComp = nullptr;
 				}
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Button("Cancel")) {
+				if (deleteComp != nullptr) {
+					deleteComp = nullptr;
+				}
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
+	void DrawWarningDeleteEntityPopup() {
+		if (ImGui::BeginPopupModal("Confirm Delete Entity", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
+			ImGui::Text((std::string("Are you sure you want to delete entity #") + std::to_string(selectedEntity) + "?").c_str());
+
+			if (ImGui::Button("Confirm", { ImGui::GetContentRegionAvailWidth()*0.5f, 0 })) {
+				ENTITY_MANAGER->MarkEntityDead(selectedEntity);
+				selectedEntity = -1;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", { ImGui::GetContentRegionAvailWidth(), 0 })) {
 				ImGui::CloseCurrentPopup();
 			}
 
