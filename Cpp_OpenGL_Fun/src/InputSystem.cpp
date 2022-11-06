@@ -1,4 +1,7 @@
 #include "ComponentManager.h"
+
+#include <Windows.h>
+
 #include "Engine.h"
 #include "FunImGuiSystem.h"
 #include "GraphicSystem.h"
@@ -72,6 +75,12 @@ namespace OpenGLFun {
 
 		if (IsKeyTriggered(GLFW_KEY_F2)) {
 			ENGINE->mInDebugMode = !ENGINE->mInDebugMode;
+			#ifndef _DEBUG
+			if (ENGINE->mInDebugMode)
+				::ShowWindow(::GetConsoleWindow(), true);
+			else
+				::ShowWindow(::GetConsoleWindow(), false);
+			#endif
 		}
 
 		if (ENGINE->mIsPaused || ENGINE->mPlayerId == -1 || !COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera) || !COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Transform)) return;
