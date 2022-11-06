@@ -5,15 +5,15 @@
 	"preload_assets": [
 		{
 			"type": "texture",
-			"filename": "icons/back_button.png"
+			"filename": "icons\\back_button.png"
 		},
 		{
 			"type": "texture",
-			"filename": "icons/folder.png"
+			"filename": "icons\\folder.png"
 		},
 		{
 			"type": "texture",
-			"filename": "icons/file.png"
+			"filename": "icons\\file.png"
 		},
 		{
 			"type": "texture",

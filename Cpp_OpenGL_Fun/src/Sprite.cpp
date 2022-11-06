@@ -1,4 +1,6 @@
 #include "Sprite.h"
+
+#include "FunImGuiSystem.h"
 #include "ResourceManager.h"
 
 namespace OpenGLFun {
@@ -43,6 +45,7 @@ namespace OpenGLFun {
 
 	bool Sprite::DrawImGuiComponent() {
 		bool canClose = true;
+		bool openAddTexture = false;
 		if (!ImGui::CollapsingHeader("Sprite", &canClose)) return !canClose;
 
 		std::vector<std::string> texturesList;
@@ -69,6 +72,11 @@ namespace OpenGLFun {
 					_selectedTexture = i;
 			}
 			ImGui::EndCombo();
+		}
+
+		ImGui::SameLine();
+		if (ImGui::Button("Add Texture")) {
+			FUN_IMGUI_SYSTEM->mTextureLoadFileBrowser.OpenPopup();
 		}
 
 		Texture* texturePtr = RESOURCE_MANAGER->GetTexture(mTextureFilepath);

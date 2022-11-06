@@ -106,6 +106,7 @@
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityFactory.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
+    <ClCompile Include="src\FileBrowserImgui.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FunImGuiSystem.cpp" />
     <ClCompile Include="src\glad.c" />
@@ -148,6 +149,7 @@
     <ClInclude Include="src\Configuration.h" />
     <ClInclude Include="src\ContentBrowserImgui.h" />
     <ClInclude Include="src\CuboidShape.h" />
+    <ClInclude Include="src\FileBrowserImgui.h" />
     <ClInclude Include="src\Framebuffer.h" />
     <ClInclude Include="src\FunImGuiSystem.h" />
     <ClInclude Include="src\Mesh.h" />

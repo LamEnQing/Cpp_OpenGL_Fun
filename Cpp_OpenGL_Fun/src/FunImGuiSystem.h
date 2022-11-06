@@ -3,6 +3,7 @@
 #include "System.h"
 
 #include "ContentBrowserImgui.h"
+#include "FileBrowserImgui.h"
 #include "Vec2.h"
 
 namespace OpenGLFun {
@@ -10,6 +11,7 @@ namespace OpenGLFun {
 	public:
 		bool mShowEditor;
 		Vec2<float> mSceneViewportSize;
+		FileBrowserImgui mTextureLoadFileBrowser;
 
 		FunImGuiSystem();
 		~FunImGuiSystem() override;

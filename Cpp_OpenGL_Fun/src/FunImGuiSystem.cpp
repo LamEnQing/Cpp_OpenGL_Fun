@@ -11,7 +11,7 @@
 #include "InputSystem.h"
 #include "LevelManager.h"
 #include "ResourceManager.h"
-#include "Sprite.h"
+#include "TextureUtils.h"
 #include "WindowSystem.h"
 
 namespace OpenGLFun {
@@ -32,7 +32,7 @@ namespace OpenGLFun {
 	void DrawWarningDeleteCompPopup(const char* compType);
 	void DrawWarningDeleteEntityPopup();
 
-	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, mSceneViewportSize{}, _showLevelSelect{ false } {
+	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, mSceneViewportSize{}, _showLevelSelect{ false }, _contentBrowser{}, mTextureLoadFileBrowser("Add Texture", "assets\\textures", {".jpg", ".png"}) {
 		if (FUN_IMGUI_SYSTEM != nullptr)
 			throw SimpleException("FunImGuiSystem has already been created!");
 
@@ -82,6 +82,7 @@ namespace OpenGLFun {
 			DrawEntityProperty();
 			DrawGameScene();
 			_contentBrowser.Draw();
+			mTextureLoadFileBrowser.Draw();
 
 			DrawLoadLevelPopup();
 
@@ -113,8 +114,10 @@ namespace OpenGLFun {
 				if (ImGui::BeginMenu("Editor")) {
 					if (ImGui::MenuItem("Enabled", NULL, FUN_IMGUI_SYSTEM->mShowEditor))
 						FUN_IMGUI_SYSTEM->mShowEditor = true;
-					if (ImGui::MenuItem("Disabled", NULL, !FUN_IMGUI_SYSTEM->mShowEditor))
+					if (ImGui::MenuItem("Disabled", NULL, !FUN_IMGUI_SYSTEM->mShowEditor)) {
 						FUN_IMGUI_SYSTEM->mShowEditor = false;
+						GRAPHICS_SYSTEM->mFramebuffer.PreResize(WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+					}
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();

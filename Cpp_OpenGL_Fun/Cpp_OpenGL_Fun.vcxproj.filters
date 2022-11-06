@@ -170,6 +170,9 @@
     <ClCompile Include="src\TextureUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\FileBrowserImgui.cpp">
+      <Filter>system\imgui</Filter>
+    </ClCompile>
     <ClCompile Include="src\FileOps.cpp">
       <Filter>utils</Filter>
     </ClCompile>
@@ -298,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="src\TextureUtils.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FileBrowserImgui.h">
+      <Filter>system\imgui</Filter>
     </ClInclude>
     <ClInclude Include="src\FileOps.h">
       <Filter>utils</Filter>

@@ -54,7 +54,7 @@ namespace OpenGLFun {
 	}
 
 	Texture* ResourceManager::LoadTexture(std::string textureFilepath) {
-		std::string texturesDirPath = std::string("assets/textures/");
+		std::string texturesDirPath = std::string("assets\\textures\\");
 
 		if (mTexturesDataMap.find(textureFilepath) != mTexturesDataMap.end()) {
 			std::cout << textureFilepath + " was already loaded, getting you the existing texture instead!\n";
