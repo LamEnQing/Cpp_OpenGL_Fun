@@ -3,7 +3,7 @@
 		"Transform": {
 			"position": [0.0, 0.0, 0.0],
 			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1280, 720, 1.0]
+			"scale": [-1, -1, 1.0]
 		},
 		"Model": {
 			"model_type": "2d",

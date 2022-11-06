@@ -61,10 +61,10 @@ namespace OpenGLFun {
 		Vertex vertex;
 		std::vector<unsigned int> indices;
 		std::vector<Vertex> vertices = {
-			vertex.Pos(-0.5f, 0.5f, 0.0f).Color(1.0f, 1.0f, 1.0f).UV(0.0f, 1.0f), // top left
-			vertex.Pos(-0.5f, -0.5f, 0.0f).UV(0.0f, 0.0f), // bottom left
-			vertex.Pos(0.5f, -0.5f, 0.0f).UV(1.0f, 0.0f), // bottom right
-			vertex.Pos(0.5f, 0.5f, 0.0f).UV(1.0f, 1.0f), // top right
+			vertex.Pos(-1.0f, 1.0f, 0.0f).Color(1.0f, 1.0f, 1.0f).UV(0.0f, 1.0f), // top left
+			vertex.Pos(-1.0f, -1.0f, 0.0f).UV(0.0f, 0.0f), // bottom left
+			vertex.Pos(1.0f, -1.0f, 0.0f).UV(1.0f, 0.0f), // bottom right
+			vertex.Pos(1.0f, 1.0f, 0.0f).UV(1.0f, 1.0f), // top right
 		};
 		indices = {
 			0, 1, 2,
@@ -72,8 +72,6 @@ namespace OpenGLFun {
 		};
 		mesh->Init(vertices, indices)->SetCull(false)->SetBlend(true);
 		_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
-
-		// ==== FrameBuffer ====
 
 		SetViewport(0, 0, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight());
 	}
@@ -182,10 +180,13 @@ namespace OpenGLFun {
 			//model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
 
 			sample_vec3 = vec3f_to_vec3(entityTransform->mScale);
-			sample_vec3[0] /= WINDOW_SYSTEM->GetWindowWidth();
-			sample_vec3[1] /= WINDOW_SYSTEM->GetWindowHeight();
+			if (entityTransform->mScale.x < 0)
+				sample_vec3.x = WINDOW_SYSTEM->mFrameWidth;
+			if (entityTransform->mScale.y < 0)
+				sample_vec3.y = WINDOW_SYSTEM->mFrameHeight;
+			sample_vec3[0] /= WINDOW_SYSTEM->mFrameWidth;
+			sample_vec3[1] /= WINDOW_SYSTEM->mFrameHeight;
 			sample_vec3[2] = 0.0f;
-			sample_vec3 *= 2.0f;
 			model = glm::scale(model, sample_vec3);
 
 			RESOURCE_MANAGER->Get2DModel(modelComp->mModelFilepath)

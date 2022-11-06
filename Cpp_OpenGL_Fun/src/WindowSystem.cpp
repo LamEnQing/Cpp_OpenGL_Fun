@@ -20,7 +20,7 @@ namespace OpenGLFun {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // can resize or not?
 
 		mWindow = glfwCreateWindow(GetWindowWidth(), GetWindowHeight(), WINDOW_TITLE.c_str(), NULL, NULL);
 		if (mWindow == nullptr) {
