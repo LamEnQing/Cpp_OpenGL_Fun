@@ -83,7 +83,7 @@
     <ClCompile Include="src\EntityFactory.cpp">
       <Filter>factory</Filter>
     </ClCompile>
-    <ClCompile Include="src\Serializer.cpp">
+    <ClCompile Include="src\FileOps.cpp">
       <Filter>serializer</Filter>
     </ClCompile>
     <ClCompile Include="src\Vec3f.cpp">
@@ -224,7 +224,7 @@
     <ClInclude Include="src\EntityFactory.h">
       <Filter>factory</Filter>
     </ClInclude>
-    <ClInclude Include="src\Serializer.h">
+    <ClInclude Include="src\FileOps.h">
       <Filter>serializer</Filter>
     </ClInclude>
     <ClInclude Include="src\Color.h">

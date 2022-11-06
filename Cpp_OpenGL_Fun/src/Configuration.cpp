@@ -2,7 +2,7 @@
 #include "LevelManager.h"
 #include "ModelComponent.h"
 #include "ResourceManager.h"
-#include "Serializer.h"
+#include "FileOps.h"
 
 namespace OpenGLFun {	
 	void Configuration::LoadConfig() {

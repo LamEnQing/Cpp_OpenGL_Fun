@@ -115,7 +115,7 @@
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ModelComponent.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
-    <ClCompile Include="src\Serializer.cpp" />
+    <ClCompile Include="src\FileOps.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
     <ClCompile Include="src\Shape.cpp" />
@@ -160,7 +160,7 @@
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\ResourceManager.h" />
-    <ClInclude Include="src\Serializer.h" />
+    <ClInclude Include="src\FileOps.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\ShaderProgram.h" />
     <ClInclude Include="src\Shape.h" />
