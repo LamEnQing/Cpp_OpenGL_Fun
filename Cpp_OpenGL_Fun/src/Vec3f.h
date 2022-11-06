@@ -3,6 +3,11 @@
 #include "Vec2f.h"
 
 namespace OpenGLFun {
+	#ifdef _MSC_VER
+		// Supress warning: nonstandard extension used : nameless struct/union
+	#pragma warning( disable : 4201 )
+	#endif
+
 	union Vec3f {
 		float data[3];
 		struct {
@@ -24,11 +29,6 @@ namespace OpenGLFun {
 		//Vec3f& operator=(const glm::vec3& rhs);
 		bool operator!=(const Vec3f& rhs);
 	};
-
-	#ifdef _MSC_VER
-		// Supress warning: nonstandard extension used : nameless struct/union
-	#pragma warning( default : 4201 )
-	#endif
 
 	Vec3f operator+(const Vec3f& lhs, const Vec3f& rhs);
 	Vec3f operator+(const Vec3f& lhs, const float& rhs);

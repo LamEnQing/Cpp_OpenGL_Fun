@@ -1,6 +1,11 @@
 #pragma once
 
 namespace OpenGLFun {
+	#ifdef _MSC_VER
+		// Supress warning: nonstandard extension used : nameless struct/union
+	#pragma warning( disable : 4201 )
+	#endif
+
 	union Vec4f {
 		float data[4];
 		struct {
@@ -14,9 +19,4 @@ namespace OpenGLFun {
 		const float& operator[](size_t idx) const;
 		float& operator[](size_t idx);
 	};
-
-	#ifdef _MSC_VER
-		// Supress warning: nonstandard extension used : nameless struct/union
-	#pragma warning( default : 4201 )
-	#endif
 }

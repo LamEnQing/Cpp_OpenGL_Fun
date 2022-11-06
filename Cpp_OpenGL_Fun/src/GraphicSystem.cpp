@@ -181,9 +181,9 @@ namespace OpenGLFun {
 
 			sample_vec3 = vec3f_to_vec3(entityTransform->mScale);
 			if (entityTransform->mScale.x < 0)
-				sample_vec3.x = WINDOW_SYSTEM->mFrameWidth;
+				sample_vec3.x = static_cast<float>(WINDOW_SYSTEM->mFrameWidth);
 			if (entityTransform->mScale.y < 0)
-				sample_vec3.y = WINDOW_SYSTEM->mFrameHeight;
+				sample_vec3.y = static_cast<float>(WINDOW_SYSTEM->mFrameHeight);
 			sample_vec3[0] /= WINDOW_SYSTEM->mFrameWidth;
 			sample_vec3[1] /= WINDOW_SYSTEM->mFrameHeight;
 			sample_vec3[2] = 0.0f;

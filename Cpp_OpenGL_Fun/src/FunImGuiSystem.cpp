@@ -65,7 +65,7 @@ namespace OpenGLFun {
 		selectedLevel = -1;
 	}
 
-	void FunImGuiSystem::Update(float const& deltaTime) {
+	void FunImGuiSystem::Update(float const& /*deltaTime*/) {
 		if (mShowEditor) {
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
@@ -187,7 +187,7 @@ namespace OpenGLFun {
 			ImGui::Text("Select an entity!");
 		}
 		else {
-			ImGui::PushStyleColor(ImGuiCol_Button, {0.7, 0.1, 0.1, 1.0});
+			ImGui::PushStyleColor(ImGuiCol_Button, {0.7f, 0.1f, 0.1f, 1.0f});
 			if (ImGui::Button("Delete Entity", { ImGui::GetContentRegionAvailWidth(), 0 })) {
 				shouldDeleteEntity = true;
 			}

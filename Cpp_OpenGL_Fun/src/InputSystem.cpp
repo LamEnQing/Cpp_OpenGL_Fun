@@ -215,7 +215,7 @@ namespace OpenGLFun {
 		}
 	}
 
-	void KeyCallback(GLFWwindow* window, int key, int, int action, int) {
+	void KeyCallback(GLFWwindow* /*window*/, int key, int, int action, int) {
 		if (ENGINE->mIsPaused && FUN_IMGUI_SYSTEM->mShowEditor) return;
 
 		if (action == GLFW_PRESS) {
