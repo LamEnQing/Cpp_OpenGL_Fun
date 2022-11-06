@@ -5,6 +5,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "pch.h"
+#include "ContentBrowserImgui.h"
 #include "Engine.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
@@ -80,6 +81,7 @@ namespace OpenGLFun {
 			DrawEntityList();
 			DrawEntityProperty();
 			DrawGameScene();
+			_contentBrowser.Draw();
 
 			DrawLoadLevelPopup();
 
@@ -247,7 +249,7 @@ namespace OpenGLFun {
 		ImVec2 buttonSize(40.0f, 30.0f);
 
 		// Draw Play Button
-		ImGui::SetCursorPosX((ImGui::GetWindowWidth() - buttonSize.x) * 0.5f); // sets image position
+		ImGui::SetCursorPos({ (ImGui::GetWindowWidth() - buttonSize.x) * 0.5f, buttonSize.y - 2.0f }); // sets image position
 		if (ImGui::Button("Play", buttonSize))
 			INPUT_SYSTEM->UnpauseGame();
 

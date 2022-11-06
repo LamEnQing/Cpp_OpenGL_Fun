@@ -1,6 +1,8 @@
 #pragma once
 
 #include "System.h"
+
+#include "ContentBrowserImgui.h"
 #include "Vec2.h"
 
 namespace OpenGLFun {
@@ -17,6 +19,7 @@ namespace OpenGLFun {
 		void Reset();
 	private:
 		bool _showLevelSelect;
+		ContentBrowserImgui _contentBrowser;
 	};
 
 	extern FunImGuiSystem* FUN_IMGUI_SYSTEM;

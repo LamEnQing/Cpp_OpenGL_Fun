@@ -46,6 +46,12 @@
     <Filter Include="managers">
       <UniqueIdentifier>{05a7a11d-6e77-46fa-ad4b-eed85a258ab0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system\imgui">
+      <UniqueIdentifier>{e729bf08-1c0c-4dbe-8519-9adab6135f0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{f909df77-ba12-4d14-ad3f-70665daf3b00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
@@ -137,9 +143,6 @@
     <ClCompile Include="src\ComponentManager.cpp">
       <Filter>managers</Filter>
     </ClCompile>
-    <ClCompile Include="src\FunImGuiSystem.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="src\Configuration.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -163,6 +166,15 @@
     </ClCompile>
     <ClCompile Include="src\Framebuffer.cpp">
       <Filter>system\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FunImGuiSystem.cpp">
+      <Filter>system\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ContentBrowserImgui.cpp">
+      <Filter>system\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureUtils.cpp">
+      <Filter>utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,9 +266,6 @@
     <ClInclude Include="src\AnimationSystem.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="src\FunImGuiSystem.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="src\ResourceManager.h">
       <Filter>managers</Filter>
     </ClInclude>
@@ -283,6 +292,15 @@
     </ClInclude>
     <ClInclude Include="src\Vec2.hpp">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FunImGuiSystem.h">
+      <Filter>system\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ContentBrowserImgui.h">
+      <Filter>system\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureUtils.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
