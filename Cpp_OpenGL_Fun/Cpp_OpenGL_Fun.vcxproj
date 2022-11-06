@@ -130,6 +130,7 @@
     <ClCompile Include="src\vendors\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\vendors\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\vendors\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\vendors\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="src\vendors\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\vendors\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Vertex.cpp" />

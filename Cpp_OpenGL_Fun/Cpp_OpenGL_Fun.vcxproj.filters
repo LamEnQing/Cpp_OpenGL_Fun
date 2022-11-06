@@ -176,6 +176,9 @@
     <ClCompile Include="src\TextureUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\vendors\imgui\imgui_stdlib.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Component.h">
