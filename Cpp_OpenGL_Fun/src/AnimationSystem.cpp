@@ -23,8 +23,7 @@ namespace OpenGLFun {
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			if (modelComp->mModelType == ModelType::TwoD) continue;
 
-			Transform* transform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
-			auto model = RESOURCE_MANAGER->Get3DModel(entityId);
+			auto& model = RESOURCE_MANAGER->Get3DModel(entityId);
 
 			for (auto meshesIt = model->GetMeshMap().begin(); meshesIt != model->GetMeshMap().end(); meshesIt++) {
 				std::string const& meshName = meshesIt->first;

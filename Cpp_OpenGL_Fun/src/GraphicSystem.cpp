@@ -230,7 +230,6 @@ namespace OpenGLFun {
 			.Draw2D(_2DShaderProgram.mProgramId, transformMtx, mFrameBufferTex, { 1.0f, 1.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 
 		if (ENGINE->mIsPaused) {
-			glm::mat4 model;
 			_2DShaderProgram.use();
 
 			/*for (EntityId const& entityId : LEVEL_MANAGER->mPauseScreenObjs) {
