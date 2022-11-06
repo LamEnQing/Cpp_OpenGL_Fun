@@ -21,6 +21,8 @@ namespace OpenGLFun {
 
 	IComponent* deleteComp = nullptr; // the component to be deleted
 
+	void DrawMenuBar();
+	void DrawStats();
 	void DrawEntityList();
 	void DrawEntityProperty();
 	void DrawGameScene();
@@ -70,31 +72,13 @@ namespace OpenGLFun {
 			ImGui::NewFrame();
 			ImGuiIO& io = ImGui::GetIO();
 
-			bool shouldShowLevelSelect = false;
-			if (ImGui::BeginMainMenuBar()) {
-				if (ImGui::BeginMenu("File")) {
-					ImGui::MenuItem("Load Level", NULL, &shouldShowLevelSelect);
-
-					ImGui::EndMenu();
-				}
-				ImGui::EndMainMenuBar();
-			}
-
 			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 				ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode, NULL);
 
-			if (shouldShowLevelSelect) {
-				std::cout << "Hello pop up should be opening\n";
-				ImGui::OpenPopup("Load Level");
-			}
-
+			DrawMenuBar();
+			DrawStats();
 			DrawEntityList();
-			try {
-				DrawEntityProperty();
-			}
-			catch (std::exception& e) {
-				std::cout << "Crashed for DrawEntityProperty:" << e.what() << std::endl;
-			}
+			DrawEntityProperty();
 			DrawGameScene();
 
 			DrawLoadLevelPopup();
@@ -113,6 +97,49 @@ namespace OpenGLFun {
 				glfwMakeContextCurrent(backup_current_context);
 			}
 		}
+	}
+	
+	void DrawMenuBar() {
+		bool shouldShowLevelSelect = false;
+		if (ImGui::BeginMainMenuBar()) {
+			if (ImGui::BeginMenu("File")) {
+				ImGui::MenuItem("Load Level", NULL, &shouldShowLevelSelect);
+
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Settings")) {
+				if (ImGui::BeginMenu("Editor")) {
+					if (ImGui::MenuItem("Enabled", NULL, FUN_IMGUI_SYSTEM->mShowEditor))
+						FUN_IMGUI_SYSTEM->mShowEditor = true;
+					if (ImGui::MenuItem("Disabled", NULL, !FUN_IMGUI_SYSTEM->mShowEditor))
+						FUN_IMGUI_SYSTEM->mShowEditor = false;
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+
+		if (shouldShowLevelSelect) {
+			std::cout << "Hello pop up should be opening\n";
+			ImGui::OpenPopup("Load Level");
+		}
+	}
+
+	void DrawStats() {
+		ImGui::Begin("Statistics");
+
+		ImGui::Text("Window Width:");
+		ImGui::SameLine(); ImGui::SetCursorPosX(120); ImGui::Text(std::to_string(WINDOW_SYSTEM->GetWindowWidth()).c_str());
+		ImGui::Text("Window Height:");
+		ImGui::SameLine(); ImGui::SetCursorPosX(120); ImGui::Text(std::to_string(WINDOW_SYSTEM->GetWindowHeight()).c_str());
+
+		ImGui::Text("Frame Width:");
+		ImGui::SameLine(); ImGui::SetCursorPosX(110); ImGui::Text(std::to_string(WINDOW_SYSTEM->mFrameWidth).c_str());
+		ImGui::Text("Frame Height:");
+		ImGui::SameLine(); ImGui::SetCursorPosX(110); ImGui::Text(std::to_string(WINDOW_SYSTEM->mFrameHeight).c_str());
+
+		ImGui::End();
 	}
 
 	void DrawEntityList() {
