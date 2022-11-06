@@ -19,7 +19,7 @@
 namespace OpenGLFun {
 	GraphicSystem* GRAPHICS_SYSTEM = nullptr;
 
-	GraphicSystem::GraphicSystem() : ISystem(), _3DShaderProgram(), _viewportX{ 0 }, _viewportY{ 0 }, _viewportWidth{ WINDOW_SYSTEM->mFrameWidth }, _viewportHeight{ WINDOW_SYSTEM->mFrameHeight } {
+	GraphicSystem::GraphicSystem() : ISystem(), mFramebuffer(WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight()), _3DShaderProgram(), _viewportX{ 0 }, _viewportY{ 0 }, _viewportWidth{ WINDOW_SYSTEM->mFrameWidth }, _viewportHeight{ WINDOW_SYSTEM->mFrameHeight } {
 		if (GRAPHICS_SYSTEM != nullptr)
 			throw SimpleException("Graphics system already created!");
 
@@ -74,27 +74,6 @@ namespace OpenGLFun {
 		_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
 
 		// ==== FrameBuffer ====
-		glGenFramebuffers(1, &_frameBuffer);
-		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-		// Create texture to attach to framebuffer
-		glGenTextures(1, &mFrameBufferTex);
-		glBindTexture(GL_TEXTURE_2D, mFrameBufferTex);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mFrameBufferTex, 0);
-
-		// ==== RenderBuffer ====
-		glGenRenderbuffers(1, &_renderBuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight());
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _renderBuffer);
-		auto frameBufferError = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (frameBufferError != GL_FRAMEBUFFER_COMPLETE)
-			throw SimpleException(std::string("Framebuffer is not complete, error status:") + std::to_string(frameBufferError));
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		SetViewport(0, 0, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight());
 	}
@@ -105,7 +84,7 @@ namespace OpenGLFun {
 
 	void GraphicSystem::Update(float const&) {
 		glViewport(_viewportX, _viewportY, _viewportWidth, _viewportHeight);
-		glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+		mFramebuffer.Bind();
 
 		glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -214,20 +193,10 @@ namespace OpenGLFun {
 				.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, tintColor);
 		}
 		glm::mat4 transformMtx(1.0f);
-		/*_2DShapeModel
-			.SetCull(true)
-			.SetBlend(true)
-			.Draw2D(_2DShaderProgram.mProgramId, transformMtx, RESOURCE_MANAGER->GetTexture("no_texture.png")->mGLTextureId, { 1.0f, 1.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });*/
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		mFramebuffer.Unbind();
 
 		// Draw Scene image
-		_2DShaderProgram.use();
-		transformMtx = glm::mat4(1.0f);
-		transformMtx = glm::scale(transformMtx, { 2.0f, 2.0f, 0.0f });
-		_2DShapeModel
-			.SetCull(true)
-			.SetBlend(true)
-			.Draw2D(_2DShaderProgram.mProgramId, transformMtx, mFrameBufferTex, { 1.0f, 1.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		mFramebuffer.Draw(_2DShaderProgram, _2DShapeModel);
 
 		if (ENGINE->mIsPaused) {
 			_2DShaderProgram.use();

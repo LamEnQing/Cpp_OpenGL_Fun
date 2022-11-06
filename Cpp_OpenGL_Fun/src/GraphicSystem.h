@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Framebuffer.h"
 #include "Model.h"
 #include "ShaderProgram.h"
 #include "System.h"
@@ -8,7 +9,7 @@
 namespace OpenGLFun {
 	class GraphicSystem : public ISystem {
 	public:
-		unsigned int mFrameBufferTex;
+		Framebuffer mFramebuffer;
 
 		GraphicSystem();
 		virtual ~GraphicSystem() override;
@@ -20,9 +21,6 @@ namespace OpenGLFun {
 	private:
 		ShaderProgram _3DShaderProgram;
 		ShaderProgram _2DShaderProgram;
-
-		unsigned int _frameBuffer;
-		unsigned int _renderBuffer;
 
 		// Viewport
 		int _viewportX, _viewportY, _viewportWidth, _viewportHeight;

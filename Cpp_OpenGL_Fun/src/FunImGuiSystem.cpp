@@ -219,9 +219,14 @@ namespace OpenGLFun {
 		ImGui::Begin("Game Scene", NULL);
 		ImVec2 buttonSize(40.0f, 30.0f);
 
+		// Draw Play Button
+		ImGui::SetCursorPosX((ImGui::GetWindowWidth() - buttonSize.x) * 0.5f); // sets image position
+		if (ImGui::Button("Play", buttonSize))
+			INPUT_SYSTEM->UnpauseGame();
+
 		// Draw game scene's image
-		float windowWidth = ImGui::GetWindowSize().x;
-		float windowHeight = ImGui::GetWindowSize().y - buttonSize.y;
+		float windowWidth = ImGui::GetContentRegionAvail().x;
+		float windowHeight = ImGui::GetContentRegionAvail().y - buttonSize.y;
 		float calcWindowWidth = (16.0f/9.0f) * windowHeight; // 16/9 = width/height. So to get width, 16 / 9 * height
 		float calcWindowHeight = windowWidth / (16.0f / 9.0f); // 16/9 = width/height. So to get height, width / (16/9)
 
@@ -231,13 +236,8 @@ namespace OpenGLFun {
 		else 
 			imgSize.y = calcWindowHeight;
 
-		ImGui::SetCursorPos({ (windowWidth - imgSize.x) * 0.5f , 0.0f }); // sets image position
-		ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<intptr_t>(GRAPHICS_SYSTEM->mFrameBufferTex)), imgSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
-
-		// Draw Play Button
-		ImGui::SetCursorPos({ (windowWidth - buttonSize.x)*0.5f , imgSize.y }); // sets image position
-		if (ImGui::Button("Play", buttonSize))
-			INPUT_SYSTEM->UnpauseGame();
+		ImGui::SetCursorPosX((windowWidth - imgSize.x) * 0.5f); // sets image position
+		ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<intptr_t>(GRAPHICS_SYSTEM->mFramebuffer.mTextureId)), imgSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
 
 		ImGui::End();
 		ImGui::PopStyleVar();

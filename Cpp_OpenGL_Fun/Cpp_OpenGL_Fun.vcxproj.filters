@@ -161,6 +161,9 @@
     <ClCompile Include="src\Sprite.cpp">
       <Filter>component\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Framebuffer.cpp">
+      <Filter>system\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Component.h">
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="src\Types.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framebuffer.h">
+      <Filter>system\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

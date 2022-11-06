@@ -1,6 +1,7 @@
 #include "WindowSystem.h"
 #include "Engine.h"
 #include "Exceptions.h"
+#include "GraphicSystem.h"
 #include "LevelManager.h"
 
 namespace OpenGLFun {
@@ -41,7 +42,23 @@ namespace OpenGLFun {
 		glfwPollEvents();
 
 		// update frame buffer size variables every frame
+		int newWindowWidth, newWindowHeight;
+		glfwGetWindowSize(mWindow, &newWindowWidth, &newWindowHeight);
 		glfwGetFramebufferSize(mWindow, &mFrameWidth, &mFrameHeight);
+
+		bool resized = false;
+		if (newWindowWidth != _windowWidth) {
+			_windowWidth = newWindowWidth;
+			resized = true;
+		}
+		if (newWindowHeight != _windowHeight) {
+			_windowHeight = newWindowHeight;
+			resized = true;
+		}
+		if (resized) {
+			GRAPHICS_SYSTEM->SetViewport(0, 0, mFrameWidth, mFrameHeight);
+			GRAPHICS_SYSTEM->mFramebuffer.Resize(mFrameWidth, mFrameHeight);
+		}
 	}
 
 	int WindowSystem::GetWindowWidth() { return _windowWidth; }
