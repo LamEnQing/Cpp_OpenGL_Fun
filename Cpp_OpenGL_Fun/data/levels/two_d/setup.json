@@ -1,5 +1,23 @@
 {
 	"should_mouse_lock": false,
 	"enable_editor": true,
-	"camera_entity": {}
+	"camera_entity": {},
+	"preload_assets": [
+		{
+			"type": "texture",
+			"filename": "icons/back_button.png"
+		},
+		{
+			"type": "texture",
+			"filename": "icons/folder.png"
+		},
+		{
+			"type": "texture",
+			"filename": "icons/file.png"
+		},
+		{
+			"type": "texture",
+			"filename": "no_texture.png"
+		}
+	]
 }

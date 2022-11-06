@@ -107,7 +107,6 @@ namespace OpenGLFun {
 				}
 			}
 		}
-		RESOURCE_MANAGER->LoadTexture("no_texture.png");
 		std::cout << std::endl;
 
 		LoadLevelSetup(levelId);
@@ -161,6 +160,21 @@ namespace OpenGLFun {
 		}
 		if (COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Sprite)) {
 			RESOURCE_MANAGER->LoadTexture(COMPONENT_MANAGER->GetComponent<Sprite>(ENGINE->mPlayerId, ComponentType::Sprite)->mTextureFilepath);
+		}
+
+		if (document.HasMember("preload_assets")) {
+			rapidjson::Value& preloadAssJson = document["preload_assets"];
+			if (preloadAssJson.IsObject()) {
+				RESOURCE_MANAGER->PreloadAsset(filepath, "preload_assets", preloadAssJson.GetObject());
+			}
+			else if (preloadAssJson.IsArray()) {
+				for (rapidjson::SizeType i = 0; i < preloadAssJson.Size(); i++) {
+					RESOURCE_MANAGER->PreloadAsset(filepath, std::string("preload_assets[") + std::to_string(i) + "]", preloadAssJson[i].GetObject());
+				}
+			}
+			else {
+				throw JsonReadException(filepath, "preload_assets", "JSON object or array");
+			}
 		}
 	}
 }

@@ -26,6 +26,33 @@ namespace OpenGLFun {
 		UnloadModels();
 	}
 
+	void ResourceManager::PreloadAsset(std::string const& parentFile, std::string const& dataMember, rapidjson::Value& jsonObj) {
+		if (!jsonObj.IsObject())
+			throw JsonReadException(parentFile, dataMember, "JSON object");
+
+		if (!jsonObj.HasMember("type") || !jsonObj["type"].IsString())
+			throw JsonReadException(parentFile, dataMember, "type", "string");
+		
+		std::string assetType = jsonObj["type"].GetString();
+		for (char& c : assetType) {
+			c = static_cast<char>(std::tolower(c));
+		}
+
+		if (!jsonObj.HasMember("filename") || !jsonObj["filename"].IsString())
+			throw JsonReadException(parentFile, dataMember, "filename", "string");
+		std::string assetFile = jsonObj["filename"].GetString();
+
+		if (assetType == "texture") {
+			LoadTexture(assetFile);
+		}
+		else if (assetType == "sound") {
+
+		}
+		else {
+			throw SimpleException(std::string("In ") + parentFile + ", " + dataMember + "'s \"type\"'s valid values are: \"texture\" and \"sound\".");
+		}
+	}
+
 	Texture* ResourceManager::LoadTexture(std::string textureFilepath) {
 		std::string texturesDirPath = std::string("assets/textures/");
 

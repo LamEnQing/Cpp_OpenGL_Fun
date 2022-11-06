@@ -13,6 +13,8 @@ namespace OpenGLFun {
 		ResourceManager();
 		~ResourceManager();
 
+		void PreloadAsset(std::string const& parentFile, std::string const& dataMember, rapidjson::Value& jsonObj);
+
 		Texture* LoadTexture(std::string textureFilepath);
 		void UnloadTextures();
 		Texture* GetTexture(std::string textureFilepath);
