@@ -259,7 +259,7 @@ namespace OpenGLFun {
 			GRAPHICS_SYSTEM->mFramebuffer.PreResize(static_cast<int>(viewportSize.x), static_cast<int>(viewportSize.y));
 			FUN_IMGUI_SYSTEM->mSceneViewportSize = { viewportSize.x, viewportSize.y };
 		}
-		ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<intptr_t>(GRAPHICS_SYSTEM->mFramebuffer.mTextureId)), viewportSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
+		ImGui::Image(TextureUtils::GetImGuiTexId(GRAPHICS_SYSTEM->mFramebuffer.mTextureId), viewportSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
 
 		ImGui::End();
 		ImGui::PopStyleVar();

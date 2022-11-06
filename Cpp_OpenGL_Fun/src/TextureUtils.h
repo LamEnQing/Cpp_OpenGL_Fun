@@ -5,5 +5,6 @@
 namespace OpenGLFun {
 	namespace TextureUtils {
 		ImTextureID GetImGuiTexId(std::string const& textureName);
+		ImTextureID GetImGuiTexId(unsigned int& textureId);
 	}
 }
