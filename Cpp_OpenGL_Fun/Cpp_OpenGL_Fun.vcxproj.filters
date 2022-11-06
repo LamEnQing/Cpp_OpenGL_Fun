@@ -25,9 +25,6 @@
     <Filter Include="factory">
       <UniqueIdentifier>{4207f079-648b-4cb1-b777-60f6a657efb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="serializer">
-      <UniqueIdentifier>{0672bc3c-d621-442e-a619-b6ee38099f89}</UniqueIdentifier>
-    </Filter>
     <Filter Include="system\graphics\texture">
       <UniqueIdentifier>{349d97e8-42db-4c30-9351-402d182619f1}</UniqueIdentifier>
     </Filter>
@@ -82,9 +79,6 @@
     </ClCompile>
     <ClCompile Include="src\EntityFactory.cpp">
       <Filter>factory</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FileOps.cpp">
-      <Filter>serializer</Filter>
     </ClCompile>
     <ClCompile Include="src\Vec3f.cpp">
       <Filter>math</Filter>
@@ -176,6 +170,9 @@
     <ClCompile Include="src\TextureUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\FileOps.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\vendors\imgui\imgui_stdlib.cpp">
       <Filter>vendors\imgui</Filter>
     </ClCompile>
@@ -226,9 +223,6 @@
     </ClInclude>
     <ClInclude Include="src\EntityFactory.h">
       <Filter>factory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FileOps.h">
-      <Filter>serializer</Filter>
     </ClInclude>
     <ClInclude Include="src\Color.h">
       <Filter>component\components</Filter>
@@ -303,6 +297,9 @@
       <Filter>system\imgui</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FileOps.h">
       <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
