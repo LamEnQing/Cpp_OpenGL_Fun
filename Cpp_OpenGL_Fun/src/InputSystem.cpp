@@ -11,6 +11,7 @@
 #include "WindowSystem.h"
 #include "Camera.h"
 #include "Vec2f.h"
+#include "Vec2.h"
 
 namespace OpenGLFun {
 	float _deltaTime = 0.0f;
@@ -176,7 +177,7 @@ namespace OpenGLFun {
 			//printf("Mouse Input: %.2f, %.2f\n", xPosIn, yPosIn);
 			//printf("Mouse Old: %.2f, %.2f\n", INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y);
 
-			Vec2f mouseOffset = { static_cast<float>(xPosIn) - INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y - static_cast<float>(yPosIn) }; // mouse origin starts from top-left, so for y it has to be old-new to get the correct signed value
+			Vec2<float> mouseOffset = { static_cast<float>(xPosIn) - INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y - static_cast<float>(yPosIn) }; // mouse origin starts from top-left, so for y it has to be old-new to get the correct signed value
 			INPUT_SYSTEM->mMousePosOld = { xPosIn, yPosIn };
 			//printf("Mouse Offset: %.2f, %.2f\n", mouseOffset.x, mouseOffset.y);
 
