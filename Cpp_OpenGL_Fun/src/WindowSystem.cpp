@@ -1,6 +1,7 @@
 #include "WindowSystem.h"
 #include "Engine.h"
 #include "Exceptions.h"
+#include "FunImGuiSystem.h"
 #include "GraphicSystem.h"
 #include "LevelManager.h"
 
@@ -57,7 +58,8 @@ namespace OpenGLFun {
 		}
 		if (resized) {
 			GRAPHICS_SYSTEM->SetViewport(0, 0, mFrameWidth, mFrameHeight);
-			GRAPHICS_SYSTEM->mFramebuffer.Resize(mFrameWidth, mFrameHeight);
+			if (!FUN_IMGUI_SYSTEM->mShowEditor)
+				GRAPHICS_SYSTEM->mFramebuffer.Resize(mFrameWidth, mFrameHeight);
 		}
 	}
 

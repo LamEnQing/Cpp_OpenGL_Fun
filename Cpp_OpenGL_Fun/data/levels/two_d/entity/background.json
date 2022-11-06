@@ -10,7 +10,8 @@
 			"model": "square_2d.json"
 		},
 		"Sprite": {
-			"texture": "background.jpg"
+			"texture": "background.jpg",
+			"uv_dimensions": [ 0, 0 ]
 		}
 	}
 }

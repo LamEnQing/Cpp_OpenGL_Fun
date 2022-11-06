@@ -1,11 +1,13 @@
 #pragma once
 
 #include "System.h"
+#include "Vec2.h"
 
 namespace OpenGLFun {
 	class FunImGuiSystem : public ISystem {
 	public:
 		bool mShowEditor;
+		Vec2<float> mSceneViewportSize;
 
 		FunImGuiSystem();
 		~FunImGuiSystem() override;

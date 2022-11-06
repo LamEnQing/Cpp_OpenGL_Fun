@@ -10,8 +10,8 @@
 #include "InputSystem.h"
 #include "LevelManager.h"
 #include "ResourceManager.h"
-#include "WindowSystem.h"
 #include "Sprite.h"
+#include "WindowSystem.h"
 
 namespace OpenGLFun {
 	FunImGuiSystem* FUN_IMGUI_SYSTEM = nullptr;
@@ -31,7 +31,7 @@ namespace OpenGLFun {
 	void DrawWarningDeleteCompPopup(const char* compType);
 	void DrawWarningDeleteEntityPopup();
 
-	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, _showLevelSelect{ false } {
+	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, mSceneViewportSize{}, _showLevelSelect{ false } {
 		if (FUN_IMGUI_SYSTEM != nullptr)
 			throw SimpleException("FunImGuiSystem has already been created!");
 
@@ -41,7 +41,7 @@ namespace OpenGLFun {
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 		io.Fonts->AddFontFromFileTTF("./assets/fonts/Roboto-Regular.ttf", 18.0f);
 		io.Fonts->AddFontFromFileTTF("./assets/fonts/DroidSans.ttf", 18.0f);
@@ -252,19 +252,12 @@ namespace OpenGLFun {
 			INPUT_SYSTEM->UnpauseGame();
 
 		// Draw game scene's image
-		float windowWidth = ImGui::GetContentRegionAvail().x;
-		float windowHeight = ImGui::GetContentRegionAvail().y - buttonSize.y;
-		float calcWindowWidth = (16.0f/9.0f) * windowHeight; // 16/9 = width/height. So to get width, 16 / 9 * height
-		float calcWindowHeight = windowWidth / (16.0f / 9.0f); // 16/9 = width/height. So to get height, width / (16/9)
-
-		ImVec2 imgSize = {windowWidth, windowHeight};
-		if (calcWindowWidth <= windowWidth) // if calculated width is less than actual width, using the width
-			imgSize.x = calcWindowWidth;
-		else 
-			imgSize.y = calcWindowHeight;
-
-		ImGui::SetCursorPosX((windowWidth - imgSize.x) * 0.5f); // sets image position
-		ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<intptr_t>(GRAPHICS_SYSTEM->mFramebuffer.mTextureId)), imgSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (FUN_IMGUI_SYSTEM->mSceneViewportSize.x != viewportSize.x || FUN_IMGUI_SYSTEM->mSceneViewportSize.y != viewportSize.y) {
+			GRAPHICS_SYSTEM->mFramebuffer.PreResize(static_cast<int>(viewportSize.x), static_cast<int>(viewportSize.y));
+			FUN_IMGUI_SYSTEM->mSceneViewportSize = { viewportSize.x, viewportSize.y };
+		}
+		ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<intptr_t>(GRAPHICS_SYSTEM->mFramebuffer.mTextureId)), viewportSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
 
 		ImGui::End();
 		ImGui::PopStyleVar();

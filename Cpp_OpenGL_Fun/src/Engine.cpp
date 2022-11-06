@@ -67,6 +67,10 @@ namespace OpenGLFun {
 			glfwSwapBuffers(WINDOW_SYSTEM->mWindow);
 			glfwSwapInterval(0);
 
+			if (!GRAPHICS_SYSTEM->mFramebuffer.mHasResized) {
+				GRAPHICS_SYSTEM->mFramebuffer.PostResize();
+			}
+
 			if (LEVEL_MANAGER->mShouldReloadLevel) {
 				LEVEL_MANAGER->mShouldReloadLevel = false;
 				LEVEL_MANAGER->ReloadLevel();
