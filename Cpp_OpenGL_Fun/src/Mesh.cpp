@@ -72,7 +72,7 @@ namespace OpenGLFun {
 		return this;
 	}
 
-	Mesh* Mesh::Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor) {
+	Mesh* Mesh::Draw2D(unsigned int& shaderProgram, glm::mat4 const& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor) {
 		unsigned int transformLoc = glGetUniformLocation(shaderProgram, "uTransformation");
 		unsigned int tintColorLoc = glGetUniformLocation(shaderProgram, "uTintColor");
 		unsigned int texDimLoc = glGetUniformLocation(shaderProgram, "uTexDimensions");
@@ -123,7 +123,7 @@ namespace OpenGLFun {
 		return this;
 	}
 
-	Mesh* Mesh::Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor) {
+	Mesh* Mesh::Draw3D(unsigned int& shaderProgram, glm::mat4 const& modelMtx, glm::mat4 const& viewMtx, glm::mat4 const& projMtx, unsigned int textureId, Vec4f tintColor) {
 		unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
 		unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
 		unsigned int projLoc = glGetUniformLocation(shaderProgram, "proj");

@@ -12,8 +12,8 @@ namespace OpenGLFun {
 
 		Mesh* Init(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 
-		Mesh* Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor);
-		Mesh* Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor);
+		Mesh* Draw2D(unsigned int& shaderProgram, glm::mat4 const& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor);
+		Mesh* Draw3D(unsigned int& shaderProgram, glm::mat4 const& modelMtx, glm::mat4 const& viewMtx, glm::mat4 const& projMtx, unsigned int textureId, Vec4f tintColor);
 
 		Mesh* SetDrawMode(const int& mode);
 		Mesh* SetCull(const bool& cull);

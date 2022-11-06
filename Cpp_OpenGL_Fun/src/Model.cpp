@@ -31,7 +31,7 @@ namespace OpenGLFun {
 		return *this;
 	}
 
-	Model& Model::Draw2D(unsigned int& shaderProgram, glm::mat4& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor) {
+	Model& Model::Draw2D(unsigned int& shaderProgram, glm::mat4 const& transformMtx, unsigned int textureId, Vec2f uvDimensions, Vec2f uvOffsetPos, Vec4f tintColor) {
 		for (auto& meshPair : _meshes) {
 			meshPair.second->Draw2D(shaderProgram, transformMtx, textureId, uvDimensions, uvOffsetPos, tintColor);
 		}
@@ -39,7 +39,7 @@ namespace OpenGLFun {
 		return *this;
 	}
 
-	Model& Model::Draw3D(unsigned int& shaderProgram, glm::mat4& modelMtx, glm::mat4& viewMtx, glm::mat4& projMtx, unsigned int textureId, Vec4f tintColor) {
+	Model& Model::Draw3D(unsigned int& shaderProgram, glm::mat4 const& modelMtx, glm::mat4 const& viewMtx, glm::mat4 const& projMtx, unsigned int textureId, Vec4f tintColor) {
 		for (auto& meshPair : _meshes) {
 			meshPair.second->Draw3D(shaderProgram, modelMtx, viewMtx, projMtx, textureId, tintColor);
 		}
