@@ -278,5 +278,11 @@
     <ClInclude Include="src\Framebuffer.h">
       <Filter>system\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Vec2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vec2.hpp">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

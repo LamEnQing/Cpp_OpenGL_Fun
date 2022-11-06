@@ -107,7 +107,7 @@ namespace OpenGLFun {
 
 			// Calculate camera offset, by applying rotation to the cam offset. Note: mCamRotation.x rotates about the y-axis
 			float xRot = glm::radians(playerCamera->mCamRotation.x);
-			Vec2f camOffsetRotated = Vec2f(playerCamera->mCamOffset.x * cos(xRot) - playerCamera->mCamOffset.y * sin(xRot), playerCamera->mCamOffset.x * sin(xRot) + playerCamera->mCamOffset.y * cos(xRot));
+			Vec2<float> camOffsetRotated = Vec2<float>(playerCamera->mCamOffset.x * cos(xRot) - playerCamera->mCamOffset.y * sin(xRot), playerCamera->mCamOffset.x * sin(xRot) + playerCamera->mCamOffset.y * cos(xRot));
 
 			// camera pos, target pos, up direction
 			Vec3f lookAtLerp = playerCamera->mLookAt;

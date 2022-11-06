@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Component.h"
+#include "Vec2.h"
 
 namespace OpenGLFun {
 	class Sprite : public IComponent {
@@ -8,8 +9,8 @@ namespace OpenGLFun {
 		int _selectedTexture = 0;
 	public:
 		std::string mTextureFilepath;
-		std::array<int, 2> mUVPosition;
-		std::array<int, 2> mUVDimensions;
+		Vec2<int> mUVPosition;
+		Vec2<int> mUVDimensions;
 
 		Sprite();
 		~Sprite() override;
