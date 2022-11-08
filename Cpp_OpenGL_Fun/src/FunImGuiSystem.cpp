@@ -289,16 +289,14 @@ namespace OpenGLFun {
 				ImGui::EndListBox();
 			}
 
-			if (selectedLevel.empty())
-				ImGui::BeginDisabled();
+			ImGui::BeginDisabled(selectedLevel.empty());
 			if (ImGui::Button("Confirm Load")) {
 				LEVEL_MANAGER->mShouldReloadLevel = true;
 				LEVEL_MANAGER->mCurrentLevel = selectedLevel;
 				selectedLevel = ""; // reset selection
 				ImGui::CloseCurrentPopup();
 			}
-			if (selectedLevel.empty())
-				ImGui::EndDisabled();
+			ImGui::EndDisabled();
 
 			ImGui::SameLine();
 			if (ImGui::Button("Cancel")) {
