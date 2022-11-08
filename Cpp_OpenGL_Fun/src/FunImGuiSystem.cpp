@@ -128,7 +128,6 @@ namespace OpenGLFun {
 		}
 
 		if (shouldShowLevelSelect) {
-			std::cout << "Hello pop up should be opening\n";
 			ImGui::OpenPopup("Load Level");
 		}
 	}
@@ -290,12 +289,16 @@ namespace OpenGLFun {
 				ImGui::EndListBox();
 			}
 
+			if (selectedLevel.empty())
+				ImGui::BeginDisabled();
 			if (ImGui::Button("Confirm Load")) {
 				LEVEL_MANAGER->mShouldReloadLevel = true;
 				LEVEL_MANAGER->mCurrentLevel = selectedLevel;
-				selectedLevel = -1;
+				selectedLevel = ""; // reset selection
 				ImGui::CloseCurrentPopup();
 			}
+			if (selectedLevel.empty())
+				ImGui::EndDisabled();
 
 			ImGui::SameLine();
 			if (ImGui::Button("Cancel")) {
