@@ -2,6 +2,8 @@
 #include "FileOps.h"
 
 namespace OpenGLFun {
+	const std::string ENTITY_DIR = "data\\entity";
+
 	EntityFactory::EntityFactory() {}
 	
 	EntityId EntityFactory::DeserializeEntity(std::string const& filename, rapidjson::Value const& jsonObj, bool allowParent) {
@@ -51,18 +53,19 @@ namespace OpenGLFun {
 	}
 
 	EntityId EntityFactory::CreateEntityFromFile(std::string const& filepath) {
-		std::string json_from_file = Serializer::GetFileContents(filepath.c_str());
+		std::string fullpath = ENTITY_DIR + "\\" + filepath;
+		std::string json_from_file = Serializer::GetFileContents(fullpath.c_str());
 
 		rapidjson::Document document;
 		if (document.Parse(json_from_file.c_str()).HasParseError()) {
 			// I put filepath into std::string, so that I can append new strings or char pointers via add operator
-			throw SimpleException(filepath + " has an incorrect JSON format");
+			throw SimpleException(fullpath + " has an incorrect JSON format");
 		}
 
 		// the root must be a JSON object
 		if (!document.IsObject())
-			throw SimpleException(filepath + " must start with a JSON object");
+			throw SimpleException(fullpath + " must start with a JSON object");
 
-		return DeserializeEntity(filepath, document);
+		return DeserializeEntity(fullpath, document);
 	}
 }
