@@ -16,38 +16,17 @@
 #include "ModelComponent.h"
 
 namespace OpenGLFun {
-	void LoadLevelSetup(std::string const& levelId);
+	void LoadLevelJson(std::string const& levelId);
 
 	// these variables are private, only visible inside LevelManager.cpp
-	const std::string LEVEL_DIR = "data\\levels";
-	const std::string ENTITY_SUBDIR = "\\entity";
-	const std::string LEVEL_SETUP_JSON = "setup.json";
+	const std::string LEVEL_DIR = "data\\level";
 	
 	// these variables are extern
 	const std::string LEVEL_PAUSE_ID = "pause_screen";
 
-	LevelManager::LevelManager() : mShouldReloadLevel{false}, mCurrentLevel{}, mLevels{} {}
+	LevelManager::LevelManager() : mShouldReloadLevel{false}, mCurrentLevel{} {}
 
 	LevelManager::~LevelManager() {}
-
-	void LevelManager::Load() {
-		std::cout << "Level Manager Loading" << std::endl;
-		std::cout << "----------------------------------------------------------------------" << std::endl;
-
-		// scan levels, and add level folder names to vector
-		for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR)) {
-			if (!entry.is_directory()) continue;
-
-			mLevels.push_back(entry.path().filename().string());
-
-			std::cout << "Found level " << mLevels.back() << '\n';
-		}
-		std::cout << std::endl;
-	}
-
-	void LevelManager::Unload() {
-		mLevels.clear();
-	}
 
 	void LevelManager::ReloadLevel() {
 		RESOURCE_MANAGER->UnloadTextures();
@@ -64,10 +43,9 @@ namespace OpenGLFun {
 		std::cout << "\nLoading a level, " << levelId << std::endl;
 		std::cout << "----------------------------------------------------------------------" << std::endl;
 
-		if (std::find(mLevels.begin(), mLevels.end(), levelId) == mLevels.end())
-			throw SimpleException(std::string("Could not find level '") + levelId + "'");
+		LoadLevelJson(levelId);
 
-		for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR + "\\" + levelId + ENTITY_SUBDIR)) {
+		/*for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR + "\\" + levelId + ENTITY_SUBDIR)) {
 			if (!Serializer::DoesFilenameEndWith(entry.path().string(), ".json")) continue;
 
 			std::cout << "Discovered:" << entry.path().string() << '\n';
@@ -77,14 +55,14 @@ namespace OpenGLFun {
 			catch (std::exception& e) {
 				throw SimpleException(std::string("Failed to parse ") + entry.path().string() + ", here's the error:\n\t" + e.what() + '\n');
 			}
-		}
+		}*/
 
 		std::cout << std::endl << "Loading Resources" << std::endl;
 		std::cout << "--------------------------" << std::endl;
 
 		// Load textures
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
-			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
+			if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
 				Sprite* sprite = COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite);
 				Texture* tex = RESOURCE_MANAGER->LoadTexture(sprite->mTextureFilepath);
 				if (sprite->mUVDimensions[0] == 0)
@@ -92,7 +70,7 @@ namespace OpenGLFun {
 				if (sprite->mUVDimensions[1] == 0)
 					sprite->mUVDimensions[1] = tex->imgHeight;
 			}
-			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model)) {
+			if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Model)) {
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 				if (!modelComp->mModelFilepath.empty()) {
 					try {
@@ -108,17 +86,11 @@ namespace OpenGLFun {
 			}
 		}
 		std::cout << std::endl;
-
-		LoadLevelSetup(levelId);
-	}
-
-	int LevelManager::MaxLevel() const {
-		return static_cast<int>(mLevels.size());
 	}
 
 	// Load setup for that level, should be called after level data has been loaded
-	void LoadLevelSetup(std::string const& levelId) {
-		std::string filepath = LEVEL_DIR + "\\" + levelId + "\\" + LEVEL_SETUP_JSON;
+	void LoadLevelJson(std::string const& levelId) {
+		std::string filepath = LEVEL_DIR + "\\" + levelId;
 		std::string json_from_file = Serializer::GetFileContents(filepath.c_str());
 
 		rapidjson::Document document;
@@ -147,7 +119,7 @@ namespace OpenGLFun {
 		}
 
 		ENGINE->mPlayerId = ENTITY_FACTORY->DeserializeEntity(filepath, document["camera_entity"].GetObject(), false);
-		if (COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Model)) {
+		if (ENTITY_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Model)) {
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(ENGINE->mPlayerId, ComponentType::Model);
 			if (!modelComp->mModelFilepath.empty()) {
 				try {
@@ -158,8 +130,75 @@ namespace OpenGLFun {
 				}
 			}
 		}
-		if (COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Sprite)) {
+		if (ENTITY_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Sprite)) {
 			RESOURCE_MANAGER->LoadTexture(COMPONENT_MANAGER->GetComponent<Sprite>(ENGINE->mPlayerId, ComponentType::Sprite)->mTextureFilepath);
+		}
+
+		// ==== Load entities ====
+		if (document.HasMember("entities")) {
+			rapidjson::Value& entityArr = document["entities"];
+			if (!entityArr.IsArray() || entityArr.Size() <= 0)
+				throw JsonReadException(filepath, "entities", "JSON array with minimum size 1");
+
+			for (rapidjson::SizeType i = 0; i < entityArr.Size(); i++) {
+				rapidjson::Value& entityJson = entityArr[i];
+
+				// check value type of the array element
+				if (!entityJson.IsObject())
+					throw JsonReadException(filepath, std::string("entities[") + std::to_string(i) + "]", "JSON object");
+
+				// parse filename
+				if (!entityJson.HasMember("filename") || !entityJson["filename"].IsString())
+					throw JsonReadException(filepath, std::string("entities[") + std::to_string(i) + "]", "filename", "string");
+
+				const char* entityFile = entityJson["filename"].GetString();
+				bool hasErrors = false;
+				try {
+					EntityId entityId = ENTITY_FACTORY->CreateEntityFromFile(entityFile);
+
+					// Check that entity has either Transform or Body component, in order to set the entity's position
+					if (!ENTITY_MANAGER->HasComponent(entityId, ComponentType::Transform))
+						throw JsonReadException(filepath, std::string("entities[") + std::to_string(i) + "]", entityFile, "must have either Transform or Body component");
+
+					// can be nullptr, must check later on. BUT, only one of them can be nullptr, cannot be BOTH are nullptr
+					Transform* transformComp = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
+					Vec3f posVector = /*bodyComp != nullptr ? bodyComp->mPosition :*/ transformComp->mPosition;
+
+					// Parse position array
+					if (entityJson.HasMember("position")) {
+						if (!entityJson["position"].IsArray() || entityJson["position"].Size() < 2)
+							throw JsonReadException(filepath, std::string("entities[") + std::to_string(i) + "]", "position", "JSON array of size 2");
+
+						const rapidjson::Value& posArr = entityJson["position"];
+						for (rapidjson::SizeType j = 0; j < 2; j++) {
+							const rapidjson::Value& posValue = posArr[j];
+
+							if (!posValue.IsNumber())
+								throw JsonReadException(filepath, std::string("entities[") + std::to_string(i) + "]", std::string("position[") + std::to_string(j) + "]", "number");
+
+							float value = posValue.GetFloat();
+
+							if (j == 0)
+								posVector.x = value;
+							else
+								posVector.y = value;
+						}
+					}
+				} catch (std::exception& e) {
+					// if there were errors with a malformed JSON entity, entity should not be created, by design with how the loading and all were coded
+					// if there were errors with parsing a component, the entity and component should not be added, by design
+					// if there were errors with loading a behaviour script, the behaviour script should not be added, but the entity will still be created
+					if (!hasErrors) {
+						std::cout << "====== START OF LEVEL MANAGER ERROR ======" << std::endl;
+						hasErrors = true;
+					}
+
+					std::cout << "In level '" << filepath << "', failed to parse entity '" << entityFile << "', here's the error:\n\t" << e.what() << std::endl;
+				}
+
+				if (hasErrors)
+					std::cout << "====== END OF LEVEL MANAGER ERROR ======" << std::endl;
+			}
 		}
 
 		if (document.HasMember("preload_assets")) {

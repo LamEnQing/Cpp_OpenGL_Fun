@@ -1,0 +1,23 @@
+{
+	"should_mouse_lock": true,
+	"camera_entity": {
+		"components": {
+			"Camera": {
+				"eye_height": 1.375,
+				"xz_offset": [-2, 0],
+				"look_at": [1, 0, 0],
+				"up_direction": [0, 1, 0]
+			},
+			"Transform": {
+				"position": [-3, 0, 0]
+			},
+			"Model": {
+				"model_type": "3d",
+				"model": "player.json"
+			},
+			"Sprite": {
+				"texture": "batman.png"
+			}
+		}
+	}
+}

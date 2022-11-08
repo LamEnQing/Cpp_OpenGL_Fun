@@ -45,10 +45,8 @@ namespace OpenGLFun {
 		_systems.push_back(std::unique_ptr<ISystem>(new GraphicSystem()));
 		_systems.push_back(std::unique_ptr<ISystem>(new FunImGuiSystem()));
 
-		LEVEL_MANAGER->Unload();
 		mConfig.ReloadConfig(); // To load models
 
-		LEVEL_MANAGER->Load();
 		LEVEL_MANAGER->LoadLevel(LEVEL_MANAGER->mCurrentLevel);
 		if (mShouldMouseBeLocked)
 			INPUT_SYSTEM->LockMouse();
@@ -94,7 +92,5 @@ namespace OpenGLFun {
 				frameCount = 0;
 			}
 		}
-
-		LEVEL_MANAGER.get()->Unload();
 	}
 }
