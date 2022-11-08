@@ -19,5 +19,22 @@
 				"texture": "batman.png"
 			}
 		}
-	}
+	},
+	"entities": [
+		{
+			"filename": "axis.json"
+		},
+		{
+			"filename": "cube.json"
+		},
+		{
+			"filename": "doorway.json"
+		},
+		{
+			"filename": "logos.json"
+		},
+		{
+			"filename": "player.json"
+		}
+	]
 }
