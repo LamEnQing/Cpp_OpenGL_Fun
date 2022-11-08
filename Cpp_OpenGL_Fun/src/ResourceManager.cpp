@@ -1,5 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
+#include "Configuration.h"
+#include "Engine.h"
 #include "ResourceManager.h"
 #include "Shape.h"
 #include "GraphicSystem.h"
@@ -43,7 +45,7 @@ namespace OpenGLFun {
 		std::string assetFile = jsonObj["filename"].GetString();
 
 		if (assetType == "texture") {
-			LoadTexture(assetFile);
+			ENGINE->mConfig.mPreloadTextures.push_back(assetFile);
 		}
 		else if (assetType == "sound") {
 

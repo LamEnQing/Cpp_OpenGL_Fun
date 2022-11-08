@@ -6,5 +6,23 @@
 	"default_model": {
 		"model_type": "2d",
 		"model": "square_2d.json"
-	}
+	},
+	"preload_assets": [
+		{
+			"type": "texture",
+			"filename": "icons\\back_button.png"
+		},
+		{
+			"type": "texture",
+			"filename": "icons\\folder.png"
+		},
+		{
+			"type": "texture",
+			"filename": "icons\\file.png"
+		},
+		{
+			"type": "texture",
+			"filename": "no_texture.png"
+		}
+	]
 }

@@ -31,6 +31,21 @@ namespace OpenGLFun {
 			throw JsonReadException(configFilepath, "level_on_startup", "string");
 		LEVEL_MANAGER->mCurrentLevel = document["level_on_startup"].GetString();
 
+		if (document.HasMember("preload_assets")) {
+			rapidjson::Value& preloadAssJson = document["preload_assets"];
+			if (preloadAssJson.IsObject()) {
+				RESOURCE_MANAGER->PreloadAsset(configFilepath, "preload_assets", preloadAssJson.GetObject());
+			}
+			else if (preloadAssJson.IsArray()) {
+				for (rapidjson::SizeType i = 0; i < preloadAssJson.Size(); i++) {
+					RESOURCE_MANAGER->PreloadAsset(configFilepath, std::string("preload_assets[") + std::to_string(i) + "]", preloadAssJson[i].GetObject());
+				}
+			}
+			else {
+				throw JsonReadException(configFilepath, "preload_assets", "JSON object or array");
+			}
+		}
+
 		if (!document.HasMember("default_model") || !document["default_model"].IsObject())
 			throw JsonReadException(configFilepath, "default_model", "JSON object");
 		const rapidjson::Value& modelObj = document["default_model"];
@@ -45,6 +60,8 @@ namespace OpenGLFun {
 	}
 
 	void Configuration::ReloadConfig() {
+		mPreloadTextures.clear();
+
 		std::string configFilepath = ".\\data\\config.json";
 		rapidjson::Document document;
 		if (document.Parse(Serializer::GetFileContents(configFilepath.c_str()).c_str()).HasParseError()) {
@@ -68,6 +85,21 @@ namespace OpenGLFun {
 
 		if (_defaultModelType == ModelType::TwoD)
 			RESOURCE_MANAGER->Load2DModel(_defaultModelFilepath);
+
+		if (document.HasMember("preload_assets")) {
+			rapidjson::Value& preloadAssJson = document["preload_assets"];
+			if (preloadAssJson.IsObject()) {
+				RESOURCE_MANAGER->PreloadAsset(configFilepath, "preload_assets", preloadAssJson.GetObject());
+			}
+			else if (preloadAssJson.IsArray()) {
+				for (rapidjson::SizeType i = 0; i < preloadAssJson.Size(); i++) {
+					RESOURCE_MANAGER->PreloadAsset(configFilepath, std::string("preload_assets[") + std::to_string(i) + "]", preloadAssJson[i].GetObject());
+				}
+			}
+			else {
+				throw JsonReadException(configFilepath, "preload_assets", "JSON object or array");
+			}
+		}
 	}
 
 	const int& Configuration::GetWindowWidth() const {

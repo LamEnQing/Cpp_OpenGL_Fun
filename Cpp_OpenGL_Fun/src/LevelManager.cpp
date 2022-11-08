@@ -40,22 +40,16 @@ namespace OpenGLFun {
 	}
 
 	void LevelManager::LoadLevel(std::string const& levelId) {
-		std::cout << "\nLoading a level, " << levelId << std::endl;
+		std::cout << std::endl << "Loading a level, " << levelId << std::endl;
 		std::cout << "----------------------------------------------------------------------" << std::endl;
 
+		std::cout << std::endl << "Preloading textures" << std::endl;
+		std::cout << "----------------------------------------------------------------------" << std::endl;
+		for (const std::string& textureFile : ENGINE->mConfig.mPreloadTextures) {
+			RESOURCE_MANAGER->LoadTexture(textureFile);
+		}
+
 		LoadLevelJson(levelId);
-
-		/*for (const auto& entry : std::filesystem::directory_iterator(LEVEL_DIR + "\\" + levelId + ENTITY_SUBDIR)) {
-			if (!Serializer::DoesFilenameEndWith(entry.path().string(), ".json")) continue;
-
-			std::cout << "Discovered:" << entry.path().string() << '\n';
-			try {
-				ENTITY_FACTORY.get()->CreateEntityFromFile(entry.path().string());
-			}
-			catch (std::exception& e) {
-				throw SimpleException(std::string("Failed to parse ") + entry.path().string() + ", here's the error:\n\t" + e.what() + '\n');
-			}
-		}*/
 
 		std::cout << std::endl << "Loading Resources" << std::endl;
 		std::cout << "--------------------------" << std::endl;
@@ -198,21 +192,6 @@ namespace OpenGLFun {
 
 				if (hasErrors)
 					std::cout << "====== END OF LEVEL MANAGER ERROR ======" << std::endl;
-			}
-		}
-
-		if (document.HasMember("preload_assets")) {
-			rapidjson::Value& preloadAssJson = document["preload_assets"];
-			if (preloadAssJson.IsObject()) {
-				RESOURCE_MANAGER->PreloadAsset(filepath, "preload_assets", preloadAssJson.GetObject());
-			}
-			else if (preloadAssJson.IsArray()) {
-				for (rapidjson::SizeType i = 0; i < preloadAssJson.Size(); i++) {
-					RESOURCE_MANAGER->PreloadAsset(filepath, std::string("preload_assets[") + std::to_string(i) + "]", preloadAssJson[i].GetObject());
-				}
-			}
-			else {
-				throw JsonReadException(filepath, "preload_assets", "JSON object or array");
 			}
 		}
 	}

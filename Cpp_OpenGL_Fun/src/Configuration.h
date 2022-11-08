@@ -6,6 +6,8 @@ namespace OpenGLFun {
 	// No need create pointer or instance of the class, just declare it as Configuration config; or smth like that, to allocate memory on the stack
 	class Configuration {
 	public:
+		std::vector<std::string> mPreloadTextures;
+
 		// Loads the configuration JSON file
 		void LoadConfig();
 		void ReloadConfig();
