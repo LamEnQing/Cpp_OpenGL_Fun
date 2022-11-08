@@ -3,10 +3,12 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
+//#include <filesystem>
 
 #include "pch.h"
 #include "ContentBrowserImgui.h"
 #include "Engine.h"
+#include "FileOps.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
 #include "LevelManager.h"
@@ -18,7 +20,7 @@ namespace OpenGLFun {
 	FunImGuiSystem* FUN_IMGUI_SYSTEM = nullptr;
 	int selectedEntity = -1;
 	int selectedAddComponent = 0;
-	int selectedLevel = -1;
+	std::string selectedLevel{ "" };
 
 	IComponent* deleteComp = nullptr; // the component to be deleted
 
@@ -63,7 +65,7 @@ namespace OpenGLFun {
 	void FunImGuiSystem::Reset() {
 		selectedEntity = -1;
 		selectedAddComponent = 0;
-		selectedLevel = -1;
+		selectedLevel = "";
 	}
 
 	void FunImGuiSystem::Update(float const& /*deltaTime*/) {
@@ -273,11 +275,16 @@ namespace OpenGLFun {
 			ImGui::Text("Select the level to load");
 
 			if (ImGui::BeginListBox("##Level List", { -FLT_MIN, 4 * ImGui::GetTextLineHeightWithSpacing() })) {
-				for (int i = 0; i < LEVEL_MANAGER->mLevels.size(); i++) {
-					if (ImGui::Selectable(LEVEL_MANAGER->mLevels[i].c_str(), selectedLevel == i))
-						selectedLevel = i;
+				for (auto const& entry : std::filesystem::directory_iterator(LEVEL_DIR)) {
+					std::string entryName = entry.path().filename().string();
 
-					if (selectedLevel == i)
+					// don't display if entry is a directory, or if it's a file, it's name does not end with .json
+					if (entry.is_directory() || !Serializer::DoesFilenameEndWith(entryName, ".json")) continue;
+
+					if (ImGui::Selectable(entryName.c_str(), entryName == selectedLevel))
+						selectedLevel = entryName;
+
+					if (entryName == selectedLevel)
 						ImGui::SetItemDefaultFocus();
 				}
 				ImGui::EndListBox();
@@ -285,7 +292,7 @@ namespace OpenGLFun {
 
 			if (ImGui::Button("Confirm Load")) {
 				LEVEL_MANAGER->mShouldReloadLevel = true;
-				LEVEL_MANAGER->mCurrentLevel = LEVEL_MANAGER->mLevels[selectedLevel];
+				LEVEL_MANAGER->mCurrentLevel = selectedLevel;
 				selectedLevel = -1;
 				ImGui::CloseCurrentPopup();
 			}

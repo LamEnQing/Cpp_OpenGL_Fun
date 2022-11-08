@@ -47,9 +47,13 @@ namespace OpenGLFun {
 					if (!dir_entry.is_directory()) continue;
 					std::string name = dir_entry.path().filename().string();
 
-					if (ImGui::Selectable((std::string("##") + name).c_str())) {
-						_currentPath = dir_entry.path();
-						_selectedFilename = "";
+					ImGui::Selectable((std::string("##") + name).c_str());
+					if (ImGui::IsItemHovered()) {
+						ImGui::SetTooltip("Double click me to enter!");
+						if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+							_currentPath = dir_entry.path();
+							_selectedFilename = "";
+						}
 					}
 					ImGui::SameLine();
 					ImGui::SetCursorPosX(iconPos);
