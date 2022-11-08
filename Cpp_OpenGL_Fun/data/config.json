@@ -2,7 +2,7 @@
 	"window_width": 1280,
 	"window_height": 720,
 	"window_title": "OpenGL Fun",
-	"level_on_startup": "two_d",
+	"level_on_startup": "two_d.json",
 	"default_model": {
 		"model_type": "2d",
 		"model": "square_2d.json"
