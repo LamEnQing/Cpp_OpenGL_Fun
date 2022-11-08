@@ -84,7 +84,7 @@ namespace OpenGLFun {
 			#endif
 		}
 
-		if (ENGINE->mIsPaused || ENGINE->mPlayerId == -1 || !COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera) || !COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Transform)) return;
+		if (ENGINE->mIsPaused || ENGINE->mPlayerId == -1 || !ENTITY_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera) || !ENTITY_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Transform)) return;
 
 		Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(ENGINE->mPlayerId, ComponentType::Camera);
 		Transform* playerTransform = COMPONENT_MANAGER->GetComponent<Transform>(ENGINE->mPlayerId, ComponentType::Transform);
@@ -173,7 +173,7 @@ namespace OpenGLFun {
 
 		if (ENGINE->mIsPaused) return;
 
-		if (ENGINE->mPlayerId != -1 && COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
+		if (ENGINE->mPlayerId != -1 && ENTITY_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
 			//printf("Mouse Input: %.2f, %.2f\n", xPosIn, yPosIn);
 			//printf("Mouse Old: %.2f, %.2f\n", INPUT_SYSTEM->mMousePosOld.x, INPUT_SYSTEM->mMousePosOld.y);
 

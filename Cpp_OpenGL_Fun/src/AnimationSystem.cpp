@@ -17,7 +17,7 @@ namespace OpenGLFun {
 		if((FUN_IMGUI_SYSTEM->mShowEditor && ENGINE->mIsPaused) || ENGINE->mIsPaused) return;
 
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
-			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
+			if (!ENTITY_MANAGER->HasComponent(entityId, ComponentType::Transform) || !ENTITY_MANAGER->HasComponent(entityId, ComponentType::Model))
 				continue;
 
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
@@ -39,7 +39,7 @@ namespace OpenGLFun {
 					mesh->SetRotation(rotation);
 				}
 
-				if (entityId == ENGINE->mPlayerId && meshName == "head" && COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Camera)) {
+				if (entityId == ENGINE->mPlayerId && meshName == "head" && ENTITY_MANAGER->HasComponent(entityId, ComponentType::Camera)) {
 					//std::cout << "Rotating head" << std::endl;
 					Camera* camera = COMPONENT_MANAGER->GetComponent<Camera>(entityId, ComponentType::Camera);
 

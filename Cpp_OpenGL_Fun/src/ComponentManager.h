@@ -22,8 +22,6 @@ namespace OpenGLFun {
 		std::vector<IComponent*>& GetEntityComponents(EntityId const&);
 		template<typename T>
 		T* GetComponent(EntityId const&, ComponentType const&);
-
-		bool HasComponent(EntityId const&, ComponentType const&);
 	private:
 		std::map<EntityId, std::vector<IComponent*>> _mapEntityComponents;
 	};
@@ -31,7 +29,7 @@ namespace OpenGLFun {
 
 	template<typename T>
 	T* ComponentManager::GetComponent(EntityId const& entityId, ComponentType const& componentType) {
-		if (!HasComponent(entityId, componentType))
+		if (!ENTITY_MANAGER->HasComponent(entityId, componentType))
 			return nullptr;
 
 		for (IComponent* comp : _mapEntityComponents.at(entityId))

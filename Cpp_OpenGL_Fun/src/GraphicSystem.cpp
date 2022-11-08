@@ -99,7 +99,7 @@ namespace OpenGLFun {
 		glm::mat4 model;
 		Vec4f tintColor(1.0f);
 		// 3D Drawing
-		if (ENGINE->mPlayerId != -1 && COMPONENT_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
+		if (ENGINE->mPlayerId != -1 && ENTITY_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
 			glEnable(GL_DEPTH_TEST);
 
 			Camera* playerCamera = COMPONENT_MANAGER->GetComponent<Camera>(ENGINE->mPlayerId, ComponentType::Camera);
@@ -121,7 +121,7 @@ namespace OpenGLFun {
 			proj = glm::perspective(glm::radians(45.0f), static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / WINDOW_SYSTEM->GetWindowHeight(), 0.1f, 50.0f);
 
 			for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
-				if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
+				if (!ENTITY_MANAGER->HasComponent(entityId, ComponentType::Transform) || !ENTITY_MANAGER->HasComponent(entityId, ComponentType::Model))
 					continue;
 
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
@@ -131,9 +131,9 @@ namespace OpenGLFun {
 				Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
 				Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
-				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
+				if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Sprite))
 					texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
-				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
+				if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Color))
 					tintColor = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
 				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
 				model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
@@ -150,7 +150,7 @@ namespace OpenGLFun {
 		glm::vec3 sample_vec3;
 		_2DShaderProgram.use();
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
-			if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model))
+			if (!ENTITY_MANAGER->HasComponent(entityId, ComponentType::Transform) || !ENTITY_MANAGER->HasComponent(entityId, ComponentType::Model))
 				continue;
 
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
@@ -160,14 +160,14 @@ namespace OpenGLFun {
 			Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
 			Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
-			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
+			if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Sprite))
 				texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
 			tintColor = {1.0f, 1.0f, 1.0f, 1.0f};
-			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
+			if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Color))
 				tintColor = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
 
 			Vec2f uvDimensions = { 1.0f, 1.0f }, uvOffsetPos = { 0.0f, 0.0f };
-			if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
+			if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
 				Sprite* spriteComp = COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite);
 				uvDimensions = { static_cast<float>(spriteComp->mUVDimensions[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVDimensions[1]) / texture->imgHeight };
 				uvOffsetPos = { static_cast<float>(spriteComp->mUVPosition[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVPosition[1]) / texture->imgHeight };
@@ -203,11 +203,11 @@ namespace OpenGLFun {
 			_2DShaderProgram.use();
 
 			/*for (EntityId const& entityId : LEVEL_MANAGER->mPauseScreenObjs) {
-				if (!COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Transform) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Model) || !COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Color))
+				if (!ENTITY_MANAGER->HasComponent(entityId, ComponentType::Transform) || !ENTITY_MANAGER->HasComponent(entityId, ComponentType::Model) || !ENTITY_MANAGER->HasComponent(entityId, ComponentType::Color))
 					continue;
 
 				Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
-				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite))
+				if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Sprite))
 					texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
 
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
@@ -226,7 +226,7 @@ namespace OpenGLFun {
 				model = glm::scale(model, sample_vec3);
 
 				Vec2f uvDimensions = { 1.0f, 1.0f }, uvOffsetPos = { 0.0f, 0.0f };
-				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
+				if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
 					Sprite* spriteComp = COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite);
 					if (spriteComp->mUVDimensions[0] != 0)
 						uvDimensions = { static_cast<float>(spriteComp->mUVDimensions[0]) / texture->imgWidth, static_cast<float>(spriteComp->mUVDimensions[1]) / texture->imgHeight };
@@ -242,7 +242,7 @@ namespace OpenGLFun {
 					std::cout << "Mouse Pos:" << mousePosX << ' ' << mousePosY << '\n';
 				}
 
-				if (COMPONENT_MANAGER->HasComponent(entityId, ComponentType::Button)) {
+				if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Button)) {
 					float buttonPosX = entityTransform->mPosition.x;
 					float buttonPosY = entityTransform->mPosition.y;
 					float buttonWidth = entityTransform->mScale.x / 2.0f;

@@ -46,7 +46,7 @@ namespace OpenGLFun {
 			_mapEntityComponents.insert({ component->mOwner, { component } });
 		}
 		else {
-			if (HasComponent(component->mOwner, component->mCompType))
+			if (ENTITY_MANAGER->HasComponent(component->mOwner, component->mCompType))
 				throw SimpleException(std::string("Component type ") + std::to_string(static_cast<int>(component->mCompType)) + " added to Entity " + std::to_string(component->mOwner) +  " already");
 			_mapEntityComponents.at(component->mOwner).push_back(component);
 		}
@@ -75,18 +75,6 @@ namespace OpenGLFun {
 
 		for (IComponent* comp : _mapEntityComponents.at(entityId))
 			RemoveComponent(comp);
-	}
-
-	bool ComponentManager::HasComponent(EntityId const& entityId, ComponentType const& compType) {
-		if (_mapEntityComponents.find(entityId) == _mapEntityComponents.end())
-			return false;
-
-		for (IComponent* comp : _mapEntityComponents.at(entityId)) {
-			if (comp->mCompType == compType)
-				return true;
-		}
-
-		return false;
 	}
 
 	std::vector<IComponent*>& ComponentManager::GetEntityComponents(EntityId const& entityId) {
