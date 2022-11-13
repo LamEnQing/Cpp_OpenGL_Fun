@@ -177,6 +177,7 @@ namespace OpenGLFun {
 		static std::map<ComponentType, const char*> componentTypeNames{
 			{ ComponentType::Button, "Button" },
 			//{ ComponentType::Camera, "Camera" },
+			{ ComponentType::Behaviour, "Behaviour" },
 			{ ComponentType::Color, "Color" },
 			{ ComponentType::Model, "Model" },
 			{ ComponentType::Sprite, "Sprite" },

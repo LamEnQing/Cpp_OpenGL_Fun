@@ -11,6 +11,7 @@ namespace OpenGLFun {
 		Camera,
 
 		Button,
+		Behaviour,
 		Color,
 		Model,
 		Sprite,

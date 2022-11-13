@@ -49,6 +49,9 @@
     <Filter Include="utils">
       <UniqueIdentifier>{f909df77-ba12-4d14-ad3f-70665daf3b00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system\logic">
+      <UniqueIdentifier>{3e516087-3317-4576-b64c-a21139be3aee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
@@ -179,6 +182,15 @@
     <ClCompile Include="src\vendors\imgui\imgui_stdlib.cpp">
       <Filter>vendors\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\LogicSystem.cpp">
+      <Filter>system\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Behaviour.cpp">
+      <Filter>component\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Component.h">
@@ -306,6 +318,15 @@
       <Filter>system\imgui</Filter>
     </ClInclude>
     <ClInclude Include="src\FileOps.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LogicSystem.h">
+      <Filter>system\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviour.h">
+      <Filter>component\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StringUtils.h">
       <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
