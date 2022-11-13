@@ -16,8 +16,8 @@ namespace OpenGLFun {
 		virtual void Update(float const&) override;
 
 		void SetViewport(int posX, int posY, int width, int height);
-		void CreateGLTexture(Texture* texture);
-		void DeleteGLTexture(unsigned int& texture);
+		Texture* CreateGLTexture(std::string const& filepath);
+		void DeleteGLTexture(Texture* texture);
 	private:
 		ShaderProgram _3DShaderProgram;
 		ShaderProgram _2DShaderProgram;

@@ -1,5 +1,3 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
 #include "Configuration.h"
 #include "Engine.h"
 #include "FileOps.h"
@@ -20,8 +18,6 @@ namespace OpenGLFun {
 		RESOURCE_MANAGER = this;
 
 		SHAPE_MANAGER = new ShapeManager();
-
-		stbi_set_flip_vertically_on_load(1);
 	}
 	ResourceManager::~ResourceManager() {
 		delete SHAPE_MANAGER;
@@ -64,19 +60,9 @@ namespace OpenGLFun {
 			return mTexturesDataMap.at(textureFilepath).get();
 		}
 
-		Texture* texture = new Texture();
-		texture->imgData = stbi_load((texturesDirPath + textureFilepath).c_str(), &texture->imgWidth, &texture->imgHeight, &texture->imgChannels, 0);
-
-		if (!texture->imgData) {
-			delete texture;
-			throw SimpleException(std::string("Failed to load texture ") + texturesDirPath + textureFilepath);
-		}
-
-		std::cout << "Loading texture " << textureFilepath << '\n';
+		Texture* texture = GRAPHICS_SYSTEM->CreateGLTexture(texturesDirPath + textureFilepath);
 
 		mTexturesDataMap.insert({ textureFilepath, std::shared_ptr<Texture>(texture) });
-
-		GRAPHICS_SYSTEM->CreateGLTexture(texture);
 
 		// texture variable will be out of scope, so instead we return the texture from the map
 		return mTexturesDataMap.at(textureFilepath).get();
@@ -92,8 +78,7 @@ namespace OpenGLFun {
 
 	void ResourceManager::UnloadTextures() {
 		for (auto textureIt = mTexturesDataMap.rbegin(); textureIt != mTexturesDataMap.rend(); textureIt++) {
-			delete textureIt->second->imgData; // need to remove this img data
-			GRAPHICS_SYSTEM->DeleteGLTexture(textureIt->second->mGLTextureId);
+			GRAPHICS_SYSTEM->DeleteGLTexture(textureIt->second.get());
 		}
 		mTexturesDataMap.clear();
 	}

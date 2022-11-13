@@ -1,3 +1,6 @@
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+
 #include "pch.h"
 
 #include "ComponentManager.h"
@@ -24,6 +27,8 @@ namespace OpenGLFun {
 			throw SimpleException("Graphics system already created!");
 
 		GRAPHICS_SYSTEM = this;
+
+		stbi_set_flip_vertically_on_load(1);
 
 		Shader vertexShader{}, fragmentShader{};
 		if (!vertexShader.Compile(ShaderType::Vertex, "assets/shaders/3d.vert")) {
@@ -272,7 +277,17 @@ namespace OpenGLFun {
 		_viewportHeight = height;
 	}
 
-	void GraphicSystem::CreateGLTexture(Texture* texture) {
+	Texture* GraphicSystem::CreateGLTexture(std::string const& filepath) {
+		Texture* texture = new Texture();
+		texture->imgData = stbi_load((filepath).c_str(), &texture->imgWidth, &texture->imgHeight, &texture->imgChannels, 0);
+
+		if (!texture->imgData) {
+			delete texture;
+			throw SimpleException(std::string("Failed to load texture ") + filepath);
+		}
+
+		std::cout << "Loading texture " << filepath << '\n';
+
 		unsigned int texId;
 
 		glGenTextures(1, &texId); // create an id for the texture
@@ -289,9 +304,12 @@ namespace OpenGLFun {
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		texture->mGLTextureId = texId;
+
+		return texture;
 	}
 
-	void GraphicSystem::DeleteGLTexture(unsigned int& textureId) {
-		glDeleteTextures(1, &textureId);
+	void GraphicSystem::DeleteGLTexture(Texture* texture) {
+		glDeleteTextures(1, &texture->mGLTextureId);
+		delete texture->imgData; // need to remove this img data
 	}
 }
