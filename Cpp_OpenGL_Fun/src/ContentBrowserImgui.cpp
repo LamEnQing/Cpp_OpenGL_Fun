@@ -3,27 +3,37 @@
 #include <imgui/imgui.h>
 #include <iostream>
 
+#include "GraphicSystem.h"
 #include "ResourceManager.h"
+#include "StringUtils.h"
 #include "TextureUtils.h"
-
-#include <Windows.h>
-#include <shellapi.h>
 
 namespace OpenGLFun {
 
 	static const std::filesystem::path ASSETS_PATH = "assets";
 
-	ContentBrowserImgui::ContentBrowserImgui() : _currPath(ASSETS_PATH) {}
+	ContentBrowserImgui::ContentBrowserImgui() : _currPath(ASSETS_PATH), _shouldCreatePreviewIcons{ true } {}
 
-	ContentBrowserImgui::~ContentBrowserImgui() {}
+	ContentBrowserImgui::~ContentBrowserImgui() {
+		for (auto& pair : previewIconTextures) {
+			GRAPHICS_SYSTEM->DeleteGLTexture(pair.second.get());
+		}
+		previewIconTextures.clear();
+	}
 
 	void ContentBrowserImgui::Draw() {
+		static std::set<std::string> imageExtensions = {
+			".jpg", ".png"
+		};
+
 		ImGui::Begin("Content Browser");
 
 		if (_currPath != ASSETS_PATH)
 		{
 			if (ImGui::ImageButton(TextureUtils::GetImGuiTexId("icons\\back_button.png"), {15, 15}, {0, 1}, {1, 0})) {
 				_currPath = _currPath.parent_path();
+
+				_shouldCreatePreviewIcons = true;
 			}
 			ImGui::SameLine();
 		}
@@ -60,19 +70,50 @@ namespace OpenGLFun {
 				ImGui::EndGroup();
 				if (ImGui::IsItemHovered()) {
 					ImGui::SetTooltip(folderName.c_str());
-					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 						_currPath = dir_entry.path();
+
+						_shouldCreatePreviewIcons = true;
+					}
 				}
 			}
+
 			for (auto const& dir_entry : std::filesystem::directory_iterator(_currPath)) {
 				if (dir_entry.is_directory()) continue;
 				ImGui::TableNextColumn();
 
+				std::string fileExt = StringUtils::ToLower(dir_entry.path().extension().string());
 				std::string filename = dir_entry.path().filename().string();
+
+				if (_shouldCreatePreviewIcons && imageExtensions.find(fileExt) != imageExtensions.end() && previewIconTextures.find(filename) == previewIconTextures.end()) {
+					Texture* texture = GRAPHICS_SYSTEM->CreateGLTexture(_currPath.string() + "\\" + filename);
+
+					previewIconTextures.insert({ filename, std::unique_ptr<Texture>(texture) });
+				}
+
+				ImTextureID buttonTexId = TextureUtils::GetImGuiTexId("icons\\file.png");
+				ImVec2 imgBtnSize = { thumbnailSize, thumbnailSize };
+
+				if (previewIconTextures.find(filename) != previewIconTextures.end()) {
+					Texture* tex = previewIconTextures.at(filename).get();
+					buttonTexId = TextureUtils::GetImGuiTexId(tex->mGLTextureId);
+
+					// og_w/og_h = resize_w/resize_h. So you want to get a resize dimension
+					float imgRes = tex->imgWidth / static_cast<float>(tex->imgHeight);
+					if (tex->imgWidth > tex->imgHeight) {
+						imgBtnSize.y = thumbnailSize / imgRes;
+					}
+					else if (tex->imgHeight > tex->imgWidth) {
+						imgBtnSize.x = thumbnailSize * imgRes;
+					}
+				}
 
 				ImGui::BeginGroup();
 				ImGui::PushID(filename.c_str());
-				ImGui::ImageButton(TextureUtils::GetImGuiTexId("icons\\file.png"), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				//ImGui::SetCursorPosY(thumbnailSize - imgBtnSize.y + thumbnailSize/2.0f);
+				//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { thumbnailSize-imgBtnSize.x, thumbnailSize-imgBtnSize.y });
+				ImGui::ImageButton(buttonTexId, imgBtnSize, { 0, 1 }, { 1, 0 });
+				//ImGui::PopStyleVar();
 				//ImGui::Render6
 				ImGui::Text(filename.c_str());
 				ImGui::PopID();
@@ -82,12 +123,16 @@ namespace OpenGLFun {
 					ImGui::SetTooltip(filename.c_str());
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 						std::string absPath = std::filesystem::absolute(dir_entry.path()).string();
-						LPCWSTR sw = std::wstring(absPath.begin(), absPath.end()).c_str();
+						/*LPCWSTR sw = std::wstring(absPath.begin(), absPath.end()).c_str();
 						HINSTANCE status = ShellExecute(0, 0, sw, 0, 0, SW_SHOW); // from: https://stackoverflow.com/questions/9115574/how-can-you-open-a-file-with-the-program-associated-with-its-file-extension
-						std::cout << "ShellExecute stats:" << status << std::endl;
+						std::cout << "ShellExecute stats:" << status << std::endl;*/
 					}
 				}
 			}
+
+			if (_shouldCreatePreviewIcons)
+				_shouldCreatePreviewIcons = false;
+
 			ImGui::EndTable();
 		}
 		ImGui::PopStyleVar();
