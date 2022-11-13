@@ -3,16 +3,15 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-//#include <filesystem>
 
 #include "pch.h"
 #include "ContentBrowserImgui.h"
 #include "Engine.h"
-#include "FileOps.h"
 #include "GraphicSystem.h"
 #include "InputSystem.h"
 #include "LevelManager.h"
 #include "ResourceManager.h"
+#include "StringUtils.h"
 #include "TextureUtils.h"
 #include "WindowSystem.h"
 
@@ -278,7 +277,7 @@ namespace OpenGLFun {
 					std::string entryName = entry.path().filename().string();
 
 					// don't display if entry is a directory, or if it's a file, it's name does not end with .json
-					if (entry.is_directory() || !Serializer::DoesFilenameEndWith(entryName, ".json")) continue;
+					if (entry.is_directory() || !StringUtils::DoesStringEndWith(StringUtils::ToLower(entryName), ".json")) continue;
 
 					if (ImGui::Selectable(entryName.c_str(), entryName == selectedLevel))
 						selectedLevel = entryName;

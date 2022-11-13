@@ -123,6 +123,7 @@
     <ClCompile Include="src\ShaderProgram.cpp" />
     <ClCompile Include="src\Shape.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
+    <ClCompile Include="src\StringUtils.cpp" />
     <ClCompile Include="src\TextureUtils.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Vec2f.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="src\ShaderProgram.h" />
     <ClInclude Include="src\Shape.h" />
     <ClInclude Include="src\BasicShape.h" />
+    <ClInclude Include="src\StringUtils.h" />
     <ClInclude Include="src\TextureUtils.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Sprite.h" />

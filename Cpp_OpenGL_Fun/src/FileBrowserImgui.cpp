@@ -2,8 +2,9 @@
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
-#include "FileOps.h"
+
 #include "ResourceManager.h"
+#include "StringUtils.h"
 #include "TextureUtils.h"
 
 namespace OpenGLFun {
@@ -68,7 +69,7 @@ namespace OpenGLFun {
 
 					bool shouldDisplay = false;
 					for (std::string const& fileExt : _fileExtensions)
-						if (Serializer::DoesFilenameEndWith(name, fileExt)) {
+						if (StringUtils::DoesStringEndWith(StringUtils::ToLower(name), fileExt)) {
 							shouldDisplay = true;
 						}
 					if (!shouldDisplay) continue;

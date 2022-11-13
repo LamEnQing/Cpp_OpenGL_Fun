@@ -1,5 +1,7 @@
 #include "ModelComponent.h"
+
 #include "Engine.h"
+#include "StringUtils.h"
 
 namespace OpenGLFun {
 	ModelComponent::ModelComponent() : IComponent(), mModelType(ENGINE->mConfig.GetDefaultModelType()), mModelFilepath(ENGINE->mConfig.GetDefaultModelFilepath()), mEnableBlend{ false }, mShouldCull{ false }  {
@@ -12,9 +14,7 @@ namespace OpenGLFun {
 
 	// Throws an exception if string is not either '2d' or '3d'. You MUST catch the exception and throw your own error message exception
 	ModelType ModelComponent::ParseModelTypeString(std::string typeStr) {
-		for (char& c : typeStr) {
-			c = static_cast<char>(std::tolower(c));
-		}
+		typeStr = StringUtils::ToLower(typeStr);
 
 		if (!(typeStr == "2d" || typeStr == "3d"))
 			throw std::exception();

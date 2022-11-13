@@ -1,5 +1,5 @@
 #include "Mesh.h"
-#include "FileOps.h"
+#include "StringUtils.h"
 
 namespace OpenGLFun {
 	static std::unordered_map<std::string, int> DRAW_MODES = {
@@ -259,7 +259,7 @@ namespace OpenGLFun {
 		std::stringstream ss;
 
 		while (!std::getline(fs, line).eof()) {
-			if (Serializer::DoesFilenameStartWith(line, "v ")) {
+			if (StringUtils::DoesStringStartWith(line, "v ")) {
 				ss.clear(); // must clear stream, so as to not "corrupt" the reading
 				ss << line;
 
@@ -269,7 +269,7 @@ namespace OpenGLFun {
 				vertexCoordinates.push_back(Vec3f(x, y, z));
 			}
 
-			if (Serializer::DoesFilenameStartWith(line, "vt ")) {
+			if (StringUtils::DoesStringStartWith(line, "vt ")) {
 				ss.clear();
 				ss << line; // line would be "vt u v"
 
@@ -279,7 +279,7 @@ namespace OpenGLFun {
 				textureCoordinates.push_back(Vec2f(u, v));
 			}
 
-			if (Serializer::DoesFilenameStartWith(line, "f ")) { // read a face, which should be a trianglular face, hence 3 vertices only
+			if (StringUtils::DoesStringStartWith(line, "f ")) { // read a face, which should be a trianglular face, hence 3 vertices only
 				ss.clear();
 				ss << line; // line would be "f vIdx/vtexIdx/vNormIdx"
 

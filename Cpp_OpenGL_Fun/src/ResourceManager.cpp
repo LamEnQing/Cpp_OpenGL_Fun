@@ -2,10 +2,11 @@
 #include <stb/stb_image.h>
 #include "Configuration.h"
 #include "Engine.h"
+#include "FileOps.h"
+#include "GraphicSystem.h"
 #include "ResourceManager.h"
 #include "Shape.h"
-#include "GraphicSystem.h"
-#include "FileOps.h"
+#include "StringUtils.h"
 
 namespace OpenGLFun {
 	ShapeManager* SHAPE_MANAGER = nullptr;
@@ -100,11 +101,11 @@ namespace OpenGLFun {
 	Mesh* ResourceManager::LoadMesh(std::string meshFilepath) {
 		std::string meshDirPath = std::string("assets/models/meshes/");
 
-		if (!(Serializer::DoesFilenameEndWith(meshFilepath, ".json") || Serializer::DoesFilenameEndWith(meshFilepath, ".obj"))) {
+		if (!(StringUtils::DoesStringEndWith(StringUtils::ToLower(meshFilepath), ".json") || StringUtils::DoesStringEndWith(StringUtils::ToLower(meshFilepath), ".obj"))) {
 			throw SimpleException(meshDirPath + meshFilepath + " must either be in JSON or Wavefront (.obj) format");
 		}
 
-		if (Serializer::DoesFilenameEndWith(meshFilepath, ".json")) {
+		if (StringUtils::DoesStringEndWith(StringUtils::ToLower(meshFilepath), ".json")) {
 			std::string json_from_file = Serializer::GetFileContents((meshDirPath + meshFilepath).c_str());
 
 			rapidjson::Document document;
@@ -201,7 +202,7 @@ namespace OpenGLFun {
 	Model* ParseModel(const std::string& modelFilepath) {
 		std::string modelDirPath = std::string("assets/models/");
 
-		if (!Serializer::DoesFilenameEndWith(modelFilepath, ".json")) {
+		if (!StringUtils::DoesStringEndWith(StringUtils::ToLower(modelFilepath), ".json")) {
 			throw SimpleException(modelDirPath + modelFilepath + " must be in JSON format");
 		}
 
