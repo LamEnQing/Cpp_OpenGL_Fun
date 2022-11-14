@@ -41,6 +41,7 @@ namespace OpenGLFun {
 		float padding = 10.0f;
 		float thumbnailSize = 100.0f;
 		float cellSize = thumbnailSize + padding;
+		ImVec2 minFramePadding{ 4.0f, 3.0f };
 
 		float panelWidth = ImGui::GetContentRegionAvailWidth();
 		int columns = static_cast<int>(panelWidth / cellSize);
@@ -110,11 +111,9 @@ namespace OpenGLFun {
 
 				ImGui::BeginGroup();
 				ImGui::PushID(filename.c_str());
-				//ImGui::SetCursorPosY(thumbnailSize - imgBtnSize.y + thumbnailSize/2.0f);
-				//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { thumbnailSize-imgBtnSize.x, thumbnailSize-imgBtnSize.y });
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { minFramePadding.x + (thumbnailSize - imgBtnSize.x) / 2.0f, minFramePadding.y + (thumbnailSize - imgBtnSize.y) / 2.0f });
 				ImGui::ImageButton(buttonTexId, imgBtnSize, { 0, 1 }, { 1, 0 });
-				//ImGui::PopStyleVar();
-				//ImGui::Render6
+				ImGui::PopStyleVar();
 				ImGui::Text(filename.c_str());
 				ImGui::PopID();
 
