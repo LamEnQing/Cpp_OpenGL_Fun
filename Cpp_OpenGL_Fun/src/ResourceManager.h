@@ -22,10 +22,10 @@ namespace OpenGLFun {
 		Mesh* LoadMesh(std::string modelFilepath);
 
 		Model* Load2DModel(std::string modelFilepath);
-		std::shared_ptr<Model> Load3DModel(EntityId const& entityId, std::string modelFilepath);
-		void UnloadModels();
 		Model* Get2DModel(std::string const& modelFilepath);
+		std::shared_ptr<Model> Load3DModel(EntityId const& entityId, std::string modelFilepath);
 		std::shared_ptr<Model>& Get3DModel(EntityId const& entityId);
+		void UnloadModels();
 	private:
 		std::map<EntityId, std::shared_ptr<Model>> _3DModelsMap;
 		std::map<std::string, std::unique_ptr<Model>> _2DModelsMap;

@@ -52,6 +52,7 @@ namespace OpenGLFun {
 		}
 	}
 
+	#pragma region Texture
 	Texture* ResourceManager::LoadTexture(std::string textureFilepath) {
 		std::string texturesDirPath = std::string("assets\\textures\\");
 
@@ -82,6 +83,7 @@ namespace OpenGLFun {
 		}
 		mTexturesDataMap.clear();
 	}
+	#pragma endregion
 
 	Mesh* ResourceManager::LoadMesh(std::string meshFilepath) {
 		std::string meshDirPath = std::string("assets/models/meshes/");
@@ -132,6 +134,7 @@ namespace OpenGLFun {
 		}
 	}
 
+	#pragma region 2D Model
 	Model* ResourceManager::Load2DModel(std::string modelFilepath) {
 		// If 2D map has the 2D model loaded, then no need load, just return instance
 		if (_2DModelsMap.find(modelFilepath) != _2DModelsMap.end()) {
@@ -147,6 +150,16 @@ namespace OpenGLFun {
 		return _2DModelsMap.at(modelFilepath).get();
 	}
 
+	Model* ResourceManager::Get2DModel(std::string const& modelFilepath) {
+		if (_2DModelsMap.find(modelFilepath) == _2DModelsMap.end()) {
+			throw SimpleException(std::string("Could not find 2D model ") + modelFilepath + " in model database");
+		}
+
+		return _2DModelsMap.at(modelFilepath).get();
+	}
+	#pragma endregion
+
+	#pragma region 3D Model
 	std::shared_ptr<Model> ResourceManager::Load3DModel(EntityId const& entityId, std::string modelFilepath) {
 		std::cout << "Loading 3D model " << modelFilepath << " for " << entityId << std::endl;
 		Model* model = ParseModel(modelFilepath);
@@ -156,14 +169,6 @@ namespace OpenGLFun {
 		return _3DModelsMap.at(entityId);
 	}
 
-	Model* ResourceManager::Get2DModel(std::string const& modelFilepath) {
-		if (_2DModelsMap.find(modelFilepath) == _2DModelsMap.end()) {
-			throw SimpleException(std::string("Could not find 2D model ") + modelFilepath + " in model database");
-		}
-
-		return _2DModelsMap.at(modelFilepath).get();
-	}
-
 	std::shared_ptr<Model>& ResourceManager::Get3DModel(EntityId const& entityId) {
 		if (_3DModelsMap.find(entityId) == _3DModelsMap.end()) {
 			throw SimpleException(std::string("Could not find entity ") + std::to_string(entityId) + "'s 3D model in model database");
@@ -171,6 +176,7 @@ namespace OpenGLFun {
 
 		return _3DModelsMap.at(entityId);
 	}
+	#pragma endregion
 
 	void ResourceManager::UnloadModels() {
 		for (auto modelIt = _3DModelsMap.rbegin(); modelIt != _3DModelsMap.rend(); modelIt++) {
