@@ -69,7 +69,7 @@ namespace OpenGLFun {
 
 					bool shouldDisplay = false;
 					for (std::string const& fileExt : _fileExtensions)
-						if (StringUtils::DoesStringEndWith(StringUtils::ToLower(name), fileExt)) {
+						if (StringUtils::ToLower(dir_entry.path().extension().string()) == StringUtils::ToLower(fileExt)) {
 							shouldDisplay = true;
 						}
 					if (!shouldDisplay) continue;
@@ -89,13 +89,30 @@ namespace OpenGLFun {
 			// ==== End File list ====
 
 			ImGui::Separator();
+			float oldCursorY = ImGui::GetCursorPosY() + 4;
+			ImGui::SetCursorPosY(oldCursorY + 3);
 			ImGui::Text("File Name:"); ImGui::SameLine();
+			ImGui::SetCursorPosY(oldCursorY);
 			ImGui::SetNextItemWidth(200.0f);
-			ImGui::InputText((std::string("##") + _popupId + "_filename_input").c_str(), &_selectedFilename); ImGui::SameLine();
+			ImGui::InputText((std::string("##") + _popupId + "_filename_input").c_str(), &_selectedFilename);
 
+			ImGui::SameLine();
+			const char* previewText = _selectedExtension == 0 ? "All files" : _fileExtensions[_selectedExtension - 1].c_str();
+			ImGui::SetNextItemWidth(100);
+			if (ImGui::BeginCombo("##select file extensions", previewText)) {
+				if (ImGui::Selectable("All files", _selectedExtension == 0))
+					_selectedExtension = 0;
+				for (int i = 0; i < _fileExtensions.size(); i++) {
+					if (ImGui::Selectable(_fileExtensions[i].c_str(), (_selectedExtension - 1) == i))
+						_selectedExtension = i + 1;
+				}
+				ImGui::EndCombo();
+			}
+
+			ImGui::SetCursorPosX(ImGui::GetContentRegionAvailWidth() - 83);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5);
 			static std::filesystem::path fileRelativePath;
-			if (_selectedFilename.empty())
-				ImGui::BeginDisabled();
+			ImGui::BeginDisabled(_selectedFilename.empty());
 			if (ImGui::Button("Add Texture") && !_selectedFilename.empty()) {
 				try {
 					fileRelativePath = std::filesystem::relative(_currentPath / _selectedFilename, _relativePath);
@@ -111,9 +128,7 @@ namespace OpenGLFun {
 					canAddTexture = false;
 				}
 			}
-			if (_selectedFilename.empty())
-				ImGui::EndDisabled();
-
+			ImGui::EndDisabled();
 
 			if (!canAddTexture)
 				ImGui::OpenPopup("Add Texture Error");

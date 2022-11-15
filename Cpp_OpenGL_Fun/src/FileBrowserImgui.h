@@ -12,6 +12,7 @@ namespace OpenGLFun {
 		void Draw();
 	private:
 		bool _openPopup = false;
+		int _selectedExtension = 0;
 
 		std::string _popupId;
 		std::filesystem::path _relativePath; // the initial path set by pathToOpen
