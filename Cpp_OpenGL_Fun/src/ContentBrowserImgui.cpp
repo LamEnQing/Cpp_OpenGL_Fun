@@ -52,6 +52,7 @@ namespace OpenGLFun {
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
 		ImGui::Separator();
 		
+		ImGui::BeginChild("##content browser icon lists");
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
 		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, { padding, 5.0f });
 		if (ImGui::BeginTable("contentBrowserTable", columns)) {
@@ -135,6 +136,7 @@ namespace OpenGLFun {
 			ImGui::EndTable();
 		}
 		ImGui::PopStyleVar();
+		ImGui::EndChild();
 
 		ImGui::End();
 	}
