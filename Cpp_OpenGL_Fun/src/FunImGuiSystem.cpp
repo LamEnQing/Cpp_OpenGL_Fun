@@ -23,11 +23,14 @@ namespace OpenGLFun {
 
 	bool showStatsWindow;
 	bool showDemoWindow;
+	bool showDebugEditWindow;
 
 	IComponent* deleteComp = nullptr; // the component to be deleted
 
 	void DrawMenuBar();
 	void DrawStats();
+	void DrawDebugEditWindow();
+
 	void DrawEntityList();
 	void DrawEntityProperty();
 	void DrawGameScene();
@@ -42,7 +45,7 @@ namespace OpenGLFun {
 
 		FUN_IMGUI_SYSTEM = this;
 
-		showStatsWindow = showDemoWindow = false;
+		showStatsWindow = showDemoWindow = showDebugEditWindow = false;
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -83,8 +86,12 @@ namespace OpenGLFun {
 				ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode, NULL);
 
 			DrawMenuBar();
+
 			if (showStatsWindow)
 				DrawStats();
+			if (showDebugEditWindow)
+				DrawDebugEditWindow();
+
 			DrawEntityList();
 			DrawEntityProperty();
 			DrawGameScene();
@@ -134,7 +141,6 @@ namespace OpenGLFun {
 						showStatsWindow = true;
 					if (ImGui::MenuItem("Disabled", NULL, !showStatsWindow)) {
 						showStatsWindow = false;
-						GRAPHICS_SYSTEM->mFramebuffer.PreResize(WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
 					}
 					ImGui::EndMenu();
 				}
@@ -144,7 +150,15 @@ namespace OpenGLFun {
 						showDemoWindow = true;
 					if (ImGui::MenuItem("Disabled", NULL, !showDemoWindow)) {
 						showDemoWindow = false;
-						GRAPHICS_SYSTEM->mFramebuffer.PreResize(WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+					}
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Debug Edit")) {
+					if (ImGui::MenuItem("Enabled", NULL, showDebugEditWindow))
+						showDebugEditWindow = true;
+					if (ImGui::MenuItem("Disabled", NULL, !showDebugEditWindow)) {
+						showDebugEditWindow = false;
 					}
 					ImGui::EndMenu();
 				}
@@ -171,6 +185,22 @@ namespace OpenGLFun {
 		ImGui::SameLine(); ImGui::SetCursorPosX(110); ImGui::Text(std::to_string(WINDOW_SYSTEM->mFrameWidth).c_str());
 		ImGui::Text("Frame Height:");
 		ImGui::SameLine(); ImGui::SetCursorPosX(110); ImGui::Text(std::to_string(WINDOW_SYSTEM->mFrameHeight).c_str());
+
+		ImGui::End();
+	}
+
+	void DrawDebugEditWindow() {
+		ImGui::Begin("Debug Edit");
+
+		static float camPosX = GRAPHICS_SYSTEM->mCamera2D.GetPosition().x, camPosY = GRAPHICS_SYSTEM->mCamera2D.GetPosition().y;
+		ImGui::Text("Camera Pos");
+		ImGui::Text("X:");
+		ImGui::SameLine(); ImGui::DragFloat("##Cam PosX", &camPosX, 0.5f, -20, 20, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+		ImGui::Text("Y:");
+		ImGui::SameLine(); ImGui::DragFloat("##Cam PosY", &camPosY, 0.5f, -20, 20, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+
+		if (camPosX != GRAPHICS_SYSTEM->mCamera2D.GetPosition().x || camPosY != GRAPHICS_SYSTEM->mCamera2D.GetPosition().y)
+			GRAPHICS_SYSTEM->mCamera2D.SetPosition(Vec3f(camPosX, camPosY, 0));
 
 		ImGui::End();
 	}

@@ -12,6 +12,8 @@ namespace OpenGLFun {
 	public:
 		Framebuffer mFramebuffer;
 
+		OpenGLFun::OrthoCamera mCamera2D;
+
 		GraphicSystem();
 		virtual ~GraphicSystem() override;
 		virtual void Update(float const&) override;
@@ -27,8 +29,6 @@ namespace OpenGLFun {
 		int _viewportX, _viewportY, _viewportWidth, _viewportHeight;
 
 		OpenGLFun::Model _2DShapeModel;
-
-		OpenGLFun::OrthoCamera _camera2D;
 	};
 	extern GraphicSystem* GRAPHICS_SYSTEM;
 }

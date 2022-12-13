@@ -22,7 +22,7 @@
 namespace OpenGLFun {
 	GraphicSystem* GRAPHICS_SYSTEM = nullptr;
 
-	GraphicSystem::GraphicSystem() : ISystem(), mFramebuffer(WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight()), _3DShaderProgram(), _viewportX{ 0 }, _viewportY{ 0 }, _viewportWidth{ WINDOW_SYSTEM->mFrameWidth }, _viewportHeight{ WINDOW_SYSTEM->mFrameHeight }, _camera2D(-1.0f, 1.0f, -1.0f, 1.0f) {
+	GraphicSystem::GraphicSystem() : ISystem(), mFramebuffer(WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight()), _3DShaderProgram(), _viewportX{ 0 }, _viewportY{ 0 }, _viewportWidth{ WINDOW_SYSTEM->mFrameWidth }, _viewportHeight{ WINDOW_SYSTEM->mFrameHeight }, mCamera2D(-1.0f, 1.0f, -1.0f, 1.0f) {
 		if (GRAPHICS_SYSTEM != nullptr)
 			throw SimpleException("Graphics system already created!");
 
@@ -200,7 +200,7 @@ namespace OpenGLFun {
 			sample_vec3[0] /= WINDOW_SYSTEM->mFrameWidth;
 			sample_vec3[1] /= WINDOW_SYSTEM->mFrameHeight;
 			sample_vec3[2] = 0.0f;
-			mtxModel = _camera2D.GetViewProjMatrix() * glm::scale(mtxModel, sample_vec3);
+			mtxModel = mCamera2D.GetViewProjMatrix() * glm::scale(mtxModel, sample_vec3);
 
 			model
 				->SetCull(modelComp->mShouldCull)
