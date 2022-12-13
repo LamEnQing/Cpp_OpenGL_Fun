@@ -16,14 +16,11 @@ namespace OpenGLFun {
 		const int& GetWindowHeight() const;
 		const std::string& GetWindowTitle() const;
 		
-		const ModelType& GetDefaultModelType() const;
-		const std::string& GetDefaultModelFilepath() const;
+		/*const ModelType& GetDefaultModelType() const;
+		const std::string& GetDefaultModelFilepath() const;*/
 	private:
 		int _windowWidth, _windowHeight;
 		std::string _windowTitle;
-
-		ModelType _defaultModelType{ ModelType::TwoD };
-		std::string _defaultModelFilepath;
 	};
 
 }

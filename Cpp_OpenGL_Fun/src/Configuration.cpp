@@ -50,13 +50,13 @@ namespace OpenGLFun {
 			throw JsonReadException(configFilepath, "default_model", "JSON object");
 		const rapidjson::Value& modelObj = document["default_model"];
 		
-		if (!modelObj.HasMember("model_type") || !modelObj["model_type"].IsString())
+		/*if (!modelObj.HasMember("model_type") || !modelObj["model_type"].IsString())
 			throw JsonReadException(configFilepath, "default_model", "model_type", "JSON object");
 		_defaultModelType = ModelComponent::ParseModelTypeString(modelObj["model_type"].GetString());
 
 		if (!modelObj.HasMember("model") || !modelObj["model"].IsString())
 			throw JsonReadException(configFilepath, "default_model", "model_type", "string");
-		_defaultModelFilepath = modelObj["model"].GetString();
+		_defaultModelFilepath = modelObj["model"].GetString();*/
 	}
 
 	void Configuration::ReloadConfig() {
@@ -75,16 +75,16 @@ namespace OpenGLFun {
 			throw JsonReadException(configFilepath, "default_model", "JSON object");
 		const rapidjson::Value& modelObj = document["default_model"];
 
-		if (!modelObj.HasMember("model_type") || !modelObj["model_type"].IsString())
+		/*if (!modelObj.HasMember("model_type") || !modelObj["model_type"].IsString())
 			throw JsonReadException(configFilepath, "default_model", "model_type", "JSON object");
 		_defaultModelType = ModelComponent::ParseModelTypeString(modelObj["model_type"].GetString());
 
 		if (!modelObj.HasMember("model") || !modelObj["model"].IsString())
 			throw JsonReadException(configFilepath, "default_model", "model_type", "string");
-		_defaultModelFilepath = modelObj["model"].GetString();
+		_defaultModelFilepath = modelObj["model"].GetString();*/
 
-		if (_defaultModelType == ModelType::TwoD)
-			RESOURCE_MANAGER->Load2DModel(_defaultModelFilepath);
+		/*if (_defaultModelType == ModelType::TwoD)
+			RESOURCE_MANAGER->Load2DModel(_defaultModelFilepath);*/
 
 		if (document.HasMember("preload_assets")) {
 			rapidjson::Value& preloadAssJson = document["preload_assets"];
@@ -114,11 +114,11 @@ namespace OpenGLFun {
 		return _windowTitle;
 	}
 
-	const ModelType& Configuration::GetDefaultModelType() const {
+	/*const ModelType& Configuration::GetDefaultModelType() const {
 		return _defaultModelType;
 	}
 
 	const std::string& Configuration::GetDefaultModelFilepath() const {
 		return _defaultModelFilepath;
-	}
+	}*/
 }

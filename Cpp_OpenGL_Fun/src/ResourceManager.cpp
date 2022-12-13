@@ -152,7 +152,8 @@ namespace OpenGLFun {
 
 	Model* ResourceManager::Get2DModel(std::string const& modelFilepath) {
 		if (_2DModelsMap.find(modelFilepath) == _2DModelsMap.end()) {
-			throw SimpleException(std::string("Could not find 2D model ") + modelFilepath + " in model database");
+			std::cout << "Could not find 2D model " << modelFilepath << " in model database" << std::endl;
+			return nullptr;
 		}
 
 		return _2DModelsMap.at(modelFilepath).get();
@@ -161,22 +162,30 @@ namespace OpenGLFun {
 
 	#pragma region 3D Model
 	std::shared_ptr<Model>& ResourceManager::Load3DModel(EntityId const& entityId, std::string modelFilepath) {
+		if (_3DModelsMap.find(modelFilepath) != _3DModelsMap.end()) {
+			std::cout << "3D model " << modelFilepath << " is already loaded" << std::endl;
+			return _3DModelsMap.at(modelFilepath);
+		}
+
 		std::cout << "Loading 3D model " << modelFilepath << " for " << entityId << std::endl;
 		Model* model = ParseModel(modelFilepath);
 
-		_3DModelsMap.insert({ entityId, std::shared_ptr<Model>(model) });
+		//_3DModelsMap.insert({ entityId, std::shared_ptr<Model>(model) });
+		_3DModelsMap.insert({ modelFilepath, std::shared_ptr<Model>(model) });
 
-		return _3DModelsMap.at(entityId);
+		//return _3DModelsMap.at(entityId);
+		return _3DModelsMap.at(modelFilepath);
 	}
 
-	Model* ResourceManager::Get3DModel(EntityId const& entityId) {
-		if (_3DModelsMap.find(entityId) == _3DModelsMap.end()) {
+	Model* ResourceManager::Get3DModel(std::string const& modelFilepath) {
+		if (_3DModelsMap.find(modelFilepath) == _3DModelsMap.end()) {
 			//throw SimpleException(std::string("Could not find entity ") + std::to_string(entityId) + "'s 3D model in model database");
-			std::cout << "Could not find entity " << entityId << "'s 3D model in model database" << std::endl;
+			//std::cout << "Could not find entity " << entityId << "'s 3D model in model database" << std::endl;
+			std::cout << "Could not find 3D model " << modelFilepath << " in model database" << std::endl;
 			return nullptr;
 		}
 
-		return _3DModelsMap.at(entityId).get();
+		return _3DModelsMap.at(modelFilepath).get();
 	}
 	#pragma endregion
 

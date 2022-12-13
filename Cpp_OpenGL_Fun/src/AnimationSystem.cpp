@@ -23,7 +23,7 @@ namespace OpenGLFun {
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			if (modelComp->mModelType == ModelType::TwoD) continue;
 
-			Model* model = RESOURCE_MANAGER->Get3DModel(entityId);
+			Model* model = RESOURCE_MANAGER->Get3DModel(modelComp->mModelFilepath);
 
 			if (model == nullptr) continue;
 

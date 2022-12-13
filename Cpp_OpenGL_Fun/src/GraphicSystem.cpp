@@ -76,7 +76,7 @@ namespace OpenGLFun {
 			2, 3, 0
 		};
 		mesh->Init(vertices, indices)->SetCull(false)->SetBlend(true);
-		_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
+		//_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
 
 		SetViewport(0, 0, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight());
 	}
@@ -133,7 +133,7 @@ namespace OpenGLFun {
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 				if (modelComp->mModelType == ModelType::TwoD) continue;
 
-				Model* model = RESOURCE_MANAGER->Get3DModel(entityId);
+				Model* model = RESOURCE_MANAGER->Get3DModel(modelComp->mModelFilepath);
 				if (model == nullptr) continue;
 
 				mtxModel = glm::mat4(1.0f);
@@ -165,6 +165,9 @@ namespace OpenGLFun {
 
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			if (modelComp->mModelType == ModelType::ThreeD) continue;
+
+			Model* model = RESOURCE_MANAGER->Get2DModel(modelComp->mModelFilepath);
+			if (model == nullptr) continue;
 
 			mtxModel = glm::mat4(1.0f);
 			Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
@@ -199,7 +202,7 @@ namespace OpenGLFun {
 			sample_vec3[2] = 0.0f;
 			mtxModel = _camera2D.GetViewProjMatrix() * glm::scale(mtxModel, sample_vec3);
 
-			RESOURCE_MANAGER->Get2DModel(modelComp->mModelFilepath)
+			model
 				->SetCull(modelComp->mShouldCull)
 				.Draw2D(_2DShaderProgram.mProgramId, mtxModel, texture->mGLTextureId, uvDimensions, uvOffsetPos, tintColor);
 		}
