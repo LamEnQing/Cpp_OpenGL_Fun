@@ -4,7 +4,7 @@
 #include "StringUtils.h"
 
 namespace OpenGLFun {
-	ModelComponent::ModelComponent() : IComponent(), mModelType(ENGINE->mConfig.GetDefaultModelType()), mModelFilepath(ENGINE->mConfig.GetDefaultModelFilepath()), mEnableBlend{ false }, mShouldCull{ false }  {
+	ModelComponent::ModelComponent() : IComponent(), mModelType(ModelType::TwoD), mModelFilepath(""), mEnableBlend{false}, mShouldCull{false}  {
 		mCompType = ComponentType::Model;
 	}
 	ModelComponent::ModelComponent(EntityId const& owner) : ModelComponent() {
@@ -64,6 +64,10 @@ namespace OpenGLFun {
 				mModelType = ModelType::ThreeD;
 			ImGui::EndCombo();
 		}
+
+		ImGui::Text("Filepath"); ImGui::SameLine();
+		ImGui::SetCursorPosX(offsetFromMainText);
+		ImGui::InputText("##ModelFilepath", &mModelFilepath);
 
 		return !canClose;
 	}

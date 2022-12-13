@@ -2,7 +2,7 @@
 
 namespace OpenGLFun {
 	OrthoCamera::OrthoCamera(float left, float right, float bottom, float top)
-		: _projMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)), _viewMatrix(1.0f) {
+		: _projMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)), _viewMatrix(1.0f), _rotation(0.0f) {
 		_viewProjMatrix = _projMatrix * _viewMatrix;
 	}
 
