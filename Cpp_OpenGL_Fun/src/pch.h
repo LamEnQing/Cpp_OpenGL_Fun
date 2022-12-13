@@ -5,9 +5,13 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#pragma warning(push)
+#pragma warning(disable : 4201)
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#pragma warning(pop)
 
 #include <rapidjson/document.h>
 
