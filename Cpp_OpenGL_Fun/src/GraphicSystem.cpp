@@ -96,14 +96,15 @@ namespace OpenGLFun {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // enable wireframe mode
 		}
 		else {
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // reset to default view
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // reset to default mtxView
 		}
 
 		_3DShaderProgram.use();
 
-		glm::mat4 model;
+		glm::mat4 mtxModel;
 		Vec4f tintColor(1.0f);
 		// 3D Drawing
+		#pragma region 3D Drawing
 		if (ENGINE->mPlayerId != -1 && ENTITY_MANAGER->HasComponent(ENGINE->mPlayerId, ComponentType::Camera)) {
 			glEnable(GL_DEPTH_TEST);
 
@@ -119,11 +120,11 @@ namespace OpenGLFun {
 			Vec3f camPos = playerTransforms->mPosition + Vec3f(camOffsetRotated.x, playerCamera->mEyeHeight - lookAtLerp.y, camOffsetRotated.y);
 			Vec3f target = playerTransforms->mPosition + Vec3f(0.0f, playerCamera->mEyeHeight, 0.0f) + lookAtLerp;
 
-			glm::mat4 view = glm::lookAt(glm::vec3(camPos.x, camPos.y, camPos.z), glm::vec3(target.x, target.y, target.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
-			glm::mat4 proj = glm::mat4(1.0f);
+			glm::mat4 mtxView = glm::lookAt(glm::vec3(camPos.x, camPos.y, camPos.z), glm::vec3(target.x, target.y, target.z), glm::vec3(playerCamera->mCamUp.x, playerCamera->mCamUp.y, playerCamera->mCamUp.z));
+			glm::mat4 mtxProj = glm::mat4(1.0f);
 
 			// fov, width/height ratio, near, far
-			proj = glm::perspective(glm::radians(45.0f), static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / WINDOW_SYSTEM->GetWindowHeight(), 0.1f, 50.0f);
+			mtxProj = glm::perspective(glm::radians(45.0f), static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / WINDOW_SYSTEM->GetWindowHeight(), 0.1f, 50.0f);
 
 			for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
 				if (!ENTITY_MANAGER->HasComponent(entityId, ComponentType::Transform) || !ENTITY_MANAGER->HasComponent(entityId, ComponentType::Model))
@@ -132,7 +133,10 @@ namespace OpenGLFun {
 				ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 				if (modelComp->mModelType == ModelType::TwoD) continue;
 
-				model = glm::mat4(1.0f);
+				Model* model = RESOURCE_MANAGER->Get3DModel(entityId);
+				if (model == nullptr) continue;
+
+				mtxModel = glm::mat4(1.0f);
 				Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
 				Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
@@ -140,18 +144,19 @@ namespace OpenGLFun {
 					texture = RESOURCE_MANAGER->GetTexture(COMPONENT_MANAGER->GetComponent<Sprite>(entityId, ComponentType::Sprite)->mTextureFilepath);
 				if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Color))
 					tintColor = COMPONENT_MANAGER->GetComponent<Color>(entityId, ComponentType::Color)->mRgba;
-				model = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
-				model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
-				model = glm::scale(model, vec3f_to_vec3(entityTransform->mScale));
+				mtxModel = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(entityTransform->mPosition));
+				mtxModel = glm::rotate(mtxModel, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
+				mtxModel = glm::scale(mtxModel, vec3f_to_vec3(entityTransform->mScale));
 
-				RESOURCE_MANAGER->Get3DModel(entityId)
-					->SetCull(modelComp->mShouldCull)
-					.Draw3D(_3DShaderProgram.mProgramId, model, view, proj, texture->mGLTextureId, tintColor);
+				model->SetCull(modelComp->mShouldCull)
+					.Draw3D(_3DShaderProgram.mProgramId, mtxModel, mtxView, mtxProj, texture->mGLTextureId, tintColor);
 			}
 			glDisable(GL_DEPTH_TEST);
 		}
+		#pragma endregion
 
 		// 2D Drawing
+		#pragma region 2D Drawing
 		glm::vec3 sample_vec3;
 		_2DShaderProgram.use();
 		for (EntityId const& entityId : ENTITY_MANAGER->GetEntities()) {
@@ -161,7 +166,7 @@ namespace OpenGLFun {
 			ModelComponent* modelComp = COMPONENT_MANAGER->GetComponent<ModelComponent>(entityId, ComponentType::Model);
 			if (modelComp->mModelType == ModelType::ThreeD) continue;
 
-			model = glm::mat4(1.0f);
+			mtxModel = glm::mat4(1.0f);
 			Texture* texture = RESOURCE_MANAGER->GetTexture("no_texture.png");
 			Transform* entityTransform = COMPONENT_MANAGER->GetComponent<Transform>(entityId, ComponentType::Transform);
 
@@ -181,8 +186,8 @@ namespace OpenGLFun {
 			sample_vec3 = vec3f_to_vec3(entityTransform->mPosition);
 			sample_vec3[0] /= static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f;
 			sample_vec3[1] /= static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f;
-			model = glm::translate(glm::mat4(1.0f), sample_vec3);
-			//model = glm::rotate(model, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
+			mtxModel = glm::translate(glm::mat4(1.0f), sample_vec3);
+			//mtxModel = glm::rotate(mtxModel, glm::radians(entityTransform->mRotation.y), glm::vec3(0.0f, 1.0f, 0.0));
 
 			sample_vec3 = vec3f_to_vec3(entityTransform->mScale);
 			if (entityTransform->mScale.x < 0)
@@ -192,14 +197,15 @@ namespace OpenGLFun {
 			sample_vec3[0] /= WINDOW_SYSTEM->mFrameWidth;
 			sample_vec3[1] /= WINDOW_SYSTEM->mFrameHeight;
 			sample_vec3[2] = 0.0f;
-			model = glm::scale(model, sample_vec3);
+			mtxModel = glm::scale(mtxModel, sample_vec3);
 
 			RESOURCE_MANAGER->Get2DModel(modelComp->mModelFilepath)
 				->SetCull(modelComp->mShouldCull)
-				.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, tintColor);
+				.Draw2D(_2DShaderProgram.mProgramId, mtxModel, texture->mGLTextureId, uvDimensions, uvOffsetPos, tintColor);
 		}
 		glm::mat4 transformMtx(1.0f);
 		mFramebuffer.Unbind();
+		#pragma endregion
 
 		// Draw Scene image
 		mFramebuffer.Draw(_2DShaderProgram, _2DShapeModel);
@@ -221,14 +227,14 @@ namespace OpenGLFun {
 				sample_vec3 = vec3f_to_vec3(entityTransform->mPosition);
 				sample_vec3[0] /= static_cast<float>(WINDOW_SYSTEM->GetWindowWidth()) / 2.0f;
 				sample_vec3[1] /= static_cast<float>(WINDOW_SYSTEM->GetWindowHeight()) / 2.0f;
-				model = glm::translate(glm::mat4(1.0f), sample_vec3);
+				mtxModel = glm::translate(glm::mat4(1.0f), sample_vec3);
 
 				sample_vec3 = vec3f_to_vec3(entityTransform->mScale);
 				sample_vec3[0] /= WINDOW_SYSTEM->GetWindowWidth();
 				sample_vec3[1] /= WINDOW_SYSTEM->GetWindowHeight();
 				sample_vec3[2] = 0.0f;
 				sample_vec3 *= 2.0f;
-				model = glm::scale(model, sample_vec3);
+				mtxModel = glm::scale(mtxModel, sample_vec3);
 
 				Vec2f uvDimensions = { 1.0f, 1.0f }, uvOffsetPos = { 0.0f, 0.0f };
 				if (ENTITY_MANAGER->HasComponent(entityId, ComponentType::Sprite)) {
@@ -265,7 +271,7 @@ namespace OpenGLFun {
 				_2DShapeModel
 					.SetCull(modelComp->mShouldCull)
 					.SetBlend(modelComp->mEnableBlend)
-					.Draw2D(_2DShaderProgram.mProgramId, model, texture->mGLTextureId, uvDimensions, uvOffsetPos, color);
+					.Draw2D(_2DShaderProgram.mProgramId, mtxModel, texture->mGLTextureId, uvDimensions, uvOffsetPos, color);
 			}*/
 		}
 	}

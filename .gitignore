@@ -34,3 +34,5 @@
 /x64*
 *.vcxproj.user
 /Debug
+*.zip
+*.rar

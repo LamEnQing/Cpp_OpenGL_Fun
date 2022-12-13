@@ -23,8 +23,9 @@ namespace OpenGLFun {
 
 		Model* Load2DModel(std::string modelFilepath);
 		Model* Get2DModel(std::string const& modelFilepath);
-		std::shared_ptr<Model> Load3DModel(EntityId const& entityId, std::string modelFilepath);
-		std::shared_ptr<Model>& Get3DModel(EntityId const& entityId);
+		std::shared_ptr<Model>& Load3DModel(EntityId const& entityId, std::string modelFilepath);
+		// Gets a pointer to a Model, it can be null if the entity does not have a 3D model loaded for it
+		Model* Get3DModel(EntityId const& entityId);
 		void UnloadModels();
 	private:
 		std::map<EntityId, std::shared_ptr<Model>> _3DModelsMap;

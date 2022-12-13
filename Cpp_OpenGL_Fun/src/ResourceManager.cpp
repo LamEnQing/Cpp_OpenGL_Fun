@@ -160,7 +160,7 @@ namespace OpenGLFun {
 	#pragma endregion
 
 	#pragma region 3D Model
-	std::shared_ptr<Model> ResourceManager::Load3DModel(EntityId const& entityId, std::string modelFilepath) {
+	std::shared_ptr<Model>& ResourceManager::Load3DModel(EntityId const& entityId, std::string modelFilepath) {
 		std::cout << "Loading 3D model " << modelFilepath << " for " << entityId << std::endl;
 		Model* model = ParseModel(modelFilepath);
 
@@ -169,12 +169,14 @@ namespace OpenGLFun {
 		return _3DModelsMap.at(entityId);
 	}
 
-	std::shared_ptr<Model>& ResourceManager::Get3DModel(EntityId const& entityId) {
+	Model* ResourceManager::Get3DModel(EntityId const& entityId) {
 		if (_3DModelsMap.find(entityId) == _3DModelsMap.end()) {
-			throw SimpleException(std::string("Could not find entity ") + std::to_string(entityId) + "'s 3D model in model database");
+			//throw SimpleException(std::string("Could not find entity ") + std::to_string(entityId) + "'s 3D model in model database");
+			std::cout << "Could not find entity " << entityId << "'s 3D model in model database" << std::endl;
+			return nullptr;
 		}
 
-		return _3DModelsMap.at(entityId);
+		return _3DModelsMap.at(entityId).get();
 	}
 	#pragma endregion
 
