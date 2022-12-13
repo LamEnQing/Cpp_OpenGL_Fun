@@ -19,8 +19,8 @@ namespace OpenGLFun {
 
 		// Resets variables in the system
 		void Reset();
+
 	private:
-		bool _showLevelSelect;
 		ContentBrowserImgui _contentBrowser;
 	};
 

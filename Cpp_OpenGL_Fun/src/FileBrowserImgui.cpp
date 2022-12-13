@@ -41,7 +41,7 @@ namespace OpenGLFun {
 			static ImVec2 thumbnailSize{ 20, 20 };
 			static float iconPos = 10, iconDescPos = iconPos + thumbnailSize.x + 6;
 
-			float color = 0.2;
+			float color = 0.2f;
 			ImGui::PushStyleColor(ImGuiCol_FrameBg, { color, color, color, 1.0f });
 			if (ImGui::BeginListBox((std::string("##") + _popupId + "_list").c_str(), {-FLT_MIN, 8 * ImGui::GetTextLineHeightWithSpacing()})) {
 				for (auto const& dir_entry : std::filesystem::directory_iterator(_currentPath)) {
@@ -124,7 +124,7 @@ namespace OpenGLFun {
 
 					ImGui::CloseCurrentPopup();
 				}
-				catch (std::exception& e) {
+				catch (std::exception&) {
 					canAddTexture = false;
 				}
 			}

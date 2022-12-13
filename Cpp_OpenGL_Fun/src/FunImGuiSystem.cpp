@@ -21,6 +21,9 @@ namespace OpenGLFun {
 	int selectedAddComponent = 0;
 	std::string selectedLevel{ "" };
 
+	bool showStatsWindow;
+	bool showDemoWindow;
+
 	IComponent* deleteComp = nullptr; // the component to be deleted
 
 	void DrawMenuBar();
@@ -33,11 +36,13 @@ namespace OpenGLFun {
 	void DrawWarningDeleteCompPopup(const char* compType);
 	void DrawWarningDeleteEntityPopup();
 
-	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, mSceneViewportSize{}, _showLevelSelect{ false }, _contentBrowser{}, mTextureLoadFileBrowser("Add Texture", "assets\\textures", {".jpg", ".png"}) {
+	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, mSceneViewportSize{},  _contentBrowser{}, mTextureLoadFileBrowser("Add Texture", "assets\\textures", { ".jpg", ".png" }) {
 		if (FUN_IMGUI_SYSTEM != nullptr)
 			throw SimpleException("FunImGuiSystem has already been created!");
 
 		FUN_IMGUI_SYSTEM = this;
+
+		showStatsWindow = showDemoWindow = false;
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -78,7 +83,8 @@ namespace OpenGLFun {
 				ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode, NULL);
 
 			DrawMenuBar();
-			DrawStats();
+			if (showStatsWindow)
+				DrawStats();
 			DrawEntityList();
 			DrawEntityProperty();
 			DrawGameScene();
@@ -87,7 +93,8 @@ namespace OpenGLFun {
 
 			DrawLoadLevelPopup();
 
-			ImGui::ShowDemoWindow(NULL);
+			if (showDemoWindow)
+				ImGui::ShowDemoWindow(NULL);
 
 			ImGui::Render();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -121,6 +128,27 @@ namespace OpenGLFun {
 					}
 					ImGui::EndMenu();
 				}
+
+				if (ImGui::BeginMenu("Statistics")) {
+					if (ImGui::MenuItem("Enabled", NULL, showStatsWindow))
+						showStatsWindow = true;
+					if (ImGui::MenuItem("Disabled", NULL, !showStatsWindow)) {
+						showStatsWindow = false;
+						GRAPHICS_SYSTEM->mFramebuffer.PreResize(WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+					}
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Demo")) {
+					if (ImGui::MenuItem("Enabled", NULL, showDemoWindow))
+						showDemoWindow = true;
+					if (ImGui::MenuItem("Disabled", NULL, !showDemoWindow)) {
+						showDemoWindow = false;
+						GRAPHICS_SYSTEM->mFramebuffer.PreResize(WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+					}
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenu();
 			}
 			ImGui::EndMainMenuBar();
