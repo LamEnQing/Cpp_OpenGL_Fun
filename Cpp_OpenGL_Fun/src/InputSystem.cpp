@@ -34,8 +34,7 @@ namespace OpenGLFun {
 			GLFW_KEY_Q, GLFW_KEY_R, GLFW_KEY_S, GLFW_KEY_T, GLFW_KEY_U, GLFW_KEY_V, GLFW_KEY_W, GLFW_KEY_X,
 			GLFW_KEY_Y, GLFW_KEY_Z,
 			GLFW_KEY_1, GLFW_KEY_2, GLFW_KEY_3, GLFW_KEY_4, GLFW_KEY_5, GLFW_KEY_6, GLFW_KEY_7, GLFW_KEY_8, GLFW_KEY_9, GLFW_KEY_0,
-			GLFW_KEY_F1, GLFW_KEY_F2, GLFW_KEY_F3, GLFW_KEY_F4, GLFW_KEY_F5, GLFW_KEY_F6, GLFW_KEY_F7, GLFW_KEY_F8, GLFW_KEY_F9,
-			GLFW_KEY_F10, GLFW_KEY_F11, GLFW_KEY_F12,
+			GLFW_KEY_F1, GLFW_KEY_F2, GLFW_KEY_F3, GLFW_KEY_F4, GLFW_KEY_F5, GLFW_KEY_F6, GLFW_KEY_F7, GLFW_KEY_F8, GLFW_KEY_F9, GLFW_KEY_F10, GLFW_KEY_F11, GLFW_KEY_F12,
 			GLFW_KEY_SPACE, GLFW_KEY_LEFT_CONTROL
 		};
 	}
@@ -44,18 +43,6 @@ namespace OpenGLFun {
 
 	void InputSystem::Update(float const& deltaTime) {
 		_deltaTime = deltaTime;
-
-		if (IsKeyTriggered(GLFW_KEY_F4)) {
-			FUN_IMGUI_SYSTEM->mShowEditor = !FUN_IMGUI_SYSTEM->mShowEditor;
-			if (FUN_IMGUI_SYSTEM->mShowEditor) {
-				PauseGame();
-				FUN_IMGUI_SYSTEM->Reset();
-			}
-			else {
-				GRAPHICS_SYSTEM->SetViewport(0, 0, WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
-				UnpauseGame();
-			}
-		}
 
 		for (int& key : _availableKeys) {
 			if (_keyTriggerStateMap.find(key) == _keyTriggerStateMap.end()) { // could not find, means key does not exist in the map
@@ -67,6 +54,19 @@ namespace OpenGLFun {
 					_keyTriggerStateMap.at(key) = false;
 				else
 					_keyTriggerStateMap.erase(key);
+			}
+		}
+
+		if (IsKeyTriggered(GLFW_KEY_F4)) {
+			FUN_IMGUI_SYSTEM->mShowEditor = !FUN_IMGUI_SYSTEM->mShowEditor;
+
+			if (FUN_IMGUI_SYSTEM->mShowEditor) {
+				PauseGame();
+				FUN_IMGUI_SYSTEM->Reset();
+			}
+			else {
+				GRAPHICS_SYSTEM->SetViewport(0, 0, WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+				UnpauseGame();
 			}
 		}
 
