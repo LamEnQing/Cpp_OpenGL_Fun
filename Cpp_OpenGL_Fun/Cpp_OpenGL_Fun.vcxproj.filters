@@ -52,6 +52,9 @@
     <Filter Include="system\logic">
       <UniqueIdentifier>{3e516087-3317-4576-b64c-a21139be3aee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system\graphics\camera">
+      <UniqueIdentifier>{ace3b2bc-7d53-48e2-bf76-0a5650249eb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
@@ -191,6 +194,9 @@
     <ClCompile Include="src\StringUtils.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\OrthoCamera2D.cpp">
+      <Filter>system\graphics\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Component.h">
@@ -328,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="src\StringUtils.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OrthoCamera2D.h">
+      <Filter>system\graphics\camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

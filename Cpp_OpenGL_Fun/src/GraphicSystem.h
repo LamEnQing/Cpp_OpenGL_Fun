@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "Framebuffer.h"
 #include "Model.h"
+#include "OrthoCamera2D.h"
 #include "ShaderProgram.h"
 #include "System.h"
 #include "Texture.h"
@@ -26,6 +27,8 @@ namespace OpenGLFun {
 		int _viewportX, _viewportY, _viewportWidth, _viewportHeight;
 
 		OpenGLFun::Model _2DShapeModel;
+
+		OpenGLFun::OrthoCamera _camera2D;
 	};
 	extern GraphicSystem* GRAPHICS_SYSTEM;
 }
