@@ -76,7 +76,7 @@ namespace OpenGLFun {
 			2, 3, 0
 		};
 		mesh->Init(vertices, indices)->SetCull(false)->SetBlend(true);
-		//_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
+		_2DShapeModel.AddMesh("idk", std::shared_ptr<Mesh>(mesh));
 
 		SetViewport(0, 0, WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight());
 	}
