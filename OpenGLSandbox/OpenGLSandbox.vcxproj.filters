@@ -28,7 +28,9 @@
     <ClCompile Include="src\FileOps.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vertex.cpp" />
+    <ClCompile Include="..\vendors\source\glad\glad.c">
+      <Filter>vendors\glad</Filter>
+    </ClCompile>
     <ClCompile Include="..\vendors\source\imgui\imgui.cpp">
       <Filter>vendors\imgui</Filter>
     </ClCompile>
@@ -53,9 +55,7 @@
     <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp">
       <Filter>vendors\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\vendors\source\glad\glad.c">
-      <Filter>vendors\glad</Filter>
-    </ClCompile>
+    <ClCompile Include="src\BatchRendering.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -98,5 +98,7 @@
     <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h">
       <Filter>vendors\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\BatchRendering.h" />
+    <ClInclude Include="src\Texture.h" />
   </ItemGroup>
 </Project>

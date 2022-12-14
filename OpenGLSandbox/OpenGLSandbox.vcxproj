@@ -20,11 +20,11 @@
     <ClCompile Include="..\vendors\source\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="..\vendors\source\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\BatchRendering.cpp" />
     <ClCompile Include="src\FileOps.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
-    <ClCompile Include="src\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\vendors\source\imgui\imconfig.h" />
@@ -37,9 +37,11 @@
     <ClInclude Include="..\vendors\source\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\vendors\source\imgui\imstb_textedit.h" />
     <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\BatchRendering.h" />
     <ClInclude Include="src\FileOps.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Vertex.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -77,13 +79,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)vendors\includes;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)vendors\libs;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)vendors\header;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)vendors\libs;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
@@ -96,6 +98,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendors\source;$(SolutionDir)vendors\includes</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -114,6 +117,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendors\source;$(SolutionDir)vendors\includes</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
