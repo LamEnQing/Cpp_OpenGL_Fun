@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="shader">
+      <UniqueIdentifier>{de419506-b45a-47ff-aa65-4dd62e7f704b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{c331a1b0-e93e-4aa1-a3d8-b7a731712ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendors">
+      <UniqueIdentifier>{566d2e27-a155-4f0a-829b-cda55520b5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendors\imgui">
+      <UniqueIdentifier>{24c67930-ad6d-4c62-bb3a-e16994f707b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendors\glad">
+      <UniqueIdentifier>{68140b2a-5dbd-4677-8547-763e2b214456}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderProgram.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileOps.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vertex.cpp" />
+    <ClCompile Include="..\vendors\source\imgui\imgui.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_demo.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_draw.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_impl_glfw.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_impl_opengl3.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_stdlib.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_tables.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\glad\glad.c">
+      <Filter>vendors\glad</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Shader.h">
+      <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderProgram.h">
+      <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FileOps.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vertex.h" />
+    <ClInclude Include="..\vendors\source\imgui\imconfig.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_glfw.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_opengl3.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_internal.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_stdlib.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imstb_rectpack.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imstb_textedit.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
