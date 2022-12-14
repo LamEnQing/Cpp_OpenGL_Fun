@@ -59,7 +59,7 @@ namespace OpenGLFun {
 					ImGui::SameLine();
 					ImGui::SetCursorPosX(iconPos);
 					ImGui::Image(TextureUtils::GetImGuiTexId("icons\\folder.png"), thumbnailSize); ImGui::SameLine();
-					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
+					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 					ImGui::Text(name.c_str());
 				}
 
@@ -109,7 +109,7 @@ namespace OpenGLFun {
 				ImGui::EndCombo();
 			}
 
-			ImGui::SetCursorPosX(ImGui::GetContentRegionAvailWidth() - 83);
+			ImGui::SetCursorPosX(ImGui::GetContentRegionAvail().x - 83);
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5);
 			static std::filesystem::path fileRelativePath;
 			ImGui::BeginDisabled(_selectedFilename.empty());
@@ -136,7 +136,7 @@ namespace OpenGLFun {
 			shouldClose = true;
 			if (ImGui::BeginPopupModal("Add Texture Error", &shouldClose, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize)) {
 				ImGui::Text((std::string("Could not open texture to ") + fileRelativePath.string() + "!").c_str());
-				if (ImGui::Button("Ok!", { ImGui::GetContentRegionAvailWidth(), 0 }))
+				if (ImGui::Button("Ok!", { ImGui::GetContentRegionAvail().x, 0 }))
 					ImGui::CloseCurrentPopup();
 				ImGui::EndPopup();
 			}

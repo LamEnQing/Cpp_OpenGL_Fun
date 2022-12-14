@@ -43,7 +43,7 @@ namespace OpenGLFun {
 		float cellSize = thumbnailSize + padding;
 		ImVec2 minFramePadding{ 4.0f, 3.0f };
 
-		float panelWidth = ImGui::GetContentRegionAvailWidth();
+		float panelWidth = ImGui::GetContentRegionAvail().x;
 		int columns = static_cast<int>(panelWidth / cellSize);
 		if (columns < 1)
 			columns = 1;

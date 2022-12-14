@@ -40,11 +40,12 @@ namespace OpenGLFun {
 		}
 		ImGui::EndDisabled();
 
-		ImGui::BeginListBox("##behaviour list", { -FLT_MIN, 5 * ImGui::GetTextLineHeightWithSpacing() });
-		for (const std::string& classPath : _behaviourClasspaths) {
-			ImGui::Selectable(classPath.c_str());
+		if (ImGui::BeginListBox("##behaviour list", { -FLT_MIN, 5 * ImGui::GetTextLineHeightWithSpacing() })) {
+			for (const std::string& classPath : _behaviourClasspaths) {
+				ImGui::Selectable(classPath.c_str());
+			}
+			ImGui::EndListBox();
 		}
-		ImGui::EndListBox();
 
 		return !canClose;
 	}

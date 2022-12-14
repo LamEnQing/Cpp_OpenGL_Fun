@@ -209,22 +209,22 @@ namespace OpenGLFun {
 		ImGui::Begin("Entity List");
 
 		static std::string listElementName{};
-		ImGui::BeginListBox("##entity List", { -FLT_MIN, 8 * ImGui::GetTextLineHeightWithSpacing() });
+		if (ImGui::BeginListBox("##entity List", { -FLT_MIN, 8 * ImGui::GetTextLineHeightWithSpacing() })) {
+			for (const EntityId& entityId : ENTITY_MANAGER->GetEntities()) {
+				listElementName = "Entity #" + std::to_string(entityId);
 
-		for (const EntityId& entityId : ENTITY_MANAGER->GetEntities()) {
-			listElementName = "Entity #" + std::to_string(entityId);
+				// adds c_str into the list
+				if (ImGui::Selectable(listElementName.c_str(), selectedEntity == entityId))
+					selectedEntity = entityId;
 
-			// adds c_str into the list
-			if (ImGui::Selectable(listElementName.c_str(), selectedEntity == entityId))
-				selectedEntity = entityId;
+				if (selectedEntity == entityId)
+					ImGui::SetItemDefaultFocus();
+			}
 
-			if (selectedEntity == entityId)
-				ImGui::SetItemDefaultFocus();
+			ImGui::EndListBox();
 		}
 
-		ImGui::EndListBox();
-
-		if (ImGui::Button("Add Entity", { ImGui::GetContentRegionAvailWidth(), 0 })) {
+		if (ImGui::Button("Add Entity", { ImGui::GetContentRegionAvail().x, 0 })) {
 			ENTITY_MANAGER->SpawnEntity();
 		}
 
@@ -252,7 +252,7 @@ namespace OpenGLFun {
 		}
 		else {
 			ImGui::PushStyleColor(ImGuiCol_Button, {0.7f, 0.1f, 0.1f, 1.0f});
-			if (ImGui::Button("Delete Entity", { ImGui::GetContentRegionAvailWidth(), 0 })) {
+			if (ImGui::Button("Delete Entity", { ImGui::GetContentRegionAvail().x, 0 })) {
 				shouldDeleteEntity = true;
 			}
 			ImGui::PopStyleColor();
@@ -370,7 +370,7 @@ namespace OpenGLFun {
 		if (ImGui::BeginPopupModal(id, NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
 			ImGui::Text(message);
 
-			if (ImGui::Button("Ok", {ImGui::GetContentRegionAvailWidth(), 0})) {
+			if (ImGui::Button("Ok", {ImGui::GetContentRegionAvail().x, 0})) {
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -406,14 +406,14 @@ namespace OpenGLFun {
 		if (ImGui::BeginPopupModal("Confirm Delete Entity", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
 			ImGui::Text((std::string("Are you sure you want to delete entity #") + std::to_string(selectedEntity) + "?").c_str());
 
-			if (ImGui::Button("Confirm", { ImGui::GetContentRegionAvailWidth()*0.5f, 0 })) {
+			if (ImGui::Button("Confirm", { ImGui::GetContentRegionAvail().x *0.5f, 0 })) {
 				ENTITY_MANAGER->MarkEntityDead(selectedEntity);
 				selectedEntity = -1;
 				ImGui::CloseCurrentPopup();
 			}
 
 			ImGui::SameLine();
-			if (ImGui::Button("Cancel", { ImGui::GetContentRegionAvailWidth(), 0 })) {
+			if (ImGui::Button("Cancel", { ImGui::GetContentRegionAvail().x, 0 })) {
 				ImGui::CloseCurrentPopup();
 			}
 
