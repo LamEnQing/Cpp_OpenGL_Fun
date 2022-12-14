@@ -48,6 +48,12 @@ namespace OpenGLFun {
 		bool openAddTexture = false;
 		if (!ImGui::CollapsingHeader("Sprite", &canClose)) return !canClose;
 
+		Texture* texturePtr = RESOURCE_MANAGER->GetTexture(mTextureFilepath);
+		static int uvPosX = 0; uvPosX = mUVPosition[0];
+		static int uvPosY = 0; uvPosY = mUVPosition[1];
+		static int uvDimX = 0; uvDimX = mUVDimensions[0];
+		static int uvDimY = 0; uvDimY = mUVDimensions[1];
+
 		std::vector<std::string> texturesList;
 		for (auto const& pair : RESOURCE_MANAGER->mTexturesDataMap)
 			texturesList.push_back(pair.first);
@@ -67,6 +73,10 @@ namespace OpenGLFun {
 				if (ImGui::Selectable(texture.c_str(), _selectedTexture == i)) {
 					_selectedTexture = i;
 					mTextureFilepath = texture;
+					texturePtr = RESOURCE_MANAGER->GetTexture(mTextureFilepath);
+
+					uvDimX = mUVDimensions[0] = texturePtr->imgWidth;
+					uvDimY = mUVDimensions[1] = texturePtr->imgHeight;
 				}
 				else if (mTextureFilepath == texture)
 					_selectedTexture = i;
@@ -78,12 +88,6 @@ namespace OpenGLFun {
 		if (ImGui::Button("Add Texture")) {
 			FUN_IMGUI_SYSTEM->mTextureLoadFileBrowser.OpenPopup();
 		}
-
-		Texture* texturePtr = RESOURCE_MANAGER->GetTexture(mTextureFilepath);
-		static int uvPosX = 0; uvPosX = mUVPosition[0];
-		static int uvPosY = 0; uvPosY = mUVPosition[1];
-		static int uvDimX = 0; uvDimX = mUVDimensions[0];
-		static int uvDimY = 0; uvDimY = mUVDimensions[1];
 
 		ImGui::PushItemWidth(30);
 		ImGui::Text("UV Position"); ImGui::SameLine();
