@@ -55,9 +55,11 @@
     <Filter Include="system\graphics\camera">
       <UniqueIdentifier>{ace3b2bc-7d53-48e2-bf76-0a5650249eb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendors\glad">
+      <UniqueIdentifier>{f75e247e-707b-4740-b0a7-cb1b9f81c49f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Shader.cpp">
       <Filter>system\graphics\shader</Filter>
     </ClCompile>
@@ -110,27 +112,6 @@
     <ClCompile Include="src\AnimationSystem.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="src\vendors\imgui\imgui.cpp">
-      <Filter>vendors\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vendors\imgui\imgui_demo.cpp">
-      <Filter>vendors\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vendors\imgui\imgui_draw.cpp">
-      <Filter>vendors\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vendors\imgui\imgui_impl_glfw.cpp">
-      <Filter>vendors\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vendors\imgui\imgui_impl_opengl3.cpp">
-      <Filter>vendors\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vendors\imgui\imgui_tables.cpp">
-      <Filter>vendors\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vendors\imgui\imgui_widgets.cpp">
-      <Filter>vendors\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="src\ResourceManager.cpp">
       <Filter>managers</Filter>
     </ClCompile>
@@ -182,9 +163,6 @@
     <ClCompile Include="src\FileOps.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\vendors\imgui\imgui_stdlib.cpp">
-      <Filter>vendors\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="src\LogicSystem.cpp">
       <Filter>system\logic</Filter>
     </ClCompile>
@@ -196,6 +174,33 @@
     </ClCompile>
     <ClCompile Include="src\OrthoCamera2D.cpp">
       <Filter>system\graphics\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\glad\glad.c">
+      <Filter>vendors\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_demo.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_draw.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_impl_glfw.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_impl_opengl3.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_stdlib.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_tables.cpp">
+      <Filter>vendors\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp">
+      <Filter>vendors\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +342,36 @@
     </ClInclude>
     <ClInclude Include="src\OrthoCamera2D.h">
       <Filter>system\graphics\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imconfig.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_glfw.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_opengl3.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_internal.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imgui_stdlib.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imstb_rectpack.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imstb_textedit.h">
+      <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h">
+      <Filter>vendors\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

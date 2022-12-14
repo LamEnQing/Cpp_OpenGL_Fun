@@ -45,13 +45,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)lib;$(SolutionDir)vendors\libs;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)lib;$(SolutionDir)vendors\libs;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -64,6 +66,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendors\includes;$(SolutionDir)vendors\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -85,6 +88,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendors\includes;$(SolutionDir)vendors\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,6 +100,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\vendors\source\glad\glad.c" />
+    <ClCompile Include="..\vendors\source\imgui\imgui.cpp" />
+    <ClCompile Include="..\vendors\source\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\vendors\source\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\vendors\source\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\vendors\source\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\vendors\source\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="..\vendors\source\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\AnimationSystem.cpp" />
     <ClCompile Include="src\BasicShape.cpp" />
     <ClCompile Include="src\Behaviour.cpp" />
@@ -112,7 +125,6 @@
     <ClCompile Include="src\FileBrowserImgui.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\FunImGuiSystem.cpp" />
-    <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\GraphicSystem.cpp" />
     <ClCompile Include="src\InputSystem.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
@@ -134,18 +146,20 @@
     <ClCompile Include="src\Vec2f.cpp" />
     <ClCompile Include="src\Vec3f.cpp" />
     <ClCompile Include="src\Vec4f.cpp" />
-    <ClCompile Include="src\vendors\imgui\imgui.cpp" />
-    <ClCompile Include="src\vendors\imgui\imgui_demo.cpp" />
-    <ClCompile Include="src\vendors\imgui\imgui_draw.cpp" />
-    <ClCompile Include="src\vendors\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="src\vendors\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\vendors\imgui\imgui_stdlib.cpp" />
-    <ClCompile Include="src\vendors\imgui\imgui_tables.cpp" />
-    <ClCompile Include="src\vendors\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Vertex.cpp" />
     <ClCompile Include="src\WindowSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\vendors\source\imgui\imconfig.h" />
+    <ClInclude Include="..\vendors\source\imgui\imgui.h" />
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\vendors\source\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\vendors\source\imgui\imgui_internal.h" />
+    <ClInclude Include="..\vendors\source\imgui\imgui_stdlib.h" />
+    <ClInclude Include="..\vendors\source\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\vendors\source\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h" />
     <ClInclude Include="src\AnimationSystem.h" />
     <ClInclude Include="src\Behaviour.h" />
     <ClInclude Include="src\Button.h" />
