@@ -3,10 +3,6 @@
 	"window_height": 720,
 	"window_title": "OpenGL Fun",
 	"level_on_startup": "two_d.json",
-	"default_model": {
-		"model_type": "2d",
-		"model": "square_2d.json"
-	},
 	"preload_assets": [
 		{
 			"type": "texture",

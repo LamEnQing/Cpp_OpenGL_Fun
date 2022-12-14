@@ -46,11 +46,11 @@ namespace OpenGLFun {
 			}
 		}
 
-		if (!document.HasMember("default_model") || !document["default_model"].IsObject())
+		/*if (!document.HasMember("default_model") || !document["default_model"].IsObject())
 			throw JsonReadException(configFilepath, "default_model", "JSON object");
 		const rapidjson::Value& modelObj = document["default_model"];
 		
-		/*if (!modelObj.HasMember("model_type") || !modelObj["model_type"].IsString())
+		if (!modelObj.HasMember("model_type") || !modelObj["model_type"].IsString())
 			throw JsonReadException(configFilepath, "default_model", "model_type", "JSON object");
 		_defaultModelType = ModelComponent::ParseModelTypeString(modelObj["model_type"].GetString());
 
@@ -71,19 +71,19 @@ namespace OpenGLFun {
 		if (!document.IsObject())
 			throw SimpleException(configFilepath + " must start with a JSON object");
 
-		if (!document.HasMember("default_model") || !document["default_model"].IsObject())
+		/*if (!document.HasMember("default_model") || !document["default_model"].IsObject())
 			throw JsonReadException(configFilepath, "default_model", "JSON object");
 		const rapidjson::Value& modelObj = document["default_model"];
 
-		/*if (!modelObj.HasMember("model_type") || !modelObj["model_type"].IsString())
+		if (!modelObj.HasMember("model_type") || !modelObj["model_type"].IsString())
 			throw JsonReadException(configFilepath, "default_model", "model_type", "JSON object");
 		_defaultModelType = ModelComponent::ParseModelTypeString(modelObj["model_type"].GetString());
 
 		if (!modelObj.HasMember("model") || !modelObj["model"].IsString())
 			throw JsonReadException(configFilepath, "default_model", "model_type", "string");
-		_defaultModelFilepath = modelObj["model"].GetString();*/
+		_defaultModelFilepath = modelObj["model"].GetString();
 
-		/*if (_defaultModelType == ModelType::TwoD)
+		if (_defaultModelType == ModelType::TwoD)
 			RESOURCE_MANAGER->Load2DModel(_defaultModelFilepath);*/
 
 		if (document.HasMember("preload_assets")) {
