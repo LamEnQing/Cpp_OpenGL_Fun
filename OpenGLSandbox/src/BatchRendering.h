@@ -24,6 +24,7 @@ private:
 
 	const size_t maxQuad{ 100 };
 	size_t quadCount{ 0 };
+	int selectedQuad{ -1 };
 public:
 	BatchRendering();
 	~BatchRendering();

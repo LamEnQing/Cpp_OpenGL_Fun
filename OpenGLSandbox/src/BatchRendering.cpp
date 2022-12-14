@@ -64,7 +64,7 @@ void BatchRendering::Draw(OpenGLSandbox::ShaderProgram& shdrPgm) {
 		this->indexData.reserve(6); // pre-allocate space for 6 indices, remember, 3 indices per triangle and 2 triangle per quad.
 
 		// index goes like this: 0,1,2, 2,3,0
-		uint32_t quadStart = this->quadCount * (uint32_t)4;
+		uint32_t quadStart = (uint32_t)this->quadCount * (uint32_t)4;
 
 		this->indexData.emplace_back(quadStart);
 		this->indexData.emplace_back(quadStart + 1);
@@ -79,10 +79,24 @@ void BatchRendering::Draw(OpenGLSandbox::ShaderProgram& shdrPgm) {
 		hasVertexDataChanged = true;
 	}
 
+	static float posX = 0, posY = 0;
+	static float rotation = 0;
+	static float scaleX = 0, scaleY = 0;
+
 	ImGui::SetNextItemWidth(-FLT_MIN);
 	if (ImGui::BeginListBox("##Quad List")) {
-		for (size_t i = 1; i <= quadCount; i++) {
-			ImGui::Selectable((std::string("Quad #") + std::to_string(i)).c_str());
+		for (size_t i = 0; i < quadCount; i++) {
+			if (ImGui::Selectable((std::string("Quad #") + std::to_string(i+1)).c_str(), ((int)i) == selectedQuad)) {
+				selectedQuad = (int)i;
+
+				OpenGLSandbox::Vertex& firstVertex = this->vertexData.at((size_t)(selectedQuad * 4));
+				posX = firstVertex.position[0];
+				posY = firstVertex.position[1];
+			}
+
+			if (selectedQuad == (int)i) {
+				ImGui::SetItemDefaultFocus();
+			}
 		}
 
 		ImGui::EndListBox();
@@ -90,36 +104,60 @@ void BatchRendering::Draw(OpenGLSandbox::ShaderProgram& shdrPgm) {
 
 	ImGui::NewLine();
 	if (ImGui::CollapsingHeader("Quad Property Editor")) {
-		ImGui::Text("Position:");
-		ImGui::SameLine(); ImGui::Text("X");
-		ImGui::SameLine(); ImGui::InputFloat("##posx", NULL);
-		ImGui::SameLine(); ImGui::Text("Y");
-		ImGui::SameLine();
+		if (selectedQuad != -1) {
+			OpenGLSandbox::Vertex& bottomLeftVertex = this->vertexData.at((size_t)(selectedQuad * 4));
 
-		ImGui::Text("Rotation:");
+			ImGui::PushItemWidth(50);
 
-		ImGui::Text("Scale:");
+			// Position will set from the bottom left
+			ImGui::Text("Position:");
+			ImGui::SameLine(); ImGui::Text("X");
+			ImGui::SameLine(); ImGui::InputFloat("##posX", &posX, -1);
+			ImGui::SameLine(); ImGui::Text("Y");
+			ImGui::SameLine(); ImGui::InputFloat("##posY", &posY);
+
+			ImGui::Text("Rotation:");
+
+			ImGui::Text("Scale:");
+
+			ImGui::PopItemWidth();
+
+			if (posX != bottomLeftVertex.position[0] || posY != bottomLeftVertex.position[1]) {
+				OpenGLSandbox::Vertex& topRightVertex = this->vertexData.at(static_cast<size_t>(selectedQuad * 4) + 2);
+
+				float width = topRightVertex.position[0] - bottomLeftVertex.position[0];
+				float height = topRightVertex.position[1] - bottomLeftVertex.position[1];
+
+				// loop through the quad's vertices in the order: bottom left, bottom right, top right, top left
+				for (size_t i = 0; i < 4; i++) {
+					OpenGLSandbox::Vertex& vertex = this->vertexData.at(static_cast<size_t>(selectedQuad * 4) + i);
+
+					if (i == 0) { // bottom left
+						vertex.position[0] = posX;
+						vertex.position[1] = posY;
+					}
+					else if (i == 1) { // bottom right
+						vertex.position[0] = posX + width;
+						vertex.position[1] = posY;
+					}
+					else if (i == 2) { // top right
+						vertex.position[0] = posX + width;
+						vertex.position[1] = posY + height;
+					}
+					else if (i == 3) { // top left
+						vertex.position[0] = posX;
+						vertex.position[1] = posY + height;
+					}
+
+					std::cout << "Vertex " << i << ":" << vertex.position[0] << ',' << vertex.position[1] << std::endl;
+				}
+
+				hasVertexDataChanged = true;
+			}
+		}
 	}
 
 	ImGui::End();
-
-	// x,y,z, r,g,b,a, u,v, texIndex
-	OpenGLSandbox::Vertex vertices[] = {
-		{ -0.75f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f },
-		{ -0.25f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f },
-		{ -0.25f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f },
-		{ -0.75f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f },
-
-		{ 0.25f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f },
-		{ 0.75f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f },
-		{ 0.75f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f },
-		{ 0.25f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f }
-	};
-
-	uint32_t idk_indices[] = {
-		0, 1, 2, 2, 3, 0,
-		4, 5, 6, 6, 7, 4
-	};
 
 	// Set dynamic vertex buffer
 	if (hasVertexDataChanged) {
@@ -150,6 +188,6 @@ void BatchRendering::Draw(OpenGLSandbox::ShaderProgram& shdrPgm) {
 	glUniform1iv(texLoc, 2, samplers);
 
 	glBindVertexArray(this->vao);
-	glDrawElements(GL_TRIANGLES, indexData.size(), GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indexData.size()), GL_UNSIGNED_INT, nullptr);
 	glBindVertexArray(0);
 }
