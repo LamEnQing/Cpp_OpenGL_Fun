@@ -1,8 +1,9 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <glm/vec2.hpp>
 
-#include <iostream>
+#include <cmath> // sin, cos
 #include <vector>
 
 #include "GlobalDeclared.h"
@@ -57,8 +58,28 @@ namespace OpenGLSandbox {
 			for (size_t i = 0; i < m_vertices.size(); i++) {
 				VertexWrapper& vertWrap = m_vertices.at(i);
 
-				vertWrap.vertex.m_position[0] = (vertWrap.m_position[0] * m_scale[0] + m_position[0]) / (SCREEN_WIDTH / 2.0f);
-				vertWrap.vertex.m_position[1] = (vertWrap.m_position[1] * m_scale[1] + m_position[1]) / (SCREEN_HEIGHT / 2.0f);
+				// Apply scaling
+				vertWrap.vertex.position[0] = vertWrap.m_position[0] * m_scale[0];
+				vertWrap.vertex.position[1] = vertWrap.m_position[1] * m_scale[1];
+
+
+				// Apply rotation
+				float x = vertWrap.vertex.position[0];
+				float y = vertWrap.vertex.position[1];
+				float rotRadians = glm::radians(m_rotation);
+				float cosVal = cos(rotRadians), sinVal = sin(rotRadians);
+
+				vertWrap.vertex.position[0] = x * cosVal - y * sinVal;
+				vertWrap.vertex.position[1] = x * sinVal + y * cosVal;
+
+
+				// Apply translation
+				vertWrap.vertex.position[0] += m_position[0];
+				vertWrap.vertex.position[1] += m_position[1];
+
+				// Normalise the coordinates to range -1 and 1
+				vertWrap.vertex.position[0] /= SCREEN_WIDTH / 2.0f;
+				vertWrap.vertex.position[1] /= SCREEN_HEIGHT / 2.0f;
 			}
 		}
 	};

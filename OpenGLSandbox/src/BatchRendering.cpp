@@ -134,7 +134,7 @@ void BatchRendering::Draw(OpenGLSandbox::ShaderProgram& shdrPgm) {
 
 			ImGui::PopItemWidth();
 
-			if (posX != mesh.m_position[0] || posY != mesh.m_position[1] || scaleX != mesh.m_scale[0] || scaleY != mesh.m_scale[1]) {
+			if (posX != mesh.m_position[0] || posY != mesh.m_position[1] || scaleX != mesh.m_scale[0] || scaleY != mesh.m_scale[1] || rotation != mesh.m_rotation) {
 				mesh.SetTransforms(posX, posY, rotation, scaleX, scaleY);
 
 				hasVertexDataChanged = true;
