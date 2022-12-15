@@ -16,6 +16,9 @@
     <Filter Include="vendors\glad">
       <UniqueIdentifier>{68140b2a-5dbd-4677-8547-763e2b214456}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mesh">
+      <UniqueIdentifier>{db29f008-1f69-452e-bc5a-a0ee8b4e277f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
@@ -67,7 +70,6 @@
     <ClInclude Include="src\FileOps.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Vertex.h" />
     <ClInclude Include="..\vendors\source\imgui\imconfig.h">
       <Filter>vendors\imgui</Filter>
     </ClInclude>
@@ -100,5 +102,14 @@
     </ClInclude>
     <ClInclude Include="src\BatchRendering.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Vertex.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GlobalDeclared.h">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

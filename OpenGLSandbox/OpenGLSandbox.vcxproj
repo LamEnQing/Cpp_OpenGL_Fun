@@ -39,9 +39,11 @@
     <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h" />
     <ClInclude Include="src\BatchRendering.h" />
     <ClInclude Include="src\FileOps.h" />
+    <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\ShaderProgram.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\GlobalDeclared.h" />
     <ClInclude Include="src\Vertex.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

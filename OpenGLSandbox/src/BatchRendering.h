@@ -6,8 +6,9 @@
 #include <numeric>
 #include <vector>
 
+#include "GlobalDeclared.h"
 #include "ShaderProgram.h"
-#include "Vertex.h"
+#include "Mesh.h"
 
 class BatchRendering {
 private:
@@ -19,8 +20,8 @@ private:
 	GLuint sinonSqTex{ UINT32_MAX }, gwenStacyTex{ UINT32_MAX };
 
 	bool hasVertexDataChanged{ false };
-	std::vector<OpenGLSandbox::Vertex> vertexData;
-	std::vector<uint32_t> indexData;
+	std::vector<OpenGLSandbox::Mesh> meshData;
+	std::vector<OpenGLSandbox::VertexIndexType> indexData;
 
 	const size_t maxQuad{ 100 };
 	size_t quadCount{ 0 };

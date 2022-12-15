@@ -27,7 +27,7 @@ void WindowCreation() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // can resize or not?
 
-	windowPtr = glfwCreateWindow(1280, 720, "OpenGL Sandbox", NULL, NULL);
+	windowPtr = glfwCreateWindow(static_cast<int>(OpenGLSandbox::SCREEN_WIDTH), static_cast<int>(OpenGLSandbox::SCREEN_HEIGHT), "OpenGL Sandbox", NULL, NULL);
 	if (windowPtr == nullptr) {
 		throw std::exception("Failed to create GLFW window");
 	}
