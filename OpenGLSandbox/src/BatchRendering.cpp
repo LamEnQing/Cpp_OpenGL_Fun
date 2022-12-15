@@ -52,6 +52,8 @@ void BatchRendering::Draw(OpenGLSandbox::ShaderProgram& shdrPgm) {
 
 	ImGui::Begin("BatchRendering", NULL, ImGuiWindowFlags_HorizontalScrollbar);
 
+	ImGui::Text((std::string("Buffer updates count:") + std::to_string(this->bufferUpdates)).c_str());
+
 	if (ImGui::Button("Add Quad") && quadCount < maxQuad) {
 		this->meshData.reserve(1); // pre-allocate space for 4 m_vertices
 
@@ -147,9 +149,9 @@ void BatchRendering::Draw(OpenGLSandbox::ShaderProgram& shdrPgm) {
 	// Set dynamic vertWrap buffer
 	if (hasVertexDataChanged) {
 		std::vector<OpenGLSandbox::Vertex> vertices;
-		vertices.reserve(meshData.size() * 4);
 
 		for (auto meshIt = meshData.begin(); meshIt != meshData.end(); meshIt++) {
+			vertices.reserve(sizeof(OpenGLSandbox::Vertex) * meshIt->m_vertices.size());
 			for (auto vertexIt = meshIt->m_vertices.begin(); vertexIt != meshIt->m_vertices.end(); vertexIt++)
 				vertices.push_back(vertexIt->vertex);
 		}
@@ -165,6 +167,8 @@ void BatchRendering::Draw(OpenGLSandbox::ShaderProgram& shdrPgm) {
 		hasVertexDataChanged = false;
 
 		std::cout << "Submitting mesh data" << std::endl;
+
+		bufferUpdates++;
 	}
 
 	glClearColor(0.4f, 0.4f, 0.4f, 1.0f);

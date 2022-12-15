@@ -26,6 +26,8 @@ private:
 	const size_t maxQuad{ 100 };
 	size_t quadCount{ 0 };
 	int selectedQuad{ -1 };
+
+	int bufferUpdates{ 0 }; // number of times the buffer has been updated
 public:
 	BatchRendering();
 	~BatchRendering();
