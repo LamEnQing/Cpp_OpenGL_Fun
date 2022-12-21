@@ -79,7 +79,7 @@ int main(void) {
 		ShadersInit();
 		MyImGuiInit();
 
-		BatchRendering batchRender;
+		OpenGLSandbox::BatchRendering batchRender;
 
 		while (!glfwWindowShouldClose(windowPtr)) {
 			glfwPollEvents();

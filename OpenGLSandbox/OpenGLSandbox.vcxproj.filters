@@ -19,6 +19,9 @@
     <Filter Include="mesh">
       <UniqueIdentifier>{db29f008-1f69-452e-bc5a-a0ee8b4e277f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="batch_renderers">
+      <UniqueIdentifier>{3234bfe0-5098-4146-82be-da71440daee7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
@@ -58,7 +61,9 @@
     <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp">
       <Filter>vendors\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\BatchRendering.cpp" />
+    <ClCompile Include="src\BatchRendering.cpp">
+      <Filter>batch_renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -100,7 +105,6 @@
     <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h">
       <Filter>vendors\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\BatchRendering.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Vertex.h">
       <Filter>mesh</Filter>
@@ -110,6 +114,12 @@
     </ClInclude>
     <ClInclude Include="src\GlobalDeclared.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BatchRendering.h">
+      <Filter>batch_renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IBatchRenderer.h">
+      <Filter>batch_renderers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
