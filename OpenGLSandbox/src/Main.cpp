@@ -18,7 +18,8 @@
 #include "Vertex.h"
 
 GLFWwindow* windowPtr = nullptr;
-OpenGLSandbox::ShaderProgram batchShdrPgm;
+OpenGLSandbox::ShaderProgram batchTexShdrPgm;
+OpenGLSandbox::ShaderProgram batchColorShdrPgm;
 
 void WindowCreation() {
 	glfwInit();
@@ -60,9 +61,14 @@ void MyImGuiShutdown() {
 }
 
 void ShadersInit() {
-	if (!batchShdrPgm.CompileAndLink("assets/shaders/batch.vert", "assets/shaders/batch.frag")) {
-		batchShdrPgm.Destroy();
-		throw std::exception("Failed to compile 2D shader program.\n");
+	if (!batchTexShdrPgm.CompileAndLink("assets/shaders/batch_tex.vert", "assets/shaders/batch_tex.frag")) {
+		batchTexShdrPgm.Destroy();
+		throw std::exception("Failed to compile 'batchTexShdrPgm' shader program.\n");
+	}
+
+	if (!batchColorShdrPgm.CompileAndLink("assets/shaders/batch_color.vert", "assets/shaders/batch_color.frag")) {
+		batchColorShdrPgm.Destroy();
+		throw std::exception("Failed to compile 'batchColorShdrPgm' shader program.\n");
 	}
 }
 

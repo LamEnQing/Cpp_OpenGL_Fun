@@ -1,5 +1,4 @@
 #version 330 core
-in vec4 myColor;
 in vec2 myTexCoord;
 in float myTexIndex;
 
