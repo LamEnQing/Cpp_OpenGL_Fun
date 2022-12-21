@@ -64,6 +64,9 @@
     <ClCompile Include="src\BatchRendering.cpp">
       <Filter>batch_renderers</Filter>
     </ClCompile>
+    <ClCompile Include="src\GridsBatchRendering.cpp">
+      <Filter>batch_renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -116,6 +119,9 @@
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="src\BatchRendering.h">
+      <Filter>batch_renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GridsBatchRendering.h">
       <Filter>batch_renderers</Filter>
     </ClInclude>
     <ClInclude Include="src\IBatchRenderer.h">

@@ -22,6 +22,7 @@
     <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\BatchRendering.cpp" />
     <ClCompile Include="src\FileOps.cpp" />
+    <ClCompile Include="src\GridsBatchRendering.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h" />
     <ClInclude Include="src\BatchRendering.h" />
     <ClInclude Include="src\FileOps.h" />
+    <ClInclude Include="src\GridsBatchRendering.h" />
     <ClInclude Include="src\IBatchRenderer.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Shader.h" />

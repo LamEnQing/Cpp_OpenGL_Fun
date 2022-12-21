@@ -14,6 +14,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "BatchRendering.h"
+#include "GridsBatchRendering.h"
 #include "ShaderProgram.h"
 #include "Vertex.h"
 
@@ -85,7 +86,8 @@ int main(void) {
 		ShadersInit();
 		MyImGuiInit();
 
-		OpenGLSandbox::BatchRendering batchRender;
+		//OpenGLSandbox::BatchRendering batchRender;
+		OpenGLSandbox::GridsBatchRendering gridBatchRender;
 
 		while (!glfwWindowShouldClose(windowPtr)) {
 			glfwPollEvents();
@@ -95,7 +97,8 @@ int main(void) {
 			ImGui::NewFrame();
 
 			// Drawing codes
-			batchRender.Draw(batchShdrPgm);
+			//batchRender.Draw(batchTexShdrPgm);
+			gridBatchRender.Draw(batchColorShdrPgm);
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
