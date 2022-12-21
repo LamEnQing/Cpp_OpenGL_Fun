@@ -54,7 +54,7 @@ namespace OpenGLSandbox {
 			ApplyTransformation();
 		}
 
-		void ApplyTransformation() {
+		Mesh& ApplyTransformation(bool shouldNormalise = true) {
 			for (size_t i = 0; i < m_vertices.size(); i++) {
 				VertexWrapper& vertWrap = m_vertices.at(i);
 
@@ -78,9 +78,13 @@ namespace OpenGLSandbox {
 				vertWrap.vertex.position[1] += m_position[1];
 
 				// Normalise the coordinates to range -1 and 1
-				vertWrap.vertex.position[0] /= SCREEN_WIDTH / 2.0f;
-				vertWrap.vertex.position[1] /= SCREEN_HEIGHT / 2.0f;
+				if (shouldNormalise) {
+					vertWrap.vertex.position[0] /= SCREEN_WIDTH / 2.0f;
+					vertWrap.vertex.position[1] /= SCREEN_HEIGHT / 2.0f;
+				}
 			}
+
+			return *this;
 		}
 	};
 }

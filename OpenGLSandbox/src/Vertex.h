@@ -15,6 +15,6 @@ namespace OpenGLSandbox {
 	// Apply transformations from data members into vertex
 	struct VertexWrapper {
 		float m_position[3]; // the vertex m_position before transformation, that is, in the range of -1 to 1
-		Vertex vertex; // the m_position in the vertex is after transformation
+		Vertex vertex; // the position in the vertex is after transformation
 	};
 }
