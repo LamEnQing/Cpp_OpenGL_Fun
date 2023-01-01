@@ -62,14 +62,14 @@ void MyImGuiShutdown() {
 }
 
 void ShadersInit() {
-	if (!batchTexShdrPgm.CompileAndLink("assets/shaders/batch_tex.vert", "assets/shaders/batch_tex.frag")) {
+	if (!batchTexShdrPgm.CompileAndLink("batch_tex")) {
 		batchTexShdrPgm.Destroy();
-		throw std::exception("Failed to compile 'batchTexShdrPgm' shader program.\n");
+		throw std::exception("Failed to compile 'batch_tex' shaders.\n");
 	}
 
-	if (!batchColorShdrPgm.CompileAndLink("assets/shaders/batch_color.vert", "assets/shaders/batch_color.frag")) {
+	if (!batchColorShdrPgm.CompileAndLink("batch_color")) {
 		batchColorShdrPgm.Destroy();
-		throw std::exception("Failed to compile 'batchColorShdrPgm' shader program.\n");
+		throw std::exception("Failed to compile 'batch_color' shaders.\n");
 	}
 }
 

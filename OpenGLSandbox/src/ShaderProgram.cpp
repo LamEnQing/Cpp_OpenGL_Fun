@@ -5,18 +5,22 @@
 #include <vector>
 
 namespace OpenGLSandbox {
-	bool ShaderProgram::CompileAndLink(const std::string& vertShdrPath, const std::string& fragShdrPath) {
+	std::string MakeShaderPath(std::string const& shaderName, std::string const& fileExt) {
+		return std::string("assets/shaders/") + shaderName + fileExt;
+	}
+
+	bool ShaderProgram::CompileAndLink(const std::string& shaderName) {
 		OpenGLSandbox::Shader vertexShader{}, fragmentShader{};
 
-		if (!vertexShader.Compile(OpenGLSandbox::ShaderType::Vertex, vertShdrPath)) {
+		if (!vertexShader.Compile(OpenGLSandbox::ShaderType::Vertex, MakeShaderPath(shaderName, ".vert"))) {
 			vertexShader.Destroy();
 
-			throw std::exception((std::string("Failed to compile ") + vertShdrPath + "\n").c_str());
+			throw std::exception((std::string("Failed to compile ") + MakeShaderPath(shaderName, ".vert") + "\n").c_str());
 		}
-		if (!fragmentShader.Compile(OpenGLSandbox::ShaderType::Fragment, fragShdrPath)) {
+		if (!fragmentShader.Compile(OpenGLSandbox::ShaderType::Fragment, MakeShaderPath(shaderName, ".frag"))) {
 			fragmentShader.Destroy();
 
-			throw std::exception((std::string("Failed to compile ") + fragShdrPath + "\n").c_str());
+			throw std::exception((std::string("Failed to compile ") + MakeShaderPath(shaderName, ".frag") + "\n").c_str());
 		}
 
 		mProgramId = glCreateProgram();
@@ -41,7 +45,7 @@ namespace OpenGLSandbox {
 			vertexShader.Destroy();
 			fragmentShader.Destroy();
 
-			std::cout << "Shader linking failed: \n\t" << infoLog.data();
+			std::cout << "Shader '" << shaderName << "' linking failed: \n\t" << infoLog.data();
 			mProgramId = UINT32_MAX;
 			return false;
 		}

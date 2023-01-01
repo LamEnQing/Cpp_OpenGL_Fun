@@ -5,7 +5,7 @@ namespace OpenGLSandbox {
 	struct ShaderProgram {
 		unsigned int mProgramId{ UINT32_MAX };
 
-		bool CompileAndLink(const std::string& vertexShader, const std::string& fragmentShader);
+		bool CompileAndLink(const std::string& shaderName);
 		void Destroy(void);
 
 		void use(void);
