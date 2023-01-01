@@ -2,6 +2,8 @@
 #include "Shader.h"
 
 namespace OpenGLSandbox {
+	extern unsigned int currShdrPgm;
+
 	struct ShaderProgram {
 		unsigned int mProgramId{ UINT32_MAX };
 

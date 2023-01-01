@@ -5,6 +5,8 @@
 #include <vector>
 
 namespace OpenGLSandbox {
+	unsigned int currShdrPgm = 0;
+
 	std::string MakeShaderPath(std::string const& shaderName, std::string const& fileExt) {
 		return std::string("assets/shaders/") + shaderName + fileExt;
 	}
@@ -68,5 +70,6 @@ namespace OpenGLSandbox {
 
 	void ShaderProgram::use() {
 		glUseProgram(mProgramId);
+		currShdrPgm = mProgramId;
 	}
 }

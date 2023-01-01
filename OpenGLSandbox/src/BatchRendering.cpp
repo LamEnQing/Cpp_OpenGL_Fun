@@ -134,7 +134,7 @@ namespace OpenGLSandbox {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, this->gwenStacyTex);
 
-		auto texLoc = glGetUniformLocation(shdrPgm.mProgramId, "myTextures");
+		auto texLoc = glGetUniformLocation(currShdrPgm, "myTextures");
 		int samplers[2] = { 0, 1 };
 		glUniform1iv(texLoc, 2, samplers);
 
