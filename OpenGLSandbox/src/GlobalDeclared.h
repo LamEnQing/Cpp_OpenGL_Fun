@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <numeric>
 
 namespace OpenGLSandbox {
 	using VertexIndexType = uint32_t;

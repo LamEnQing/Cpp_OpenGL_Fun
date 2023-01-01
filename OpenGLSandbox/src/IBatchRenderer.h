@@ -3,7 +3,6 @@
 
 #include <glad/glad.h>
 
-#include <numeric>
 #include <iostream>
 #include <vector>
 
