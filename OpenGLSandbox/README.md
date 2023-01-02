@@ -8,5 +8,10 @@ In an isolated environment, solely focused on OpenGL, with no game engine abstra
 # I want to see your codes!
 The codes are grouped into classes within `Main.cpp`. In the future, as more codes get added, these classes will be moved into their own source files.
 
-# What does it have currently?
-* Batch Rendering, from [The Cherno](https://www.youtube.com/watch?v=Th4huqR77rI&list=PLlrATfBNZ98f5vZ8nJ6UengEkZUMC4fy5)
+# What does each classes do?
+* IBatchRenderer, BatchRendering, GridsBatchRendering  
+An attempt at Batch Rendering, using these video guides from [The Cherno](https://www.youtube.com/watch?v=Th4huqR77rI&list=PLlrATfBNZ98f5vZ8nJ6UengEkZUMC4fy5)
+* StarSystem  
+An attempt to implement basic lighting and a perspective-view camera that orbits around the world origin.  
+For basic lighting, I followed a guide from [LearnOpenGL](https://learnopengl.com/Lighting/Basic-Lighting).
+To calculate the position of the orbiting camera, I followed a guide from [Megabyte Softworks](https://www.mbsoftworks.sk/tutorials/opengl4/026-camera-pt3-orbit-camera/).
