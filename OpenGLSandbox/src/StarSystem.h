@@ -1,5 +1,5 @@
 /*
-Authored by En Qing.
+Created by Lam En Qing.
  
 Description:
 	StarSystem attempts to implement a perspective camera that orbits the world origin, as well as basic lighting.
