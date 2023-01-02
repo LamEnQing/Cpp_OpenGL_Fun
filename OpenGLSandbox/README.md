@@ -6,9 +6,9 @@ In an isolated environment, solely focused on OpenGL, with no game engine abstra
 [Dear ImGui](https://github.com/ocornut/imgui) is also integrated into this project to quickly create GUIs to test the codes in a dynamic or fluid manner.
 
 # I want to see your codes!
-The codes are grouped into classes within `Main.cpp`. In the future, as more codes get added, these classes will be moved into their own source files.
+The codes are grouped into their own source files, such as BatchRendering, StarSystem, etc. They can be found in the `src` folder.
 
-# What does each classes do?
+# What and Where did you implement XXX?
 * IBatchRenderer, BatchRendering, GridsBatchRendering  
 An attempt at Batch Rendering, using these video guides from [The Cherno](https://www.youtube.com/watch?v=Th4huqR77rI&list=PLlrATfBNZ98f5vZ8nJ6UengEkZUMC4fy5)
 * StarSystem  
