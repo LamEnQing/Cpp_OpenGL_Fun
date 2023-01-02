@@ -16,6 +16,7 @@
 #include "BatchRendering.h"
 #include "GridsBatchRendering.h"
 #include "ShaderProgram.h"
+#include "StarSystem.h"
 #include "Vertex.h"
 
 GLFWwindow* windowPtr = nullptr;
@@ -87,7 +88,8 @@ int main(void) {
 		MyImGuiInit();
 
 		//OpenGLSandbox::BatchRendering batchRender;
-		OpenGLSandbox::GridsBatchRendering gridBatchRender;
+		//OpenGLSandbox::GridsBatchRendering gridBatchRender;
+		OpenGLSandbox::StarSystem starSystem;
 
 		while (!glfwWindowShouldClose(windowPtr)) {
 			glfwPollEvents();
@@ -98,7 +100,8 @@ int main(void) {
 
 			// Drawing codes
 			//batchRender.Draw(batchTexShdrPgm);
-			gridBatchRender.Draw(batchColorShdrPgm);
+			//gridBatchRender.Draw(batchColorShdrPgm);
+			starSystem.Draw();
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

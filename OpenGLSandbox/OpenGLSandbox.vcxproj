@@ -26,6 +26,8 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\StarSystem.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\vendors\source\imgui\imconfig.h" />
@@ -45,6 +47,7 @@
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\StarSystem.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\GlobalDeclared.h" />
     <ClInclude Include="src\Vertex.h" />
