@@ -15,13 +15,16 @@ References:
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <thread>
+#include <vector>
 
 #include "GlobalDeclared.h"
 
 namespace OpenGLSandbox {
 	class ThreadDrawing {
 	private:
-		bool wasThreadCreated{ false };
+		std::vector<std::thread> threads_;
+		bool wasThreadCreated{ false }, stopThreads{ false };
 
 		float progressBar_{ 0.0f };
 		float const maxProgressBar_{ 100.0f };

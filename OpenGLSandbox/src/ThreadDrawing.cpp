@@ -68,10 +68,15 @@ namespace OpenGLSandbox {
 			glDeleteBuffers(1, &vbo_);
 		if (ibo_ != UINT32_MAX)
 			glDeleteBuffers(1, &ibo_);
+
+		stopThreads = true;
+
+		for (std::thread& thd : threads_)
+			thd.join();
 	}
 
 	void ThreadDrawing::DelegateLoading() {
-		while (true) {
+		while (!stopThreads) {
 			double currTime = glfwGetTime();
 
 			double timeDiff = currTime - timeElapsed_;
@@ -92,7 +97,7 @@ namespace OpenGLSandbox {
 	void ThreadDrawing::Draw() {
 		if (!wasThreadCreated) {
 			wasThreadCreated = true;
-			static std::thread t1(&ThreadDrawing::DelegateLoading, this);
+			threads_.push_back(std::thread(&ThreadDrawing::DelegateLoading, this));
 		}
 
 		std::cout << "ThreadDrawing::Draw():" << progressBar_ << std::endl;
