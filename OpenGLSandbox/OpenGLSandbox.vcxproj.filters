@@ -69,6 +69,9 @@
     </ClCompile>
     <ClCompile Include="src\StarSystem.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\OrthoTest.cpp" />
+    <ClCompile Include="src\UVTest.cpp" />
+    <ClCompile Include="src\ThreadDrawing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -130,5 +133,9 @@
       <Filter>batch_renderers</Filter>
     </ClInclude>
     <ClInclude Include="src\StarSystem.h" />
+    <ClInclude Include="src\OrthoTest.h" />
+    <ClInclude Include="src\Main.h" />
+    <ClInclude Include="src\UVTest.h" />
+    <ClInclude Include="src\ThreadDrawing.h" />
   </ItemGroup>
 </Project>

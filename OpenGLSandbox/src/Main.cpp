@@ -1,10 +1,11 @@
+#include "Main.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #define _CRTDBG_MAP_ALLOC
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
 
+#include <chrono>
 #include <crtdbg.h>
 #include <exception>
 #include <iostream>
@@ -15,13 +16,16 @@
 
 #include "BatchRendering.h"
 #include "GridsBatchRendering.h"
-#include "ShaderProgram.h"
+#include "OrthoTest.h"
 #include "StarSystem.h"
+#include "ThreadDrawing.h"
+#include "UVTest.h"
 #include "Vertex.h"
 
 GLFWwindow* windowPtr = nullptr;
 OpenGLSandbox::ShaderProgram batchTexShdrPgm;
 OpenGLSandbox::ShaderProgram batchColorShdrPgm;
+OpenGLSandbox::ShaderProgram posColorShdrPgm;
 
 void WindowCreation() {
 	glfwInit();
@@ -72,6 +76,11 @@ void ShadersInit() {
 		batchColorShdrPgm.Destroy();
 		throw std::exception("Failed to compile 'batch_color' shaders.\n");
 	}
+
+	if (!posColorShdrPgm.CompileAndLink("pos_color")) {
+		posColorShdrPgm.Destroy();
+		throw std::exception("Failed to compile 'pos_color' shaders.\n");
+	}
 }
 
 int main(void) {
@@ -81,7 +90,7 @@ int main(void) {
 	#endif
 
 	try {
-		stbi_set_flip_vertically_on_load(1);
+		//stbi_set_flip_vertically_on_load(1);
 
 		WindowCreation();
 		ShadersInit();
@@ -89,19 +98,39 @@ int main(void) {
 
 		//OpenGLSandbox::BatchRendering batchRender;
 		//OpenGLSandbox::GridsBatchRendering gridBatchRender;
-		OpenGLSandbox::StarSystem starSystem;
+		//OpenGLSandbox::OrthoTest orthoTest;
+		//OpenGLSandbox::StarSystem starSystem;
+		OpenGLSandbox::ThreadDrawing threadDrawTest;
+		//OpenGLSandbox::UVTest uvTest;
+
+		using clock = std::chrono::high_resolution_clock;
+
+		auto startTime = clock::now();
+		auto lastTime = startTime;
+		int frameCount = 0;
+		float timeElapsed = 0.0f;
 
 		while (!glfwWindowShouldClose(windowPtr)) {
+			//glViewport(0.0f, 0.0f, OpenGLSandbox::SCREEN_WIDTH, OpenGLSandbox::SCREEN_HEIGHT);
+			auto currTime = clock::now();
+			auto deltaTime = currTime - lastTime;
+			lastTime = clock::now();
+
 			glfwPollEvents();
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
+			//ImGui::ShowDemoWindow(NULL);
+
 			// Drawing codes
 			//batchRender.Draw(batchTexShdrPgm);
 			//gridBatchRender.Draw(batchColorShdrPgm);
-			starSystem.Draw();
+			//orthoTest.Draw();
+			//starSystem.Draw();
+			threadDrawTest.Draw();
+			//uvTest.Draw();
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -115,8 +144,6 @@ int main(void) {
 
 			glfwSwapBuffers(windowPtr);
 		}
-
-		MyImGuiShutdown();
 	}
 	catch (const std::exception& e) {
 		std::cout << "\nEncountered an error:\n"
@@ -125,6 +152,7 @@ int main(void) {
 		std::cout << "------------------------------------------------------------------------\n";
 	}
 
+	MyImGuiShutdown();
 	glfwTerminate();
 
 	return 0;

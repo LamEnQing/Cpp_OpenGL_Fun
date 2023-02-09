@@ -40,8 +40,8 @@ namespace OpenGLSandbox {
 			throw std::exception("Failed to compile 'star_system_emissive' shaders.\n");
 		}
 
-		this->sunTex = LoadTexture("assets/textures/sun.png");
-		this->moonTex = LoadTexture("assets/textures/moon.png");
+		this->sunTex = LoadTexture("sun.png");
+		this->moonTex = LoadTexture("red.png");
 
 		// Right-hand Rule means that x is forward, z is rightward, y is upwards
 		// Vertex Order: Bottom Left, Bottom Right, Top Right, Top Left
@@ -131,15 +131,23 @@ namespace OpenGLSandbox {
 		glDeleteTextures(1, &sunTex);
 	}
 
+	float sunRotation = 0.0f;
 	void StarSystem::Draw() {
 		this->ImGuiControls();
+
+		sunRotation += 0.1f;
+		if (sunRotation > 360.0f)
+			sunRotation -= 360.0f;
 
 		glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-		glm::vec3 sunPos(0.0f, 0.0f, 0.0f);
-		glm::vec3 moonPos(-50.0f, -20.0f, -50.0f);
+		float sunDist = 50.0f;
+		float sunAngle = glm::radians(sunRotation);
+
+		glm::vec3 sunPos(glm::sin(sunAngle) * sunDist, 0.0f, glm::cos(sunAngle) * sunDist);
+		glm::vec3 moonPos(0.0f, 0.0f, 0.0f);
 		// Sun
 		{
 			emissiveShdr.use();
@@ -153,6 +161,8 @@ namespace OpenGLSandbox {
 			mainShdr.use();
 			auto lightPosLoc = glGetUniformLocation(currShdrPgm, "myLightPos");
 			glUniform3fv(lightPosLoc, 1, glm::value_ptr(sunPos));
+			auto lightStrengthLoc = glGetUniformLocation(currShdrPgm, "myLightStrength");
+			glUniform1f(lightStrengthLoc, emissiveStrength);
 
 			/*auto lightColorLoc = glGetUniformLocation(currShdrPgm, "myLightColor");
 			glUniform3fv(lightColorLoc, 1, glm::value_ptr(glm::vec3(emissiveStrength, emissiveStrength, emissiveStrength)));*/
@@ -181,8 +191,6 @@ namespace OpenGLSandbox {
 		//glm::mat4 projMtx = glm::ortho(-scrWidth / zoom, scrWidth / zoom, -scrHeight / zoom, scrHeight / zoom, 0.0f, 100000.0f);
 		glm::mat4 projMtx = glm::perspective(glm::radians(fov), SCREEN_WIDTH/static_cast<float>(SCREEN_HEIGHT), 0.1f, 10000.0f);
 		glm::mat4 finalMtx = projMtx * viewMtx;
-		auto transformsLoc = glGetUniformLocation(currShdrPgm, "uTransformation");
-		glUniformMatrix4fv(transformsLoc, 1, GL_FALSE, glm::value_ptr(finalMtx));
 
 		glm::mat4 modelMtx(1.0f);
 		modelMtx = glm::translate(modelMtx, glm::vec3(position[0], position[1], position[2]));
@@ -190,6 +198,12 @@ namespace OpenGLSandbox {
 		modelMtx = glm::rotate(modelMtx, glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f));
 		modelMtx = glm::rotate(modelMtx, glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f));
 
+		auto viewPosLoc = glGetUniformLocation(currShdrPgm, "myViewPos");
+		if (viewPosLoc != -1) { // -1 means uniform does not exist in the shader
+			glUniform3fv(viewPosLoc, 1, glm::value_ptr(camPos));
+		}
+		auto transformsLoc = glGetUniformLocation(currShdrPgm, "uTransformation");
+		glUniformMatrix4fv(transformsLoc, 1, GL_FALSE, glm::value_ptr(finalMtx));
 		auto modelLoc = glGetUniformLocation(currShdrPgm, "uModel");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMtx));
 
@@ -197,7 +211,7 @@ namespace OpenGLSandbox {
 		glBindTexture(GL_TEXTURE_2D, texId);
 
 		glBindVertexArray(this->vao);
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
 		glBindVertexArray(0);
 	}
 

@@ -8,8 +8,8 @@
 
 namespace OpenGLSandbox {
 	BatchRendering::BatchRendering() {
-		this->sinonSqTex = OpenGLSandbox::LoadTexture("assets/textures/sinon_square.png");
-		this->gwenStacyTex = OpenGLSandbox::LoadTexture("assets/textures/gwen_stacy.png");
+		this->sinonSqTex = OpenGLSandbox::LoadTexture("sinon_square.png");
+		this->gwenStacyTex = OpenGLSandbox::LoadTexture("gwen_stacy.png");
 
 		this->CreateBuffers(this->maxQuad * 4 * sizeof(Vertex), this->maxQuad * 6 * sizeof(VertexIndexType));
 	}

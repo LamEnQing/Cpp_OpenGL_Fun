@@ -5,9 +5,15 @@
 #include <iostream>
 
 namespace OpenGLSandbox {
-	GLuint LoadTexture(const std::string& path) {
+	GLuint LoadTexture(std::string path, int* imgWidth, int* imgHeight) {
 		int width, height, channels;
+		path = "assets/textures/" + path;
 		auto* pixels = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
+		if (imgWidth != nullptr)
+			*imgWidth = width;
+		if (imgHeight != nullptr)
+			*imgHeight = height;
 
 		if (!pixels) {
 			std::cout << "Failed to load image " << path << std::endl;

@@ -4,5 +4,5 @@
 #include <string>
 
 namespace OpenGLSandbox {
-	GLuint LoadTexture(const std::string& path);
+	GLuint LoadTexture(std::string path, int* imgWidth = nullptr, int* imgHeight = nullptr);
 }
