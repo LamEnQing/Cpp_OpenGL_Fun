@@ -10,7 +10,7 @@
 
 namespace OpenGLFun {
 
-	static const std::filesystem::path ASSETS_PATH = "assets";
+	const std::filesystem::path ASSETS_PATH = "assets";
 
 	ContentBrowserImgui::ContentBrowserImgui() : _currPath(ASSETS_PATH), _shouldCreatePreviewIcons{ true } {}
 
@@ -66,7 +66,9 @@ namespace OpenGLFun {
 
 				ImGui::BeginGroup();
 				ImGui::PushID(folderName.c_str());
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				ImGui::ImageButton(TextureUtils::GetImGuiTexId("icons\\folder.png"), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				ImGui::PopStyleColor();
 				ImGui::Text(folderName.c_str());
 				ImGui::PopID();
 				ImGui::EndGroup();
@@ -83,6 +85,9 @@ namespace OpenGLFun {
 			for (auto const& dir_entry : std::filesystem::directory_iterator(_currPath)) {
 				if (dir_entry.is_directory()) continue;
 				ImGui::TableNextColumn();
+
+				const auto& path = dir_entry.path();
+				auto relativePath = std::filesystem::relative(path, ASSETS_PATH);
 
 				std::string fileExt = StringUtils::ToLower(dir_entry.path().extension().string());
 				std::string filename = dir_entry.path().filename().string();
@@ -110,15 +115,18 @@ namespace OpenGLFun {
 					}
 				}
 
-				ImGui::BeginGroup();
-				ImGui::PushID(filename.c_str());
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { minFramePadding.x + (thumbnailSize - imgBtnSize.x) / 2.0f, minFramePadding.y + (thumbnailSize - imgBtnSize.y) / 2.0f });
-				ImGui::ImageButton(buttonTexId, imgBtnSize, { 0, 1 }, { 1, 0 });
-				ImGui::PopStyleVar();
-				ImGui::Text(filename.c_str());
-				ImGui::PopID();
+				ImGui::ImageButton(dir_entry.path().string().c_str(), buttonTexId, imgBtnSize, { 0, 1 }, { 1, 0 });
 
-				ImGui::EndGroup();
+				if ((fileExt == ".png" || fileExt == ".jpg") && ImGui::BeginDragDropSource()) {
+					const wchar_t* itemPath = relativePath.c_str();
+					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+
+					ImGui::Text("Hello there");
+					ImGui::EndDragDropSource();
+				}
+
 				if (ImGui::IsItemHovered()) {
 					ImGui::SetTooltip(filename.c_str());
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
@@ -128,6 +136,10 @@ namespace OpenGLFun {
 						std::cout << "ShellExecute stats:" << status << std::endl;*/
 					}
 				}
+
+				ImGui::PopStyleVar();
+				ImGui::PopStyleColor();
+				ImGui::Text(filename.c_str());
 			}
 
 			if (_shouldCreatePreviewIcons)

@@ -7,6 +7,8 @@
 #include "Texture.h"
 
 namespace OpenGLFun {
+	extern const std::filesystem::path ASSETS_PATH;
+
 	class ContentBrowserImgui {
 	public:
 		ContentBrowserImgui();
