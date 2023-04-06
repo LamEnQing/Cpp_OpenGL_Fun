@@ -33,13 +33,13 @@ namespace OpenGLFun {
 
 	void DrawEntityList();
 	void DrawEntityProperty();
-	void DrawGameScene();
+	void DrawGameScene(float const& deltaTime);
 	void DrawLoadLevelPopup();
 	void DrawWarningPopup(const char* id, const char* message);
 	void DrawWarningDeleteCompPopup(const char* compType);
 	void DrawWarningDeleteEntityPopup();
 
-	FunImGuiSystem::FunImGuiSystem() : mShowEditor{ false }, mSceneViewportSize{},  _contentBrowser{}, mTextureLoadFileBrowser("Add Texture", "assets\\textures", { ".jpg", ".png" }) {
+	FunImGuiSystem::FunImGuiSystem() : _showEditor{ false }, mSceneViewportSize{},  _contentBrowser{}, mTextureLoadFileBrowser("Add Texture", "assets\\textures", { ".jpg", ".png" }) {
 		if (FUN_IMGUI_SYSTEM != nullptr)
 			throw SimpleException("FunImGuiSystem has already been created!");
 
@@ -75,8 +75,8 @@ namespace OpenGLFun {
 		selectedLevel = "";
 	}
 
-	void FunImGuiSystem::Update(float const& /*deltaTime*/) {
-		if (mShowEditor) {
+	void FunImGuiSystem::Update(float const& deltaTime) {
+		if (_showEditor) {
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
@@ -94,7 +94,7 @@ namespace OpenGLFun {
 
 			DrawEntityList();
 			DrawEntityProperty();
-			DrawGameScene();
+			DrawGameScene(deltaTime);
 			_contentBrowser.Draw();
 			mTextureLoadFileBrowser.Draw();
 
@@ -116,6 +116,27 @@ namespace OpenGLFun {
 			}
 		}
 	}
+
+	bool FunImGuiSystem::ShowEditor() const {
+		return this->_showEditor;
+	}
+	void FunImGuiSystem::ShowEditor(bool value) {
+		this->_showEditor = value;
+		if (value) {
+			GRAPHICS_SYSTEM->mActiveCamera = &FUN_IMGUI_SYSTEM->mCamera;
+			INPUT_SYSTEM->PauseGame();
+			Reset();
+
+			mSceneViewportSize = { 0,0 };
+		}
+		else {
+			GRAPHICS_SYSTEM->mActiveCamera = &GRAPHICS_SYSTEM->mCamera2D;
+			GRAPHICS_SYSTEM->mFramebuffer.PreResize(WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+
+			GRAPHICS_SYSTEM->SetViewport(0, 0, WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+			INPUT_SYSTEM->UnpauseGame();
+		}
+	}
 	
 	void DrawMenuBar() {
 		bool shouldShowLevelSelect = false;
@@ -127,11 +148,10 @@ namespace OpenGLFun {
 			}
 			if (ImGui::BeginMenu("Settings")) {
 				if (ImGui::BeginMenu("Editor")) {
-					if (ImGui::MenuItem("Enabled", NULL, FUN_IMGUI_SYSTEM->mShowEditor))
-						FUN_IMGUI_SYSTEM->mShowEditor = true;
-					if (ImGui::MenuItem("Disabled", NULL, !FUN_IMGUI_SYSTEM->mShowEditor)) {
-						FUN_IMGUI_SYSTEM->mShowEditor = false;
-						GRAPHICS_SYSTEM->mFramebuffer.PreResize(WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
+					if (ImGui::MenuItem("Enabled", NULL, FUN_IMGUI_SYSTEM->ShowEditor()))
+						FUN_IMGUI_SYSTEM->ShowEditor(true);
+					if (ImGui::MenuItem("Disabled", NULL, !FUN_IMGUI_SYSTEM->ShowEditor())) {
+						FUN_IMGUI_SYSTEM->ShowEditor(false);
 					}
 					ImGui::EndMenu();
 				}
@@ -233,7 +253,6 @@ namespace OpenGLFun {
 
 	void DrawEntityProperty() {
 		static std::map<ComponentType, const char*> componentTypeNames{
-			{ ComponentType::Button, "Button" },
 			//{ ComponentType::Camera, "Camera" },
 			{ ComponentType::Behaviour, "Behaviour" },
 			{ ComponentType::Color, "Color" },
@@ -305,7 +324,7 @@ namespace OpenGLFun {
 		}
 	}
 
-	void DrawGameScene() {
+	void DrawGameScene(float const& deltaTime) {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::Begin("Game Scene", NULL);
 		ImVec2 buttonSize(40.0f, 30.0f);

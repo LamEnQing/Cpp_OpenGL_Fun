@@ -58,16 +58,12 @@ namespace OpenGLFun {
 		}
 
 		if (IsKeyTriggered(GLFW_KEY_F4)) {
-			FUN_IMGUI_SYSTEM->mShowEditor = !FUN_IMGUI_SYSTEM->mShowEditor;
+			FUN_IMGUI_SYSTEM->ShowEditor(!FUN_IMGUI_SYSTEM->ShowEditor());
 
-			if (FUN_IMGUI_SYSTEM->mShowEditor) {
-				PauseGame();
-				FUN_IMGUI_SYSTEM->Reset();
+			/*if (FUN_IMGUI_SYSTEM->mShowEditor) {
 			}
 			else {
-				GRAPHICS_SYSTEM->SetViewport(0, 0, WINDOW_SYSTEM->mFrameWidth, WINDOW_SYSTEM->mFrameHeight);
-				UnpauseGame();
-			}
+			}*/
 		}
 
 		if (IsKeyTriggered(GLFW_KEY_F3)) {
@@ -217,7 +213,7 @@ namespace OpenGLFun {
 	}
 
 	void KeyCallback(GLFWwindow* /*window*/, int key, int, int action, int) {
-		if (ENGINE->mIsPaused && FUN_IMGUI_SYSTEM->mShowEditor) return;
+		if (ENGINE->mIsPaused && FUN_IMGUI_SYSTEM->ShowEditor()) return;
 
 		if (action == GLFW_PRESS) {
 			if (key == GLFW_KEY_ESCAPE) {

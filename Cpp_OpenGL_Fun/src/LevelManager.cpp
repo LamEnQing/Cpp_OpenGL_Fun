@@ -109,7 +109,7 @@ namespace OpenGLFun {
 		if (document.HasMember("enable_editor")) {
 			if (!document["enable_editor"].IsBool())
 				throw JsonReadException(filepath, "enable_editor", "bool");
-			FUN_IMGUI_SYSTEM->mShowEditor = document["enable_editor"].GetBool();
+			FUN_IMGUI_SYSTEM->ShowEditor(document["enable_editor"].GetBool());
 		}
 
 		ENGINE->mPlayerId = ENTITY_FACTORY->DeserializeEntity(filepath, document["camera_entity"].GetObject(), false);

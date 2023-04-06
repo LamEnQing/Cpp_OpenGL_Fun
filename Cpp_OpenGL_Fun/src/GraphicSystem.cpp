@@ -288,9 +288,9 @@ namespace OpenGLFun {
 
 	Texture* GraphicSystem::CreateGLTexture(std::string const& filepath) {
 		Texture* texture = new Texture();
-		texture->imgData = stbi_load((filepath).c_str(), &texture->imgWidth, &texture->imgHeight, &texture->imgChannels, 0);
+		unsigned char* imgData = stbi_load((filepath).c_str(), &texture->imgWidth, &texture->imgHeight, &texture->imgChannels, 0);
 
-		if (!texture->imgData) {
+		if (!imgData) {
 			delete texture;
 			throw SimpleException(std::string("Failed to load texture ") + filepath);
 		}
@@ -309,16 +309,16 @@ namespace OpenGLFun {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		GLint imgFormat = texture->imgChannels == 3 ? GL_RGB : GL_RGBA;
-		glTexImage2D(GL_TEXTURE_2D, 0, imgFormat, texture->imgWidth, texture->imgHeight, 0, imgFormat, GL_UNSIGNED_BYTE, texture->imgData);
+		glTexImage2D(GL_TEXTURE_2D, 0, imgFormat, texture->imgWidth, texture->imgHeight, 0, imgFormat, GL_UNSIGNED_BYTE, imgData);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		texture->mGLTextureId = texId;
+		delete imgData;
 
 		return texture;
 	}
 
 	void GraphicSystem::DeleteGLTexture(Texture* texture) {
 		glDeleteTextures(1, &texture->mGLTextureId);
-		delete texture->imgData; // need to remove this img data
 	}
 }

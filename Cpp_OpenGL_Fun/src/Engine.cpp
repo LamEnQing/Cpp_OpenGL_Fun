@@ -74,7 +74,7 @@ namespace OpenGLFun {
 				LEVEL_MANAGER->mShouldReloadLevel = false;
 				LEVEL_MANAGER->ReloadLevel();
 
-				if (FUN_IMGUI_SYSTEM->mShowEditor)
+				if (FUN_IMGUI_SYSTEM->ShowEditor())
 					INPUT_SYSTEM->PauseGame();
 			}
 

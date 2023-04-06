@@ -9,7 +9,6 @@
 namespace OpenGLFun {
 	class FunImGuiSystem : public ISystem {
 	public:
-		bool mShowEditor;
 		Vec2<float> mSceneViewportSize;
 		FileBrowserImgui mTextureLoadFileBrowser;
 
@@ -20,7 +19,11 @@ namespace OpenGLFun {
 		// Resets variables in the system
 		void Reset();
 
+		bool ShowEditor() const;
+		void ShowEditor(bool value);
 	private:
+		bool _showEditor;
+
 		ContentBrowserImgui _contentBrowser;
 	};
 
