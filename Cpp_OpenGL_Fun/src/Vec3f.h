@@ -33,6 +33,9 @@ namespace OpenGLFun {
 	Vec3f operator+(const Vec3f& lhs, const Vec3f& rhs);
 	Vec3f operator+(const Vec3f& lhs, const float& rhs);
 
+	Vec3f operator-(const Vec3f& lhs, const Vec3f& rhs);
+	Vec3f operator-(const Vec3f& lhs, const float& rhs);
+
 	Vec3f operator*(const Vec3f& lhs, const float& rhs);
 
 	Vec3f normalize(const Vec3f& obj);

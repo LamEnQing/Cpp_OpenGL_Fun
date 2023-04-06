@@ -43,6 +43,15 @@ namespace OpenGLFun {
 		return Vec3f(lhs.x + rhs, lhs.y + rhs, lhs.z + rhs);
 	}
 
+	Vec3f operator-(const Vec3f& lhs, const Vec3f& rhs) {
+		Vec3f result(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+		return result;
+	}
+
+	Vec3f operator-(const Vec3f& lhs, const float& rhs) {
+		return Vec3f(lhs.x - rhs, lhs.y - rhs, lhs.z - rhs);
+	}
+
 	Vec3f operator*(const Vec3f& lhs, const float& rhs) {
 		return Vec3f(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 	}
