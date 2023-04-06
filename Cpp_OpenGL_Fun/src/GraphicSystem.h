@@ -13,6 +13,7 @@ namespace OpenGLFun {
 		Framebuffer mFramebuffer;
 
 		OpenGLFun::OrthoCamera mCamera2D;
+		ICamera* mActiveCamera;
 
 		GraphicSystem();
 		virtual ~GraphicSystem() override;

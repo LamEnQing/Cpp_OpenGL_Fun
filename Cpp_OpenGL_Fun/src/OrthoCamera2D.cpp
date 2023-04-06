@@ -1,5 +1,7 @@
 #include "OrthoCamera2D.h"
 
+#include "WindowSystem.h"
+
 namespace OpenGLFun {
 	OrthoCamera::OrthoCamera(float left, float right, float bottom, float top)
 		: _projMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)), _viewMatrix(1.0f), _rotation(0.0f) {
@@ -23,9 +25,13 @@ namespace OpenGLFun {
 	const glm::mat4& OrthoCamera::GetViewProjMatrix() const { return _viewProjMatrix; }
 
 	void OrthoCamera::RecalculateViewMatrix() {
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(_position)) * glm::rotate(glm::mat4(1.0f), glm::radians(_rotation), glm::vec3(0, 0, 1));
+		Vec3f pos(_position);
+		pos.x /= WINDOW_SYSTEM->mFrameWidth;
+		pos.y /= WINDOW_SYSTEM->mFrameHeight;
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), vec3f_to_vec3(pos)) * glm::rotate(glm::mat4(1.0f), glm::radians(_rotation), glm::vec3(0, 0, 1));
 
 		_viewMatrix = glm::inverse(transform);
-		_viewProjMatrix = _projMatrix * _viewMatrix;
+		_viewProjMatrix = _projMatrix * glm::scale(glm::mat4(1.0f), glm::vec3(mZoom)) * _viewMatrix;
 	}
 }

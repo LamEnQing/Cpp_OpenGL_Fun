@@ -12,7 +12,6 @@
 #include "Texture.h"
 #include "WindowSystem.h"
 
-#include "Button.h"
 #include "Camera.h"
 #include "Color.h"
 #include "ModelComponent.h"
@@ -22,11 +21,13 @@
 namespace OpenGLFun {
 	GraphicSystem* GRAPHICS_SYSTEM = nullptr;
 
-	GraphicSystem::GraphicSystem() : ISystem(), mFramebuffer(WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight()), _3DShaderProgram(), _viewportX{ 0 }, _viewportY{ 0 }, _viewportWidth{ WINDOW_SYSTEM->mFrameWidth }, _viewportHeight{ WINDOW_SYSTEM->mFrameHeight }, mCamera2D(-1.0f, 1.0f, -1.0f, 1.0f) {
+	GraphicSystem::GraphicSystem() : ISystem(), mFramebuffer(WINDOW_SYSTEM->GetWindowWidth(), WINDOW_SYSTEM->GetWindowHeight()), _3DShaderProgram(), _viewportX{ 0 }, _viewportY{ 0 }, _viewportWidth{ WINDOW_SYSTEM->mFrameWidth }, _viewportHeight{ WINDOW_SYSTEM->mFrameHeight }, mCamera2D(-1.0f, 1.0f, -1.0f, 1.0f), mActiveCamera{ nullptr } {
 		if (GRAPHICS_SYSTEM != nullptr)
 			throw SimpleException("Graphics system already created!");
 
 		GRAPHICS_SYSTEM = this;
+
+		mActiveCamera = &mCamera2D;
 
 		stbi_set_flip_vertically_on_load(1);
 
@@ -200,7 +201,7 @@ namespace OpenGLFun {
 			sample_vec3[0] /= WINDOW_SYSTEM->mFrameWidth;
 			sample_vec3[1] /= WINDOW_SYSTEM->mFrameHeight;
 			sample_vec3[2] = 0.0f;
-			mtxModel = mCamera2D.GetViewProjMatrix() * glm::scale(mtxModel, sample_vec3);
+			mtxModel = mActiveCamera->GetViewProjMatrix() * glm::scale(mtxModel, sample_vec3);
 
 			model
 				->SetCull(modelComp->mShouldCull)

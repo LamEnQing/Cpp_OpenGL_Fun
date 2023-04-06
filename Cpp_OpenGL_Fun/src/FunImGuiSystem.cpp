@@ -39,7 +39,7 @@ namespace OpenGLFun {
 	void DrawWarningDeleteCompPopup(const char* compType);
 	void DrawWarningDeleteEntityPopup();
 
-	FunImGuiSystem::FunImGuiSystem() : _showEditor{ false }, mSceneViewportSize{},  _contentBrowser{}, mTextureLoadFileBrowser("Add Texture", "assets\\textures", { ".jpg", ".png" }) {
+	FunImGuiSystem::FunImGuiSystem() : _showEditor{ false }, mSceneViewportSize{},  _contentBrowser{}, mTextureLoadFileBrowser("Add Texture", "assets\\textures", { ".jpg", ".png" }), mCamera(-1.0f, 1.0f, -1.0f, 1.0f) {
 		if (FUN_IMGUI_SYSTEM != nullptr)
 			throw SimpleException("FunImGuiSystem has already been created!");
 
@@ -325,8 +325,28 @@ namespace OpenGLFun {
 	}
 
 	void DrawGameScene(float const& deltaTime) {
+		ImGuiIO& io = ImGui::GetIO();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::Begin("Game Scene", NULL);
+
+		if (ImGui::IsWindowFocused()) {
+			if (ImGui::IsMouseDown(ImGuiMouseButton_Middle)) {
+				ImVec2 mouseDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Middle);
+				FUN_IMGUI_SYSTEM->mCamera.SetPosition(FUN_IMGUI_SYSTEM->mCamera.GetPosition() + (Vec3f(-mouseDelta.x, mouseDelta.y, 0) * deltaTime));
+
+				std::cout << FUN_IMGUI_SYSTEM->mCamera.GetPosition() << std::endl;
+			}
+
+			//std::cout << "Mouse Wheel:" << io.MouseWheel << std::endl;
+
+			if (ImGui::IsKeyDown(ImGuiKey_MouseWheelY)) {
+				std::cout << "Mouse Wheel:" << io.MouseWheel << std::endl;
+				//ImGui::GetKey
+				FUN_IMGUI_SYSTEM->mCamera.Zoom(io.MouseWheel);
+			}
+		}
+
 		ImVec2 buttonSize(40.0f, 30.0f);
 
 		// Draw Play Button

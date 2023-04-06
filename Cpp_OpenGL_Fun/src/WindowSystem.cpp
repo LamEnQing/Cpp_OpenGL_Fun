@@ -58,7 +58,7 @@ namespace OpenGLFun {
 		}
 		if (resized) {
 			GRAPHICS_SYSTEM->SetViewport(0, 0, mFrameWidth, mFrameHeight);
-			if (!FUN_IMGUI_SYSTEM->mShowEditor)
+			if (!FUN_IMGUI_SYSTEM->ShowEditor())
 				GRAPHICS_SYSTEM->mFramebuffer.Resize(mFrameWidth, mFrameHeight);
 		}
 	}

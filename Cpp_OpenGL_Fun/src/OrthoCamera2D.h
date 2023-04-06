@@ -1,24 +1,25 @@
 #pragma once
 
 #include "pch.h"
+#include "ICamera.h"
 #include "Vec3f.h"
 
 namespace OpenGLFun {
-	class OrthoCamera {
+	class OrthoCamera : public ICamera {
 	public:
 		OrthoCamera(float left, float right, float bottom, float top);
 
-		const Vec3f& GetPosition() const;
-		void SetPosition(const Vec3f& position);
+		const Vec3f& GetPosition() const override;
+		void SetPosition(const Vec3f& position) override;
 
-		float GetRotation() const;
-		void SetRotation(float rotation);
+		float GetRotation() const override;
+		void SetRotation(float rotation) override;
 
-		const glm::mat4& GetProjMatrix() const;
-		const glm::mat4& GetViewMatrix() const;
-		const glm::mat4& GetViewProjMatrix() const;
+		const glm::mat4& GetProjMatrix() const override;
+		const glm::mat4& GetViewMatrix() const override;
+		const glm::mat4& GetViewProjMatrix() const override;
 	private:
-		void RecalculateViewMatrix();
+		void RecalculateViewMatrix() override;
 	private:
 		glm::mat4 _projMatrix;
 		glm::mat4 _viewMatrix;
