@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include <mono/metadata/assembly.h>
 
 #include "AnimationSystem.h"
 #include "ComponentManager.h"
@@ -27,9 +26,6 @@ namespace OpenGLFun {
 		RESOURCE_MANAGER = new ResourceManager();
 		ENTITY_FACTORY.reset(new EntityFactory());
 		LEVEL_MANAGER.reset(new LevelManager());
-
-		mono_set_dirs(".\\lib", ".");
-		_monoDomain = mono_jit_init("Spyeedy_OpenGLFun");
 	}
 
 	Engine::~Engine() {
@@ -38,13 +34,6 @@ namespace OpenGLFun {
 		delete RESOURCE_MANAGER;
 		delete COMPONENT_MANAGER;
 		delete ENTITY_MANAGER;
-
-		if (_monoDomain)
-			mono_jit_cleanup(_monoDomain);
-	}
-
-	MonoDomain* Engine::GetMonoDomain() {
-		return _monoDomain;
 	}
 
 	void Engine::GameLoop(void) {
@@ -104,5 +93,9 @@ namespace OpenGLFun {
 				frameCount = 0;
 			}
 		}
+	}
+
+	std::vector<std::unique_ptr<ISystem>>& Engine::GetSystems() {
+		return _systems;
 	}
 }

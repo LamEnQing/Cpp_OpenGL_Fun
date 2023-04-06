@@ -58,6 +58,15 @@
     <Filter Include="vendors\glad">
       <UniqueIdentifier>{f75e247e-707b-4740-b0a7-cb1b9f81c49f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system\windows">
+      <UniqueIdentifier>{413e5bba-990a-41f5-8298-dd92300b2976}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\input">
+      <UniqueIdentifier>{c4b3bbef-98f1-48a9-9b05-e144438fea06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\animation">
+      <UniqueIdentifier>{fc9ba921-5a10-46a7-9d8a-fc1bbe4a2ef7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Shader.cpp">
@@ -71,12 +80,6 @@
     </ClCompile>
     <ClCompile Include="src\Vertex.cpp">
       <Filter>system\graphics\model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\InputSystem.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\WindowSystem.cpp">
-      <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="src\GraphicSystem.cpp">
       <Filter>system\graphics</Filter>
@@ -109,9 +112,6 @@
     <ClCompile Include="src\Mesh.cpp">
       <Filter>system\graphics\model</Filter>
     </ClCompile>
-    <ClCompile Include="src\AnimationSystem.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="src\ResourceManager.cpp">
       <Filter>managers</Filter>
     </ClCompile>
@@ -131,9 +131,6 @@
       <Filter>component\components</Filter>
     </ClCompile>
     <ClCompile Include="src\Transform.cpp">
-      <Filter>component\components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Button.cpp">
       <Filter>component\components</Filter>
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
@@ -202,13 +199,22 @@
     <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp">
       <Filter>vendors\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\LayerManager.cpp">
+      <Filter>managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WindowSystem.cpp">
+      <Filter>system\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputSystem.cpp">
+      <Filter>system\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AnimationSystem.cpp">
+      <Filter>system\animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Component.h">
       <Filter>component</Filter>
-    </ClInclude>
-    <ClInclude Include="src\InputSystem.h">
-      <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="src\System.h">
       <Filter>system</Filter>
@@ -218,9 +224,6 @@
     </ClInclude>
     <ClInclude Include="src\Vertex.h">
       <Filter>system\graphics\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\WindowSystem.h">
-      <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\GraphicSystem.h">
@@ -256,9 +259,6 @@
     <ClInclude Include="src\ModelComponent.h">
       <Filter>component\components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Button.h">
-      <Filter>component\components</Filter>
-    </ClInclude>
     <ClInclude Include="src\Texture.h">
       <Filter>system\graphics\texture</Filter>
     </ClInclude>
@@ -285,9 +285,6 @@
     </ClInclude>
     <ClInclude Include="src\Mesh.h">
       <Filter>system\graphics\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AnimationSystem.h">
-      <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="src\ResourceManager.h">
       <Filter>managers</Filter>
@@ -372,6 +369,21 @@
     </ClInclude>
     <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h">
       <Filter>vendors\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LayerManager.h">
+      <Filter>managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ICamera.h">
+      <Filter>system\graphics\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WindowSystem.h">
+      <Filter>system\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputSystem.h">
+      <Filter>system\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AnimationSystem.h">
+      <Filter>system\animation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

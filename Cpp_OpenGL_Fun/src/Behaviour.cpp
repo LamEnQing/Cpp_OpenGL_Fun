@@ -9,14 +9,13 @@ namespace OpenGLFun {
 
 	Behaviour::~Behaviour() {}
 
-	void Behaviour::Deserialize(rapidjson::Value const& jsonObj) {
+	void Behaviour::Deserialize(rapidjson::Value const& jsonObj) {}
 
-	}
 	bool Behaviour::DrawImGuiComponent() {
 		bool canClose = true;
 		if (!ImGui::CollapsingHeader("Behaviour", &canClose)) return !canClose;
 
-		const auto& behaviourList = LOGIC_SYSTEM->GetBehaviourList();
+		/*const auto& behaviourList = LOGIC_SYSTEM->GetBehaviourList();
 
 		if (behaviourList.size() == 0)
 			_selectedBehaviour = -1;
@@ -45,7 +44,7 @@ namespace OpenGLFun {
 				ImGui::Selectable(classPath.c_str());
 			}
 			ImGui::EndListBox();
-		}
+		}*/
 
 		return !canClose;
 	}

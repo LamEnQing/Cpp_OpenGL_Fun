@@ -5,8 +5,6 @@
 #include "EntityManager.h"
 #include "System.h"
 
-#include <mono/jit/jit.h>
-
 namespace OpenGLFun {
 	class Engine {
 		public:
@@ -19,13 +17,12 @@ namespace OpenGLFun {
 			Engine();
 			~Engine();
 
-			MonoDomain* GetMonoDomain();
 			void GameLoop(void);
+
+			std::vector<std::unique_ptr<ISystem>>& GetSystems();
 		private:
 			std::vector<std::unique_ptr<ISystem>> _systems;
 			float _lastTime;
-
-			MonoDomain* _monoDomain;
 	};
 	extern Engine* ENGINE;
 }

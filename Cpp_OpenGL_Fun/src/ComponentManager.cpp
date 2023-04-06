@@ -1,7 +1,6 @@
 #include "ComponentManager.h"
 
 #include "Behaviour.h"
-#include "Button.h"
 #include "Color.h"
 #include "ModelComponent.h"
 #include "Sprite.h"
@@ -10,7 +9,6 @@
 
 namespace OpenGLFun {
 	ComponentManager::ComponentManager() {
-		mComponentTypeMap.insert({ "Button", ComponentType::Button });
 		mComponentTypeMap.insert({ "Behaviour", ComponentType::Behaviour });
 		mComponentTypeMap.insert({ "Camera", ComponentType::Camera });
 		mComponentTypeMap.insert({ "Color", ComponentType::Color });
@@ -19,7 +17,6 @@ namespace OpenGLFun {
 		mComponentTypeMap.insert({ "Transform", ComponentType::Transform });
 
 		mComponentCreatorsMap.insert({ ComponentType::Behaviour, new ComponentCreator<Behaviour>() });
-		mComponentCreatorsMap.insert({ ComponentType::Button, new ComponentCreator<Button>() });
 		mComponentCreatorsMap.insert({ ComponentType::Camera, new ComponentCreator<Camera>() });
 		mComponentCreatorsMap.insert({ ComponentType::Color, new ComponentCreator<Color>() });
 		mComponentCreatorsMap.insert({ ComponentType::Model, new ComponentCreator<ModelComponent>() });
