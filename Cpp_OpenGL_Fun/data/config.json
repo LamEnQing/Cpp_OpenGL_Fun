@@ -1,6 +1,6 @@
 {
-	"window_width": 1280,
-	"window_height": 720,
+	"window_width": 1600,
+	"window_height": 900,
 	"window_title": "OpenGL Fun",
 	"level_on_startup": "two_d.json",
 	"preload_assets": [

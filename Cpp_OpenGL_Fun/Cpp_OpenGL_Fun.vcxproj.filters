@@ -199,9 +199,6 @@
     <ClCompile Include="..\vendors\source\imgui\imgui_widgets.cpp">
       <Filter>vendors\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\LayerManager.cpp">
-      <Filter>managers</Filter>
-    </ClCompile>
     <ClCompile Include="src\WindowSystem.cpp">
       <Filter>system\windows</Filter>
     </ClCompile>
@@ -369,9 +366,6 @@
     </ClInclude>
     <ClInclude Include="..\vendors\source\imgui\imstb_truetype.h">
       <Filter>vendors\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LayerManager.h">
-      <Filter>managers</Filter>
     </ClInclude>
     <ClInclude Include="src\ICamera.h">
       <Filter>system\graphics\camera</Filter>

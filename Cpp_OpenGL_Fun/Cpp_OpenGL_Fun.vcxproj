@@ -21,13 +21,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -126,7 +126,6 @@
     <ClCompile Include="src\FunImGuiSystem.cpp" />
     <ClCompile Include="src\GraphicSystem.cpp" />
     <ClCompile Include="src\InputSystem.cpp" />
-    <ClCompile Include="src\LayerManager.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\LogicSystem.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -173,7 +172,6 @@
     <ClInclude Include="src\Framebuffer.h" />
     <ClInclude Include="src\FunImGuiSystem.h" />
     <ClInclude Include="src\ICamera.h" />
-    <ClInclude Include="src\LayerManager.h" />
     <ClInclude Include="src\LogicSystem.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\ModelComponent.h" />
