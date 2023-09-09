@@ -361,6 +361,15 @@ namespace OpenGLFun {
 			FUN_IMGUI_SYSTEM->mSceneViewportSize = { viewportSize.x, viewportSize.y };
 		}
 		ImGui::Image(TextureUtils::GetImGuiTexId(GRAPHICS_SYSTEM->mFramebuffer.mTextureId), viewportSize, { 0, 1 }, { 1, 0 }); // texture is from frame buffer, see GraphicSystem constructor on how the frame buffer is created
+		
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				std::cout << (std::filesystem::path(ASSETS_PATH) / path).string() << std::endl;
+			}
+
+			ImGui::EndDragDropTarget();
+		}
 
 		ImGui::End();
 		ImGui::PopStyleVar();
